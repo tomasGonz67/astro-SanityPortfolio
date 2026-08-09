@@ -1,0 +1,54 @@
+---
+import Layout from '../layouts/Layout.astro'
+import { client } from '../lib/sanity'
+
+interface Profile {
+	resumeFile?: { asset?: { url?: string } }
+}
+
+const profile = await client.fetch<Profile | null>(
+	`*[_type == "profile"][0]{ resumeFile{ asset-> { url } } }`
+)
+
+const resumeUrl = profile?.resumeFile?.asset?.url
+---
+
+<Layout title="Resume">
+	<h1>Resume</h1>
+
+	{resumeUrl ? (
+		<div class="panel resume-panel">
+			<p class="text-muted">Full resume, up to date, in PDF form.</p>
+			<a class="download-btn mono" href={resumeUrl} target="_blank" rel="noopener">Download Resume (PDF)</a>
+		</div>
+	) : (
+		<p class="text-muted">Resume not uploaded yet.</p>
+	)}
+</Layout>
+
+<style>
+	.text-muted {
+		color: var(--text-muted);
+	}
+	.resume-panel {
+		margin-top: 24px;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 20px;
+		flex-wrap: wrap;
+	}
+	.download-btn {
+		display: inline-block;
+		background: var(--accent);
+		color: var(--bg);
+		font-weight: 600;
+		font-size: 14px;
+		text-decoration: none;
+		padding: 10px 20px;
+		border-radius: 4px;
+	}
+	.download-btn:hover {
+		opacity: 0.9;
+	}
+</style>

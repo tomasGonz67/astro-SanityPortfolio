@@ -1,0 +1,109 @@
+@import '@fontsource/ibm-plex-mono/400.css';
+@import '@fontsource/ibm-plex-mono/500.css';
+@import '@fontsource/ibm-plex-mono/600.css';
+@import '@fontsource/ibm-plex-sans/400.css';
+@import '@fontsource/ibm-plex-sans/500.css';
+
+:root {
+	--bg: #0b0e14;
+	--surface: #12161f;
+	--text: #e4e7ec;
+	--text-muted: #7c8494;
+	--accent: #ffb454;
+	--border: #232838;
+
+	--font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+	--font-sans: 'IBM Plex Sans', system-ui, sans-serif;
+}
+
+:root[data-theme='light'] {
+	--bg: #f7f5f0;
+	--surface: #ffffff;
+	--text: #1a1d24;
+	--text-muted: #5c6470;
+	--accent: #b45309;
+	--border: #e2e0d9;
+}
+
+* {
+	box-sizing: border-box;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+	overscroll-behavior-y: none;
+}
+
+html {
+	scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	html {
+		scroll-behavior: auto;
+	}
+}
+
+body {
+	background:
+		radial-gradient(ellipse 1800px 2600px at 50% -10%, #091309 0%, transparent 80%),
+		radial-gradient(ellipse 1800px 1200px at 50% 100%, #091310 0%, transparent 70%);
+	background-color: var(--bg);
+	color: var(--text);
+	font-family: var(--font-sans);
+	font-size: 16px;
+	line-height: 1.6;
+	-webkit-font-smoothing: antialiased;
+	transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+:root[data-theme='light'] body {
+	background: var(--bg);
+}
+
+main {
+	max-width: 860px;
+	margin: 0 auto;
+	padding: 40px 24px 96px;
+}
+
+h1,
+h2,
+h3 {
+	font-family: var(--font-mono);
+	font-weight: 600;
+	line-height: 1.25;
+}
+
+a {
+	color: var(--accent);
+}
+
+code,
+.mono,
+.tabular {
+	font-family: var(--font-mono);
+	font-variant-numeric: tabular-nums;
+}
+
+/* Comment-style section label, e.g. "// experience" */
+.label {
+	font-family: var(--font-mono);
+	font-size: 13px;
+	color: var(--text-muted);
+	margin: 0 0 8px;
+}
+.label::before {
+	content: '// ';
+	color: var(--border);
+}
+
+.panel {
+	background: var(--surface);
+	border: 1px solid var(--border);
+	border-radius: 6px;
+	padding: 20px 24px;
+	margin-bottom: 16px;
+}

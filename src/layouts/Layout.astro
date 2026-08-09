@@ -1,0 +1,184 @@
+---
+import '../styles/global.css'
+import { client } from '../lib/sanity'
+
+interface Props {
+	title: string
+}
+
+const { title } = Astro.props
+
+interface Profile {
+	githubUrl?: string
+	linkedinUrl?: string
+	resumeFile?: { asset?: { url?: string } }
+}
+
+const profile = await client.fetch<Profile | null>(
+	`*[_type == "profile"][0]{ githubUrl, linkedinUrl, resumeFile{ asset-> { url } } }`
+)
+
+const resumeUrl = profile?.resumeFile?.asset?.url
+
+const navItems = [
+	{ href: '#home', label: 'Home' },
+	{ href: '#about', label: 'About' },
+	{ href: '#experience', label: 'Experience' },
+	{ href: '#projects', label: 'Projects' },
+	{ href: resumeUrl ?? '/resume', label: 'Resume', external: Boolean(resumeUrl) },
+]
+
+const EMAIL = 'thomasgonz67@gmail.com'
+---
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="generator" content={Astro.generator} />
+		<title>{title} · tomasgonzalez</title>
+		<script is:inline>
+			const stored = localStorage.getItem('theme')
+			if (stored === 'light') document.documentElement.setAttribute('data-theme', 'light')
+		</script>
+	</head>
+	<body>
+		<header class="tabbar">
+			<nav>
+				{navItems.map((item) => (
+					<a
+						href={item.href}
+						data-nav-link={item.href}
+						target={item.external ? '_blank' : undefined}
+						rel={item.external ? 'noopener' : undefined}
+						class:list={{ active: !item.external && item.href === '/resume' && Astro.url.pathname === '/resume' }}
+					>
+						{item.label}
+					</a>
+				))}
+			</nav>
+			<button id="theme-toggle" aria-label="Toggle theme">◐</button>
+		</header>
+		<main>
+			<slot />
+		</main>
+		<footer>
+			{profile?.githubUrl && <a href={profile.githubUrl} target="_blank" rel="noopener">GitHub</a>}
+			{profile?.linkedinUrl && <a href={profile.linkedinUrl} target="_blank" rel="noopener">LinkedIn</a>}
+			<a href={`mailto:${EMAIL}`}>{EMAIL}</a>
+		</footer>
+		<script is:inline>
+			const root = document.documentElement
+			document.getElementById('theme-toggle')?.addEventListener('click', () => {
+				const isLight = root.getAttribute('data-theme') === 'light'
+				if (isLight) {
+					root.removeAttribute('data-theme')
+					localStorage.setItem('theme', 'dark')
+				} else {
+					root.setAttribute('data-theme', 'light')
+					localStorage.setItem('theme', 'light')
+				}
+			})
+		</script>
+		<script is:inline>
+			const sections = document.querySelectorAll('section[id]')
+			const navLinks = document.querySelectorAll('a[data-nav-link^="#"]')
+
+			if (sections.length > 0 && navLinks.length > 0) {
+				const observer = new IntersectionObserver(
+					(entries) => {
+						entries.forEach((entry) => {
+							if (entry.isIntersecting) {
+								const id = entry.target.getAttribute('id')
+								navLinks.forEach((link) => {
+									link.classList.toggle('active', link.getAttribute('data-nav-link') === `#${id}`)
+								})
+							}
+						})
+					},
+					{ rootMargin: '-40% 0px -55% 0px' }
+				)
+				sections.forEach((section) => observer.observe(section))
+			}
+		</script>
+	</body>
+</html>
+
+<style>
+	.tabbar {
+		position: sticky;
+		top: 0;
+		z-index: 20;
+		display: flex;
+		align-items: center;
+		gap: 24px;
+		padding: 12px 20px;
+		background: var(--surface);
+		border-bottom: 1px solid var(--border);
+	}
+	nav {
+		display: flex;
+		gap: 4px;
+		flex: 1;
+	}
+	nav a {
+		font-family: var(--font-mono);
+		font-size: 14px;
+		color: var(--text-muted);
+		text-decoration: none;
+		padding: 6px 12px;
+		border-radius: 4px 4px 0 0;
+		border: 1px solid transparent;
+	}
+	nav a:hover {
+		color: var(--text);
+	}
+	nav a.active {
+		color: var(--accent);
+		background: var(--bg);
+		border-color: var(--border);
+		border-bottom-color: var(--bg);
+		margin-bottom: -1px;
+	}
+	#theme-toggle {
+		background: none;
+		border: 1px solid var(--border);
+		color: var(--text-muted);
+		border-radius: 4px;
+		width: 30px;
+		height: 30px;
+		cursor: pointer;
+		font-size: 14px;
+	}
+	#theme-toggle:hover {
+		color: var(--accent);
+		border-color: var(--accent);
+	}
+	main {
+		padding-bottom: 64px;
+	}
+	footer {
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		z-index: 10;
+		display: flex;
+		align-items: center;
+		gap: 20px;
+		justify-content: center;
+		padding: 10px 20px;
+		background: var(--surface);
+		border-top: 1px solid var(--border);
+		font-family: var(--font-mono);
+		font-size: 13px;
+	}
+	footer a {
+		color: var(--text-muted);
+		text-decoration: none;
+	}
+	footer a:hover {
+		color: var(--accent);
+	}
+</style>

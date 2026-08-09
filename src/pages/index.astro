@@ -1,17 +1,447 @@
 ---
+import Layout from '../layouts/Layout.astro'
+import { client, urlFor } from '../lib/sanity'
 
+interface SkillTier {
+	label: string
+	skills: string[]
+}
+
+interface Experience {
+	_id: string
+	company: string
+	role: string
+	location?: string
+	startDate: string
+	endDate?: string
+	current: boolean
+	bullets?: string[]
+	techStack?: string[]
+	coverImage?: any
+	link?: string
+	githubUrl?: string
+}
+
+interface Project {
+	_id: string
+	title: string
+	description?: string
+	coverImage?: any
+	techStack?: string[]
+	link?: string
+	githubUrl?: string
+}
+
+interface Profile {
+	name: string
+	tagline?: string
+	roles?: string[]
+	skillTiers?: SkillTier[]
+	bio?: string
+	avatar?: any
+	githubUrl?: string
+	linkedinUrl?: string
+}
+
+const profile = await client.fetch<Profile | null>(
+	`*[_type == "profile"][0]{ name, tagline, roles, skillTiers, bio, avatar, githubUrl, linkedinUrl }`
+)
+
+const experiences = await client.fetch<Experience[]>(
+	`*[_type == "experience"] | order(order asc){
+		_id, company, role, location, startDate, endDate, current, bullets, techStack, coverImage, link, githubUrl
+	}`
+)
+
+const projects = await client.fetch<Project[]>(
+	`*[_type == "project"] | order(order asc){
+		_id, title, description, coverImage, techStack, link, githubUrl
+	}`
+)
+
+const roles = profile?.roles ?? ['Full-Stack']
+
+function formatDate(dateStr?: string) {
+	if (!dateStr) return ''
+	const d = new Date(dateStr)
+	return d.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
+}
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<Layout title="Home">
+	<section id="home" class="hero">
+		<h1>Hi, I'm {profile?.name ?? 'Tomas'}.</h1>
+
+		<p class="engineer-line mono">I'm an Engineer</p>
+		<p class="typing-line mono">
+			<span id="typing-text"></span><span class="cursor">|</span>
+		</p>
+
+		{profile?.tagline && <p>{profile.tagline}</p>}
+
+		<h2 class="section-heading">Skills</h2>
+
+		{profile?.skillTiers && profile.skillTiers.length > 0 ? (
+			<div class="skills">
+				{profile.skillTiers.map((tier, i) => (
+					<div class={`skill-tier tier-${Math.min(i, 2)}`}>
+						<p class="tier-label mono">{tier.label}</p>
+						<div class="tier-skills">
+							{tier.skills.map((skill) => <span class="skill-pill mono">{skill}</span>)}
+						</div>
+					</div>
+				))}
+			</div>
+		) : (
+			<p class="text-muted">Skills snapshot goes here.</p>
+		)}
+	</section>
+
+	<section id="about">
+		<h2 class="section-heading">About Me</h2>
+
+		{!profile && <p class="text-muted">No profile published yet.</p>}
+
+		{profile && (
+			<div class="panel about-layout">
+				{profile.avatar && (
+					<img class="avatar" src={urlFor(profile.avatar).width(240).height(240).url()} alt={profile.name} />
+				)}
+				<div>
+					{profile.bio && <p class="bio">{profile.bio}</p>}
+				</div>
+			</div>
+		)}
+	</section>
+
+	<section id="experience">
+		<h2 class="section-heading">Experience</h2>
+
+		{experiences.length === 0 && <p class="text-muted">No experience entries published yet.</p>}
+
+		<div class="entries">
+			{experiences.map((exp) => (
+				<div class="panel entry" data-href={exp.link}>
+					<div class="entry-top">
+						{exp.coverImage && (
+							<img class="thumb" src={urlFor(exp.coverImage.asset).width(360).height(200).fit('max').url()} alt={exp.company} />
+						)}
+						<div class="entry-head">
+							<div>
+								<h3>{exp.role}</h3>
+								<p class="company">{exp.company}{exp.location && ` · ${exp.location}`}</p>
+							</div>
+							<p class="dates tabular mono">
+								{formatDate(exp.startDate)} – {exp.current ? 'Present' : formatDate(exp.endDate)}
+							</p>
+						</div>
+					</div>
+					{exp.bullets && exp.bullets.length > 0 && (
+						<ul class="bullets">
+							{exp.bullets.map((bullet) => <li>{bullet}</li>)}
+						</ul>
+					)}
+					{exp.techStack && exp.techStack.length > 0 && (
+						<div class="tags">
+							{exp.techStack.map((tech) => <span class="tag mono">{tech}</span>)}
+						</div>
+					)}
+					{exp.githubUrl && (
+						<p class="entry-links mono">
+							<a href={exp.githubUrl} target="_blank" rel="noopener">GitHub →</a>
+						</p>
+					)}
+				</div>
+			))}
+		</div>
+	</section>
+
+	<section id="projects">
+		<h2 class="section-heading">Projects</h2>
+
+		{projects.length === 0 && <p class="text-muted">No projects published yet.</p>}
+
+		<div class="entries">
+			{projects.map((project) => (
+				<div class="panel entry" data-href={project.link}>
+					{project.coverImage && (
+						<img class="cover" src={urlFor(project.coverImage).width(800).height(360).url()} alt={project.title} />
+					)}
+					<div class="entry-head">
+						<h3>{project.title}</h3>
+						{project.githubUrl && (
+							<p class="entry-links mono">
+								<a href={project.githubUrl} target="_blank" rel="noopener">GitHub →</a>
+							</p>
+						)}
+					</div>
+					{project.description && <p class="description">{project.description}</p>}
+					{project.techStack && project.techStack.length > 0 && (
+						<div class="tags">
+							{project.techStack.map((tech) => <span class="tag mono">{tech}</span>)}
+						</div>
+					)}
+				</div>
+			))}
+		</div>
+	</section>
+</Layout>
+
+<script define:vars={{ roles }}>
+	const el = document.getElementById('typing-text')
+	const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+	if (el) {
+		if (prefersReducedMotion || roles.length === 0) {
+			el.textContent = roles[0] ?? ''
+		} else {
+			let roleIndex = 0
+			let charIndex = 0
+			let deleting = false
+
+			const TYPE_SPEED = 70
+			const DELETE_SPEED = 35
+			const PAUSE_AT_FULL_WORD = 1400
+			const PAUSE_AT_EMPTY = 300
+
+			function tick() {
+				const current = roles[roleIndex]
+
+				if (!deleting) {
+					charIndex++
+					el.textContent = current.slice(0, charIndex)
+					if (charIndex === current.length) {
+						deleting = true
+						setTimeout(tick, PAUSE_AT_FULL_WORD)
+						return
+					}
+				} else {
+					charIndex--
+					el.textContent = current.slice(0, charIndex)
+					if (charIndex === 0) {
+						deleting = false
+						roleIndex = (roleIndex + 1) % roles.length
+						setTimeout(tick, PAUSE_AT_EMPTY)
+						return
+					}
+				}
+				setTimeout(tick, deleting ? DELETE_SPEED : TYPE_SPEED)
+			}
+
+			tick()
+		}
+	}
+
+	document.querySelectorAll('[data-href]').forEach((card) => {
+		card.addEventListener('click', (e) => {
+			if (e.target.closest('a')) return
+			const href = card.getAttribute('data-href')
+			if (href) window.open(href, '_blank', 'noopener')
+		})
+	})
+</script>
+
+<style>
+	section {
+		padding-top: 48px;
+		scroll-margin-top: 64px;
+	}
+	#home {
+		padding-top: 15px;
+		min-height: 65vh;
+	}
+	#home h1 {
+		font-size: 40px;
+	}
+	.engineer-line {
+		font-size: 30px;
+		color: var(--text-muted);
+		margin: 12px 0 0;
+	}
+	.typing-line {
+		font-size: 30px;
+		color: var(--text-muted);
+		margin: 4px 0 40px;
+	}
+	#typing-text {
+		color: var(--accent);
+	}
+	.cursor {
+		color: var(--accent);
+		animation: blink 1s step-end infinite;
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.cursor {
+			animation: none;
+		}
+	}
+	@keyframes blink {
+		50% {
+			opacity: 0;
+		}
+	}
+	.text-muted {
+		color: var(--text-muted);
+	}
+	.section-heading {
+		font-size: 30px;
+		color: var(--accent);
+		margin: 0 0 20px;
+	}
+	.skills {
+		display: flex;
+		flex-direction: column;
+		gap: 16px;
+	}
+	.skill-tier {
+		display: flex;
+		align-items: baseline;
+		gap: 14px;
+		flex-wrap: wrap;
+	}
+	.tier-label {
+		flex: none;
+		width: 190px;
+		font-size: 16px;
+		color: var(--text);
+	}
+	.tier-skills {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 8px;
+	}
+	.skill-pill {
+		font-size: 16px;
+		padding: 4px 10px;
+		border-radius: 4px;
+		border: 1px solid var(--border);
+		color: var(--text);
+	}
+
+	/* About */
+	.about-layout {
+		display: flex;
+		gap: 28px;
+		align-items: flex-start;
+	}
+	.avatar {
+		flex: none;
+		width: 140px;
+		height: 140px;
+		border-radius: 8px;
+		border: 1px solid var(--border);
+		object-fit: cover;
+	}
+	.bio {
+		line-height: 1.7;
+		white-space: pre-line;
+	}
+	@media (max-width: 560px) {
+		.about-layout {
+			flex-direction: column;
+		}
+	}
+
+	/* Experience + Projects shared */
+	.entries {
+		display: flex;
+		flex-direction: column;
+		gap: 16px;
+	}
+	.entry[data-href] {
+		cursor: pointer;
+		transition: border-color 0.15s ease;
+	}
+	.entry[data-href]:hover {
+		border-color: var(--accent);
+	}
+	.entry-top {
+		display: flex;
+		align-items: center;
+		gap: 16px;
+		margin-bottom: 12px;
+	}
+	.thumb {
+		flex: none;
+		width: 180px;
+		height: 100px;
+		border-radius: 6px;
+		border: 1px solid var(--border);
+		background: var(--bg);
+		object-fit: contain;
+	}
+	.entry-head {
+		flex: 1;
+		display: flex;
+		justify-content: space-between;
+		align-items: baseline;
+		gap: 16px;
+		flex-wrap: wrap;
+	}
+	.entry h3 {
+		font-size: 22px;
+		margin: 0 0 2px;
+		font-family: var(--font-mono);
+		font-weight: 600;
+	}
+	.company {
+		color: var(--accent);
+		font-size: 16px;
+		margin: 0;
+	}
+	.dates {
+		flex: none;
+		font-size: 15px;
+		color: var(--text-muted);
+		white-space: nowrap;
+	}
+	.bullets {
+		margin: 16px 0 0;
+		padding-left: 20px;
+	}
+	.bullets li {
+		margin-bottom: 8px;
+		line-height: 1.6;
+	}
+	.bullets li:last-child {
+		margin-bottom: 0;
+	}
+	.cover {
+		width: 100%;
+		height: auto;
+		border-radius: 4px;
+		border: 1px solid var(--border);
+		margin-bottom: 16px;
+		display: block;
+	}
+	.entry-links {
+		flex: none;
+		font-size: 13px;
+		margin: 0;
+	}
+	.entry-links a {
+		color: var(--accent);
+		text-decoration: none;
+	}
+	.entry-links a:hover {
+		text-decoration: underline;
+	}
+	.description {
+		margin: 10px 0 0;
+		line-height: 1.6;
+		max-width: 65ch;
+	}
+	.tags {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 8px;
+		margin-top: 16px;
+	}
+	.tag {
+		font-size: 12px;
+		padding: 3px 9px;
+		border-radius: 4px;
+		border: 1px solid var(--border);
+		color: var(--text-muted);
+	}
+</style>
