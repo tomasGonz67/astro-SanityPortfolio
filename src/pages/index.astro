@@ -70,12 +70,20 @@ function formatDate(dateStr?: string) {
 
 <Layout title="Home">
 	<section id="home" class="hero">
-		<h1>Hi, I'm {profile?.name ?? 'Tomas'}.</h1>
+		<div class="hero-row">
+			{profile?.avatar && (
+				<img class="avatar" src={urlFor(profile.avatar).width(240).height(240).url()} alt={profile.name} />
+			)}
+			<div class="hero-intro">
+				<p class="greeting mono">Hi, I'm</p>
+			<h1>{profile?.name ?? 'Tomas'}</h1>
 
-		<p class="engineer-line mono">I'm an Engineer</p>
-		<p class="typing-line mono">
-			<span id="typing-text"></span><span class="cursor">|</span>
-		</p>
+				<p class="engineer-line mono">I'm an Engineer</p>
+				<p class="typing-line mono">
+					<span id="typing-text"></span><span class="cursor">|</span>
+				</p>
+			</div>
+		</div>
 
 		{profile?.tagline && <p>{profile.tagline}</p>}
 
@@ -104,12 +112,7 @@ function formatDate(dateStr?: string) {
 
 		{profile && (
 			<div class="panel about-layout">
-				{profile.avatar && (
-					<img class="avatar" src={urlFor(profile.avatar).width(240).height(240).url()} alt={profile.name} />
-				)}
-				<div>
-					{profile.bio && <p class="bio">{profile.bio}</p>}
-				</div>
+				{profile.bio && <p class="bio">{profile.bio}</p>}
 			</div>
 		)}
 	</section>
@@ -239,6 +242,27 @@ function formatDate(dateStr?: string) {
 			if (href) window.open(href, '_blank', 'noopener')
 		})
 	})
+
+	const panels = document.querySelectorAll('.panel')
+	if (panels.length > 0 && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+		const revealObserver = new IntersectionObserver(
+			(entries) => {
+				entries.forEach((entry) => {
+					if (entry.isIntersecting) {
+						const target = entry.target
+						requestAnimationFrame(() => {
+							requestAnimationFrame(() => {
+								target.classList.add('in-view')
+							})
+						})
+						revealObserver.unobserve(entry.target)
+					}
+				})
+			},
+			{ threshold: 0.15 }
+		)
+		panels.forEach((panel) => revealObserver.observe(panel))
+	}
 </script>
 
 <style>
@@ -251,17 +275,57 @@ function formatDate(dateStr?: string) {
 		min-height: 65vh;
 	}
 	#home h1 {
-		font-size: 40px;
+		font-size: 44px;
+		margin: 0;
+	}
+	.greeting {
+		font-size: 22px;
+		color: var(--text-muted);
+		margin: 0 0 4px;
+	}
+	.hero-row {
+		display: flex;
+		align-items: stretch;
+		gap: 28px;
+		margin-bottom: 40px;
+	}
+	.hero-row .avatar {
+		flex: none;
+		width: auto;
+		height: 100%;
+		max-width: 220px;
+	}
+	.hero-intro {
+		position: relative;
+		display: inline-block;
+	}
+	@media (max-width: 560px) {
+		.hero-row {
+			flex-direction: column;
+			align-items: flex-start;
+		}
+		.hero-row .avatar {
+			width: 140px;
+			height: 140px;
+		}
+	}
+	.hero-intro::before {
+		content: '';
+		position: absolute;
+		inset: -50px;
+		background: radial-gradient(ellipse 75% 55% at center, rgba(20, 94, 21, 0.18) 0%, transparent 80%);
+		z-index: -1;
 	}
 	.engineer-line {
-		font-size: 30px;
-		color: var(--text-muted);
+		font-size: 34px;
+		font-weight: 600;
+		color: var(--text);
 		margin: 12px 0 0;
 	}
 	.typing-line {
-		font-size: 30px;
+		font-size: 34px;
 		color: var(--text-muted);
-		margin: 4px 0 40px;
+		margin: 4px 0 0;
 	}
 	#typing-text {
 		color: var(--accent);
@@ -283,6 +347,21 @@ function formatDate(dateStr?: string) {
 	.text-muted {
 		color: var(--text-muted);
 	}
+	.panel {
+		opacity: 0;
+		transform: translateY(12px);
+		transition: opacity 1s ease, transform 1s ease;
+	}
+	.panel.in-view {
+		opacity: 1;
+		transform: translateY(0);
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.panel {
+			opacity: 1;
+			transform: none;
+		}
+	}
 	.section-heading {
 		font-size: 30px;
 		color: var(--accent);
@@ -295,15 +374,45 @@ function formatDate(dateStr?: string) {
 	}
 	.skill-tier {
 		display: flex;
-		align-items: baseline;
-		gap: 14px;
-		flex-wrap: wrap;
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 10px;
 	}
 	.tier-label {
-		flex: none;
-		width: 190px;
-		font-size: 16px;
+		position: relative;
+		display: inline-block;
+		font-size: 15px;
 		color: var(--text);
+		padding-bottom: 6px;
+	}
+	.tier-label::after {
+		content: '';
+		position: absolute;
+		left: 0;
+		bottom: 0;
+		height: 2px;
+		width: 100%;
+		background: rgba(52, 199, 89, 0.6);
+		transform: scaleX(0);
+		transform-origin: left;
+		animation: tier-underline 1.6s ease-out forwards;
+	}
+	.skill-tier:nth-child(2) .tier-label::after {
+		animation-delay: 0.35s;
+	}
+	.skill-tier:nth-child(3) .tier-label::after {
+		animation-delay: 0.7s;
+	}
+	@keyframes tier-underline {
+		to {
+			transform: scaleX(1);
+		}
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.tier-label::after {
+			animation: none;
+			transform: scaleX(1);
+		}
 	}
 	.tier-skills {
 		display: flex;
@@ -311,35 +420,29 @@ function formatDate(dateStr?: string) {
 		gap: 8px;
 	}
 	.skill-pill {
-		font-size: 16px;
+		font-size: 15px;
 		padding: 4px 10px;
 		border-radius: 4px;
-		border: 1px solid var(--border);
+		border: 1px solid rgba(52, 199, 89, 0.2);
 		color: var(--text);
 	}
 
 	/* About */
 	.about-layout {
-		display: flex;
-		gap: 28px;
-		align-items: flex-start;
+		box-shadow: 0 0 16px rgba(52, 199, 89, 0.1);
 	}
 	.avatar {
 		flex: none;
 		width: 140px;
 		height: 140px;
-		border-radius: 8px;
-		border: 1px solid var(--border);
+		border-radius: 50%;
+		border: 2px solid rgba(52, 199, 89, 0.6);
+		box-shadow: 0 0 16px rgba(52, 199, 89, 0.35);
 		object-fit: cover;
 	}
 	.bio {
 		line-height: 1.7;
 		white-space: pre-line;
-	}
-	@media (max-width: 560px) {
-		.about-layout {
-			flex-direction: column;
-		}
 	}
 
 	/* Experience + Projects shared */
@@ -348,9 +451,12 @@ function formatDate(dateStr?: string) {
 		flex-direction: column;
 		gap: 16px;
 	}
+	.entry {
+		box-shadow: 0 0 16px rgba(52, 199, 89, 0.1);
+	}
 	.entry[data-href] {
 		cursor: pointer;
-		transition: border-color 0.15s ease;
+		transition: opacity 1s ease, transform 1s ease, border-color 0.15s ease;
 	}
 	.entry[data-href]:hover {
 		border-color: var(--accent);

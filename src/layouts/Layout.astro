@@ -1,24 +1,44 @@
 ---
 import '../styles/global.css'
-import { client } from '../lib/sanity'
+import { client, urlFor } from '../lib/sanity'
 
 interface Props {
 	title: string
+	description?: string
 }
 
-const { title } = Astro.props
+const DEFAULT_DESCRIPTION =
+	'Tomas Gonzalez — full-stack engineer focused on AI/ML, backend systems, and cloud infrastructure. See my experience, projects, and skills.'
+const OG_TITLE = 'Tomas Gonzalez — Full-Stack & AI/ML Engineer'
+
+const { title, description = DEFAULT_DESCRIPTION } = Astro.props
+const canonicalURL = new URL(Astro.url.pathname, Astro.site)
 
 interface Profile {
 	githubUrl?: string
 	linkedinUrl?: string
 	resumeFile?: { asset?: { url?: string } }
+	avatar?: any
 }
 
 const profile = await client.fetch<Profile | null>(
-	`*[_type == "profile"][0]{ githubUrl, linkedinUrl, resumeFile{ asset-> { url } } }`
+	`*[_type == "profile"][0]{ githubUrl, linkedinUrl, resumeFile{ asset-> { url } }, avatar }`
 )
 
 const resumeUrl = profile?.resumeFile?.asset?.url
+const ogImageUrl = profile?.avatar
+	? urlFor(profile.avatar.asset).width(600).height(600).fit('crop').url()
+	: undefined
+
+const sameAs = [profile?.githubUrl, profile?.linkedinUrl].filter(Boolean)
+const personSchema = {
+	'@context': 'https://schema.org',
+	'@type': 'Person',
+	name: 'Tomas Gonzalez',
+	url: Astro.site?.toString(),
+	jobTitle: 'Full-Stack & AI/ML Engineer',
+	...(sameAs.length > 0 && { sameAs }),
+}
 
 const navItems = [
 	{ href: '#home', label: 'Home' },
@@ -38,6 +58,22 @@ const EMAIL = 'thomasgonz67@gmail.com'
 		<meta name="viewport" content="width=device-width" />
 		<meta name="generator" content={Astro.generator} />
 		<title>{title} · tomasgonzalez</title>
+		<meta name="description" content={description} />
+		<link rel="canonical" href={canonicalURL} />
+
+		<meta property="og:type" content="website" />
+		<meta property="og:site_name" content="Tomas Gonzalez" />
+		<meta property="og:title" content={OG_TITLE} />
+		<meta property="og:description" content={description} />
+		<meta property="og:url" content={canonicalURL} />
+		{ogImageUrl && <meta property="og:image" content={ogImageUrl} />}
+
+		<meta name="twitter:card" content="summary" />
+		<meta name="twitter:title" content={OG_TITLE} />
+		<meta name="twitter:description" content={description} />
+		{ogImageUrl && <meta name="twitter:image" content={ogImageUrl} />}
+
+		<script type="application/ld+json" set:html={JSON.stringify(personSchema)} />
 		<script is:inline>
 			const stored = localStorage.getItem('theme')
 			if (stored === 'light') document.documentElement.setAttribute('data-theme', 'light')
@@ -67,6 +103,7 @@ const EMAIL = 'thomasgonz67@gmail.com'
 			{profile?.githubUrl && <a href={profile.githubUrl} target="_blank" rel="noopener">GitHub</a>}
 			{profile?.linkedinUrl && <a href={profile.linkedinUrl} target="_blank" rel="noopener">LinkedIn</a>}
 			<a href={`mailto:${EMAIL}`}>{EMAIL}</a>
+			<span class="built-with">(Built by me with Astro and Sanity CMS)</span>
 		</footer>
 		<script is:inline>
 			const root = document.documentElement
@@ -91,6 +128,9 @@ const EMAIL = 'thomasgonz67@gmail.com'
 						entries.forEach((entry) => {
 							if (entry.isIntersecting) {
 								const id = entry.target.getAttribute('id')
+								if (window.location.hash !== `#${id}`) {
+									history.replaceState(null, '', `#${id}`)
+								}
 								navLinks.forEach((link) => {
 									link.classList.toggle('active', link.getAttribute('data-nav-link') === `#${id}`)
 								})
@@ -168,6 +208,7 @@ const EMAIL = 'thomasgonz67@gmail.com'
 		align-items: center;
 		gap: 20px;
 		justify-content: center;
+		flex-wrap: wrap;
 		padding: 10px 20px;
 		background: var(--surface);
 		border-top: 1px solid var(--border);
@@ -180,5 +221,13 @@ const EMAIL = 'thomasgonz67@gmail.com'
 	}
 	footer a:hover {
 		color: var(--accent);
+	}
+	.built-with {
+		position: absolute;
+		left: 20px;
+		top: 50%;
+		transform: translateY(-50%);
+		color: var(--text-muted);
+		font-size: 12px;
 	}
 </style>
