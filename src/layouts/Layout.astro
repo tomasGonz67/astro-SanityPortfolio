@@ -161,8 +161,15 @@ const EMAIL = 'thomasgonz67@gmail.com'
 		display: flex;
 		gap: 4px;
 		flex: 1;
+		min-width: 0;
+		overflow-x: auto;
+		scrollbar-width: none;
+	}
+	nav::-webkit-scrollbar {
+		display: none;
 	}
 	nav a {
+		flex: none;
 		font-family: var(--font-mono);
 		font-size: 14px;
 		color: var(--text-muted);
@@ -170,6 +177,20 @@ const EMAIL = 'thomasgonz67@gmail.com'
 		padding: 6px 12px;
 		border-radius: 4px 4px 0 0;
 		border: 1px solid transparent;
+		white-space: nowrap;
+	}
+	@media (max-width: 560px) {
+		.tabbar {
+			gap: 12px;
+			padding: 10px 14px;
+		}
+		nav {
+			gap: 0;
+		}
+		nav a {
+			font-size: 13px;
+			padding: 6px 8px;
+		}
 	}
 	nav a:hover {
 		color: var(--text);

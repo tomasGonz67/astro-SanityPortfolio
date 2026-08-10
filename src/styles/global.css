@@ -34,6 +34,7 @@ body {
 	margin: 0;
 	padding: 0;
 	overscroll-behavior-y: none;
+	overflow-x: hidden;
 }
 
 html {
@@ -68,6 +69,18 @@ main {
 	max-width: 860px;
 	margin: 0 auto;
 	padding: 40px 24px 96px;
+}
+
+@media (max-width: 560px) {
+	body {
+		background-attachment: scroll;
+	}
+	main {
+		padding: 32px 14px 96px;
+	}
+	.panel {
+		padding: 16px 16px;
+	}
 }
 
 h1,

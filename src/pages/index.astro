@@ -302,11 +302,26 @@ function formatDate(dateStr?: string) {
 	@media (max-width: 560px) {
 		.hero-row {
 			flex-direction: column;
-			align-items: flex-start;
+			align-items: center;
 		}
 		.hero-row .avatar {
 			width: 140px;
 			height: 140px;
+		}
+		.hero-intro {
+			display: block;
+			width: 100%;
+			text-align: center;
+		}
+		#home h1 {
+			font-size: 32px;
+		}
+		.greeting {
+			font-size: 18px;
+		}
+		.engineer-line,
+		.typing-line {
+			font-size: 24px;
 		}
 	}
 	.hero-intro::before {
@@ -426,6 +441,14 @@ function formatDate(dateStr?: string) {
 		border: 1px solid rgba(52, 199, 89, 0.2);
 		color: var(--text);
 	}
+	@media (max-width: 560px) {
+		.skill-tier {
+			align-items: center;
+		}
+		.tier-skills {
+			justify-content: center;
+		}
+	}
 
 	/* About */
 	.about-layout {
@@ -475,6 +498,30 @@ function formatDate(dateStr?: string) {
 		border: 1px solid var(--border);
 		background: var(--bg);
 		object-fit: contain;
+	}
+	@media (max-width: 560px) {
+		.about-layout,
+		.entry {
+			text-align: center;
+		}
+		.entry-top {
+			flex-direction: column;
+			align-items: center;
+		}
+		.thumb {
+			width: 100%;
+			height: auto;
+			aspect-ratio: 16 / 9;
+		}
+		.entry-head {
+			justify-content: center;
+		}
+		.tags {
+			justify-content: center;
+		}
+		.description {
+			max-width: none;
+		}
 	}
 	.entry-head {
 		flex: 1;
