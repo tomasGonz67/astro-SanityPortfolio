@@ -34,7 +34,13 @@ body {
 	margin: 0;
 	padding: 0;
 	overscroll-behavior-y: none;
-	overflow-x: hidden;
+	/*
+	 * clip, not hidden: overflow-x: hidden makes body establish its own
+	 * scroll container, which breaks position: sticky on the header in
+	 * Chrome. clip prevents the same horizontal-overflow bleed without
+	 * that side effect.
+	 */
+	overflow-x: clip;
 }
 
 html {
