@@ -13,7 +13,10 @@ const profile = await client.fetch<Profile | null>(
 const resumeUrl = profile?.resumeFile?.asset?.url
 ---
 
-<Layout title="Resume">
+<Layout
+	title="Resume"
+	description="Resume of Tomas Gonzalez, a full-stack engineer specializing in AI/ML, backend systems, cloud infrastructure, and production web applications."
+>
 	<h1>Resume</h1>
 
 	{resumeUrl ? (

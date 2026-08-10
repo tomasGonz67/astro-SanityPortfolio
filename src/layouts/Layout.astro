@@ -12,6 +12,10 @@ const DEFAULT_DESCRIPTION =
 const OG_TITLE = 'Tomas Gonzalez — Full-Stack & AI/ML Engineer'
 
 const { title, description = DEFAULT_DESCRIPTION } = Astro.props
+// "Home" wastes the strongest SEO field by putting the page's own name in
+// the title instead of what the site is actually about — use the full
+// name+role there, and prefix other pages with their own title instead.
+const pageTitle = title === 'Home' ? OG_TITLE : `${title} | ${OG_TITLE}`
 const canonicalURL = new URL(Astro.url.pathname, Astro.site)
 
 interface Profile {
@@ -57,7 +61,7 @@ const EMAIL = 'thomasgonz67@gmail.com'
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="viewport" content="width=device-width" />
 		<meta name="generator" content={Astro.generator} />
-		<title>{title} · tomasgonzalez</title>
+		<title>{pageTitle}</title>
 		<meta name="description" content={description} />
 		<link rel="canonical" href={canonicalURL} />
 

@@ -149,9 +149,10 @@ function formatDate(dateStr?: string) {
 							{exp.techStack.map((tech) => <span class="tag mono">{tech}</span>)}
 						</div>
 					)}
-					{exp.githubUrl && (
+					{(exp.link || exp.githubUrl) && (
 						<p class="entry-links mono">
-							<a href={exp.githubUrl} target="_blank" rel="noopener">GitHub →</a>
+							{exp.link && <a href={exp.link} target="_blank" rel="noopener">View →</a>}
+							{exp.githubUrl && <a href={exp.githubUrl} target="_blank" rel="noopener">GitHub →</a>}
 						</p>
 					)}
 				</div>
@@ -172,9 +173,10 @@ function formatDate(dateStr?: string) {
 					)}
 					<div class="entry-head">
 						<h3>{project.title}</h3>
-						{project.githubUrl && (
+						{(project.link || project.githubUrl) && (
 							<p class="entry-links mono">
-								<a href={project.githubUrl} target="_blank" rel="noopener">GitHub →</a>
+								{project.link && <a href={project.link} target="_blank" rel="noopener">View →</a>}
+								{project.githubUrl && <a href={project.githubUrl} target="_blank" rel="noopener">GitHub →</a>}
 							</p>
 						)}
 					</div>
@@ -576,6 +578,8 @@ function formatDate(dateStr?: string) {
 	}
 	.entry-links {
 		flex: none;
+		display: flex;
+		gap: 14px;
 		font-size: 13px;
 		margin: 0;
 	}
