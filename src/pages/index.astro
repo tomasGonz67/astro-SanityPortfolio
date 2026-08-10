@@ -188,6 +188,8 @@ function formatDate(dateStr?: string) {
 			))}
 		</div>
 	</section>
+
+	<p class="built-with mono">// built by me with Astro + Sanity CMS</p>
 </Layout>
 
 <script define:vars={{ roles }}>
@@ -600,6 +602,12 @@ function formatDate(dateStr?: string) {
 		padding: 3px 9px;
 		border-radius: 4px;
 		border: 1px solid var(--border);
+		color: var(--text-muted);
+	}
+	.built-with {
+		margin: 48px 0 0;
+		text-align: center;
+		font-size: 12px;
 		color: var(--text-muted);
 	}
 </style>
