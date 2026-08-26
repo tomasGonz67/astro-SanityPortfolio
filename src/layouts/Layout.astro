@@ -151,9 +151,6 @@ const EMAIL = 'thomasgonz67@gmail.com'
 						entries.forEach((entry) => {
 							if (entry.isIntersecting) {
 								const id = entry.target.getAttribute('id')
-								if (window.location.hash !== `#${id}`) {
-									history.replaceState(null, '', `#${id}`)
-								}
 								navLinks.forEach((link) => {
 									link.classList.toggle('active', link.getAttribute('data-nav-link') === `#${id}`)
 								})
