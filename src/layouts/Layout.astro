@@ -144,6 +144,21 @@ const EMAIL = 'thomasgonz67@gmail.com'
 		<script is:inline>
 			const sections = document.querySelectorAll('section[id]')
 			const navLinks = document.querySelectorAll('a[data-nav-link^="#"]')
+			const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+			// Nav links keep a real href="#section" (for right-click / copy-link /
+			// middle-click-to-new-tab), but a plain click is intercepted so it
+			// scrolls without ever touching the URL — only an explicit click on
+			// the browser's own address bar or a shared link should set the hash.
+			navLinks.forEach((link) => {
+				link.addEventListener('click', (e) => {
+					const href = link.getAttribute('data-nav-link')
+					const target = href ? document.querySelector(href) : null
+					if (!target) return
+					e.preventDefault()
+					target.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth' })
+				})
+			})
 
 			if (sections.length > 0 && navLinks.length > 0) {
 				const observer = new IntersectionObserver(
