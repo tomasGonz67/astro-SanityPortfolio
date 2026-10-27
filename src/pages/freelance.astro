@@ -9,27 +9,39 @@ const SITE = 'https://tomasgonz67.com'
 const edges = [
 	{
 		name: 'You own it — pay once',
-		blurb: 'Base44 and the AI builders are subscriptions ($16–$200/mo) plus credits, forever — stop paying and it’s gone. I build it once; you own the code and host it anywhere — free up to ~100k requests a day, then about $5 a month. No subscription, no hosting rent, no lock-in.',
+		ai: 'AI builders host your site for you, as a monthly subscription plus usage credits.',
+		limit: 'You rent it forever ($16–$200/mo + credits) and own none of it — stop paying and it’s gone, and you’re locked into their platform.',
+		solve: 'I build it once; you own the code and host it anywhere — free up to ~100k requests a day, then about $5/mo. No subscription, no lock-in.',
 	},
 	{
 		name: 'The right solution for your problem',
-		blurb: 'I start from what your business needs to do, then pick and tune the stack for your cost, performance, and growth — not a template or an AI default. No overpaying, no walls when you scale.',
+		ai: 'AI builds exactly what you describe, with whatever stack it defaults to.',
+		limit: 'It needs you to already be the architect — it won’t tell you what you actually need, and its default can be slow, pricey, or hit a wall as you grow.',
+		solve: 'I start from your business problem, then pick and tune the stack for your cost, performance, and growth. No overpaying, no walls.',
 	},
 	{
 		name: 'Accessibility & ADA',
-		blurb: 'Built to WCAG 2.1 AA — reaches every customer and shields you from the web-accessibility lawsuits most AI and template sites are wide open to.',
+		ai: 'AI generators output markup that looks finished.',
+		limit: 'It’s almost never accessible — and most owners don’t know ADA applies to websites, leaving them open to accessibility lawsuits.',
+		solve: 'I build to WCAG 2.1 AA — reaches every customer and shields you from those lawsuits.',
 	},
 	{
 		name: 'Security, tested',
-		blurb: 'No leaked keys, open forms, spam floods, or mishandled data. I build it secure and check for the holes AI quietly leaves behind.',
+		ai: 'AI produces code that runs and looks fine.',
+		limit: 'It routinely leaves leaked keys, insecure forms, no spam/rate-limiting, and mishandled data — and won’t flag its own holes.',
+		solve: 'I build it secure and test for the vulnerabilities before real customers and their data ever touch it.',
 	},
 	{
 		name: 'Compliance-aware',
-		blurb: 'ADA, privacy policy, cookie consent, terms, email rules — built to them, with a heads-up when you genuinely need a lawyer. A layperson with AI doesn’t know these exist.',
+		ai: 'AI builds the page; compliance isn’t its job and it won’t bring it up.',
+		limit: 'Privacy policy, cookie consent, terms, email rules, ADA — a layperson with AI doesn’t know these exist until there’s a problem.',
+		solve: 'I build to them, and flag when you genuinely need a lawyer.',
 	},
 	{
 		name: 'Real engineering judgment',
-		blurb: 'AI writes code that looks right and is subtly broken, insecure, or unscalable — and can’t tell. I know when it’s wrong, and I fix it.',
+		ai: 'AI generates code fast and confidently from your prompt.',
+		limit: 'That code is often subtly broken, insecure, or unscalable — and the AI can’t tell. When it breaks, a non-dev is stuck.',
+		solve: 'I know when it’s wrong, fix it, and make it maintainable — and I use AI myself to move fast.',
 	},
 ]
 
@@ -120,7 +132,18 @@ const serviceSchema = {
 				edges.map((e) => (
 					<div class="panel fl-card">
 						<h3>{e.name}</h3>
-						<p class="fl-blurb">{e.blurb}</p>
+						<div class="fl-step">
+							<span class="fl-step-label">How AI does it</span>
+							<p>{e.ai}</p>
+						</div>
+						<div class="fl-step">
+							<span class="fl-step-label">Limitations of this</span>
+							<p>{e.limit}</p>
+						</div>
+						<div class="fl-step fl-step-solve">
+							<span class="fl-step-label">Problem I solve</span>
+							<p>{e.solve}</p>
+						</div>
 					</div>
 				))
 			}
@@ -270,6 +293,31 @@ const serviceSchema = {
 	}
 	.fl-card h3 {
 		margin: 0 0 0.4rem;
+	}
+	.fl-step {
+		margin-top: 0.8rem;
+	}
+	.fl-step-label {
+		display: block;
+		font-family: var(--font-mono);
+		font-size: 0.68rem;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+		opacity: 0.55;
+		margin-bottom: 0.15rem;
+	}
+	.fl-step p {
+		margin: 0;
+		font-size: 0.9rem;
+		line-height: 1.5;
+		opacity: 0.9;
+	}
+	.fl-step-solve .fl-step-label {
+		color: var(--accent);
+		opacity: 1;
+	}
+	.fl-step-solve p {
+		opacity: 1;
 	}
 	.fl-card-head {
 		display: flex;
