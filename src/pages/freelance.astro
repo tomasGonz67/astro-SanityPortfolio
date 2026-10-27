@@ -12,12 +12,15 @@ const edges: Array<{ name: string; ai: string; limit: string; solve: string; fac
 		ai: 'AI builders host your site for you, as a monthly subscription plus usage credits.',
 		limit: 'You rent it forever ($16–$200/mo + credits) and own none of it — stop paying and it’s gone, and you’re locked into their platform.',
 		solve: 'I build it once; you own the code and host it anywhere — free up to ~100k requests a day, then about $5/mo. No subscription, no lock-in.',
+		facts: 'Base44 (now owned by Wix) and similar AI builders run on monthly subscriptions ($16–$200/mo) plus usage credits that don’t roll over — and your site lives on their platform. Cloudflare hosting for a static site is free up to ~100k requests a day, then about $5/mo.',
+		process: 'I hand over everything: the code in your own repo, your domain, and your own Cloudflare account. It’s yours to keep, move, or hand to another developer — no leash.',
 	},
 	{
 		name: 'The right solution for your problem',
 		ai: 'AI builds exactly what you describe, with whatever stack it defaults to.',
 		limit: 'It needs you to already be the architect — it won’t tell you what you actually need, and its default can be slow, pricey, or hit a wall as you grow.',
 		solve: 'I start from your business problem, then pick and tune the stack for your cost, performance, and growth. No overpaying, no walls.',
+		process: 'We start with a short discovery call about what your business actually needs to do. I map the requirements, recommend the simplest stack that fits your budget and growth, and scope it before any code — so you’re not paying for things you’ll never use.',
 	},
 	{
 		name: 'Accessibility & ADA',
@@ -32,18 +35,23 @@ const edges: Array<{ name: string; ai: string; limit: string; solve: string; fac
 		ai: 'AI produces code that runs and looks fine.',
 		limit: 'It routinely leaves leaked keys, insecure forms, no spam/rate-limiting, and mishandled data — and won’t flag its own holes.',
 		solve: 'I build it secure and test for the vulnerabilities before real customers and their data ever touch it.',
+		facts: 'Leaked API keys, unvalidated forms, and no spam/rate-limiting are among the most common issues in AI-generated and no-code sites — and the tools don’t flag their own holes.',
+		process: 'Secrets kept in environment variables (never in the code), form inputs validated and rate-limited against spam/abuse, security headers and HTTPS enforced, and dependencies checked for known vulnerabilities before launch.',
 	},
 	{
 		name: 'Compliance-aware',
 		ai: 'AI builds the page; compliance isn’t its job and it won’t bring it up.',
 		limit: 'Privacy policy, cookie consent, terms, email rules, ADA — a layperson with AI doesn’t know these exist until there’s a problem.',
 		solve: 'I build to them, and flag when you genuinely need a lawyer.',
+		facts: 'Depending on who you serve, a site can trigger privacy-policy, cookie-consent (GDPR/CCPA), terms-of-service, email (CAN-SPAM), and ADA obligations. Most AI builders address none of them.',
+		process: 'I build to the ones that apply — privacy policy, cookie consent, and safe handling of any form data — and flag clearly when something genuinely needs a lawyer. I’m not one, and I’ll tell you when you need one.',
 	},
 	{
 		name: 'A consultant, not just a coder',
 		ai: 'AI answers the exact prompt you feed it — it’s only ever as good as the question you ask.',
 		limit: 'It doesn’t understand your business, so it can’t tell you what to build or flag a better approach — and a vague prompt gets a generic, mediocre result. You have to already know the right questions.',
 		solve: 'I act as your technical consultant: I learn your business, recommend the right approach, and know how to direct AI and LLMs to get precise, efficient results — so you get advice and direction, not just code.',
+		process: 'I learn your business and goals first, then recommend the right approach — sometimes that’s less than you asked for. And because I’m an engineer who uses these tools every day, I know how to steer AI and LLMs to produce precise, efficient results instead of generic guesses.',
 	},
 ]
 
@@ -132,7 +140,7 @@ const serviceSchema = {
 		<div class="fl-grid">
 			{
 				edges.map((e, i) => (
-					<div class="panel fl-card">
+					<div class="panel fl-card" data-open={e.facts || e.process ? `facts-${i}` : undefined}>
 						<h3>{e.name}</h3>
 						<div class="fl-step">
 							<span class="fl-step-label">How AI does it</span>
@@ -147,7 +155,7 @@ const serviceSchema = {
 							<p>{e.solve}</p>
 						</div>
 						{(e.facts || e.process) && (
-							<button type="button" class="fl-facts-btn" data-open={`facts-${i}`}>More details →</button>
+							<button type="button" class="fl-facts-btn">More details →</button>
 						)}
 					</div>
 				))
@@ -363,6 +371,9 @@ const serviceSchema = {
 	}
 	.fl-step-solve p {
 		opacity: 1;
+	}
+	.fl-card[data-open] {
+		cursor: pointer;
 	}
 	.fl-facts-btn {
 		margin-top: 1rem;
