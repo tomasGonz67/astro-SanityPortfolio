@@ -93,7 +93,7 @@ const serviceSchema = {
 	description="Freelance website builder and web developer in Holmdel, NJ. I build fast, custom websites — plus web apps and custom software — for businesses across Monmouth County and New Jersey. Built to own and easy to update."
 	extraSchema={serviceSchema}
 >
-	<!-- Summary / hook (always visible) -->
+	<!-- 1. Summary / hook (always visible) -->
 	<section class="fl-hero">
 		<p class="greeting mono">Freelance web development</p>
 		<h1>Website builder &amp; web developer in Holmdel, NJ</h1>
@@ -105,63 +105,19 @@ const serviceSchema = {
 		<a class="fl-cta" href={`mailto:${EMAIL}?subject=Website%20project`}>Get a free quote →</a>
 	</section>
 
-	<!-- Trigger cards (each opens a pop-up dialog) -->
-	<div class="fl-section">
-		<div class="fl-summary">
+	<!-- Collapsible sections -->
+	<details class="fl-section">
+		<summary class="fl-summary">
 			<div class="fl-summary-text">
 				<h2 class="section-heading">Why choose me?</h2>
 				<p class="fl-summary-desc">What sets me apart from an agency, a DIY builder, or just using AI.</p>
 			</div>
-			<button type="button" class="fl-toggle" data-open="dlg-why">See more →</button>
-		</div>
-	</div>
-
-	<div class="fl-section">
-		<div class="fl-summary">
-			<div class="fl-summary-text">
-				<h2 class="section-heading">What AI can't give you</h2>
-				<p class="fl-summary-desc">Accessibility, security, compliance, and judgment — the parts AI and templates skip.</p>
-			</div>
-			<button type="button" class="fl-toggle" data-open="dlg-moats">See more →</button>
-		</div>
-	</div>
-
-	<div class="fl-section">
-		<div class="fl-summary">
-			<div class="fl-summary-text">
-				<h2 class="section-heading">My plans</h2>
-				<p class="fl-summary-desc">Packages and starting prices — from a one-page site to a custom web app.</p>
-			</div>
-			<button type="button" class="fl-toggle" data-open="dlg-plans">See more →</button>
-		</div>
-	</div>
-
-	<div class="fl-section">
-		<div class="fl-summary">
-			<div class="fl-summary-text">
-				<h2 class="section-heading">Selected work</h2>
-				<p class="fl-summary-desc">A few recent sites and apps I've built for clients.</p>
-			</div>
-			<button type="button" class="fl-toggle" data-open="dlg-work">See more →</button>
-		</div>
-	</div>
-
-	<!-- Contact (always visible) -->
-	<section class="fl-contact">
-		<h2 class="section-heading">Start a project</h2>
-		<div class="panel">
-			<p>Tell me about your business and what you need — I'll reply with ideas and a quote.</p>
-			<a class="fl-cta" href={`mailto:${EMAIL}?subject=Website%20project`}>Email me →</a>
-		</div>
-	</section>
-
-	<!-- Pop-up dialogs -->
-	<dialog class="fl-dialog" id="dlg-why" aria-labelledby="dlg-why-title">
-		<div class="fl-dialog-inner">
-			<div class="fl-dialog-head">
-				<h2 id="dlg-why-title" class="section-heading">Why choose me?</h2>
-				<button type="button" class="fl-dialog-close" data-close aria-label="Close">✕</button>
-			</div>
+			<span class="fl-toggle">
+				<span class="fl-toggle-more">See more →</span>
+				<span class="fl-toggle-less">See less →</span>
+			</span>
+		</summary>
+		<div class="fl-section-body">
 			<div class="fl-why-grid">
 				<div class="panel">
 					<h3>Over the alternatives</h3>
@@ -184,14 +140,20 @@ const serviceSchema = {
 				</div>
 			</div>
 		</div>
-	</dialog>
+	</details>
 
-	<dialog class="fl-dialog" id="dlg-moats" aria-labelledby="dlg-moats-title">
-		<div class="fl-dialog-inner">
-			<div class="fl-dialog-head">
-				<h2 id="dlg-moats-title" class="section-heading">What AI can't give you</h2>
-				<button type="button" class="fl-dialog-close" data-close aria-label="Close">✕</button>
+	<details class="fl-section">
+		<summary class="fl-summary">
+			<div class="fl-summary-text">
+				<h2 class="section-heading">What AI can't give you</h2>
+				<p class="fl-summary-desc">Accessibility, security, compliance, and judgment — the parts AI and templates skip.</p>
 			</div>
+			<span class="fl-toggle">
+				<span class="fl-toggle-more">See more →</span>
+				<span class="fl-toggle-less">See less →</span>
+			</span>
+		</summary>
+		<div class="fl-section-body">
 			<div class="fl-grid">
 				{
 					moats.map((m) => (
@@ -203,14 +165,20 @@ const serviceSchema = {
 				}
 			</div>
 		</div>
-	</dialog>
+	</details>
 
-	<dialog class="fl-dialog" id="dlg-plans" aria-labelledby="dlg-plans-title">
-		<div class="fl-dialog-inner">
-			<div class="fl-dialog-head">
-				<h2 id="dlg-plans-title" class="section-heading">My plans</h2>
-				<button type="button" class="fl-dialog-close" data-close aria-label="Close">✕</button>
+	<details class="fl-section">
+		<summary class="fl-summary">
+			<div class="fl-summary-text">
+				<h2 class="section-heading">My plans</h2>
+				<p class="fl-summary-desc">Packages and starting prices — from a one-page site to a custom web app.</p>
 			</div>
+			<span class="fl-toggle">
+				<span class="fl-toggle-more">See more →</span>
+				<span class="fl-toggle-less">See less →</span>
+			</span>
+		</summary>
+		<div class="fl-section-body">
 			<div class="fl-grid">
 				{
 					plans.map((p) => (
@@ -233,14 +201,20 @@ const serviceSchema = {
 				+ ongoing care &amp; updates from $75/mo · Intro pricing while I build my portfolio — every project gets a custom quote.
 			</p>
 		</div>
-	</dialog>
+	</details>
 
-	<dialog class="fl-dialog" id="dlg-work" aria-labelledby="dlg-work-title">
-		<div class="fl-dialog-inner">
-			<div class="fl-dialog-head">
-				<h2 id="dlg-work-title" class="section-heading">Selected work</h2>
-				<button type="button" class="fl-dialog-close" data-close aria-label="Close">✕</button>
+	<details class="fl-section">
+		<summary class="fl-summary">
+			<div class="fl-summary-text">
+				<h2 class="section-heading">Selected work</h2>
+				<p class="fl-summary-desc">A few recent sites and apps I've built for clients.</p>
 			</div>
+			<span class="fl-toggle">
+				<span class="fl-toggle-more">See more →</span>
+				<span class="fl-toggle-less">See less →</span>
+			</span>
+		</summary>
+		<div class="fl-section-body">
 			<div class="panel">
 				<p>A few recent builds — more on the <a href="/#projects">projects</a> section of my site.</p>
 				<ul class="fl-list">
@@ -250,24 +224,17 @@ const serviceSchema = {
 				</ul>
 			</div>
 		</div>
-	</dialog>
-</Layout>
+	</details>
 
-<script>
-	// Open the matching <dialog> as a modal; close via the ✕, Esc (native), or a backdrop click.
-	for (const btn of document.querySelectorAll<HTMLElement>('[data-open]')) {
-		btn.addEventListener('click', () => {
-			const dlg = document.getElementById(btn.dataset.open ?? '') as HTMLDialogElement | null
-			dlg?.showModal()
-		})
-	}
-	for (const dlg of document.querySelectorAll<HTMLDialogElement>('dialog.fl-dialog')) {
-		dlg.querySelector('[data-close]')?.addEventListener('click', () => dlg.close())
-		dlg.addEventListener('click', (e) => {
-			if (e.target === dlg) dlg.close() // click on the backdrop area
-		})
-	}
-</script>
+	<!-- Contact (always visible) -->
+	<section class="fl-contact">
+		<h2 class="section-heading">Start a project</h2>
+		<div class="panel">
+			<p>Tell me about your business and what you need — I'll reply with ideas and a quote.</p>
+			<a class="fl-cta" href={`mailto:${EMAIL}?subject=Website%20project`}>Email me →</a>
+		</div>
+	</section>
+</Layout>
 
 <style>
 	.fl-hero {
@@ -296,7 +263,7 @@ const serviceSchema = {
 		opacity: 0.7;
 	}
 
-	/* Trigger cards */
+	/* Collapsible sections — each a themed panel with a See more/less button */
 	.fl-section {
 		background: var(--surface);
 		border: 1px solid var(--border);
@@ -309,7 +276,12 @@ const serviceSchema = {
 		align-items: center;
 		justify-content: space-between;
 		gap: 1rem;
+		cursor: pointer;
+		list-style: none;
 		padding-block: 0.75rem;
+	}
+	.fl-summary::-webkit-details-marker {
+		display: none;
 	}
 	.fl-summary h2 {
 		margin: 0;
@@ -327,73 +299,33 @@ const serviceSchema = {
 		flex: none;
 		display: inline-flex;
 		align-items: center;
-		background: none;
 		color: var(--accent);
 		border: 1px solid var(--accent);
 		border-radius: 8px;
 		padding: 0.45rem 0.9rem;
-		font-family: inherit;
 		font-size: 0.82rem;
 		font-weight: 600;
 		white-space: nowrap;
-		cursor: pointer;
 		transition: opacity 0.15s ease;
 	}
-	.fl-toggle:hover {
+	.fl-summary:hover .fl-toggle {
 		opacity: 0.7;
 	}
-
-	/* Pop-up dialogs */
-	.fl-dialog {
-		padding: 0;
-		border: 1px solid var(--border);
-		border-radius: 10px;
-		background: var(--surface);
-		color: inherit;
-		width: calc(100% - 2rem);
-		max-width: 680px;
-		max-height: 85vh;
-		overflow: hidden;
+	.fl-toggle-less {
+		display: none;
 	}
-	.fl-dialog::backdrop {
-		background: rgba(0, 0, 0, 0.55);
+	details[open] > .fl-summary .fl-toggle-more {
+		display: none;
 	}
-	.fl-dialog-inner {
-		padding: 24px;
-		max-height: 85vh;
-		overflow-y: auto;
+	details[open] > .fl-summary .fl-toggle-less {
+		display: inline;
 	}
-	.fl-dialog-head {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		gap: 1rem;
-		margin-bottom: 1.1rem;
+	.fl-section-body {
+		padding-block: 0.25rem 1.25rem;
 	}
-	.fl-dialog-head h2 {
-		margin: 0;
-	}
-	.fl-dialog-close {
-		flex: none;
-		background: none;
-		border: none;
-		color: inherit;
-		font-size: 1.1rem;
-		line-height: 1;
-		cursor: pointer;
-		opacity: 0.6;
-		padding: 0.3rem;
-	}
-	.fl-dialog-close:hover {
-		opacity: 1;
-	}
-	/* inside a dialog: panels transparent (no box-in-box), grids single column */
-	.fl-dialog .panel {
+	/* inner cards sit transparent inside the themed section (no box-in-box) */
+	.fl-section .panel {
 		background: transparent;
-	}
-	.fl-dialog .fl-why-grid,
-	.fl-dialog .fl-grid {
-		grid-template-columns: 1fr;
 	}
 
 	.fl-why-grid,
