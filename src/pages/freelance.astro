@@ -4,26 +4,31 @@ import Layout from '../layouts/Layout.astro'
 const EMAIL = 'thomasgonz67@gmail.com'
 const SITE = 'https://tomasgonz67.com'
 
-const services = [
+// NOTE: intro placeholder pricing — Tomas to confirm/adjust the numbers.
+const plans = [
 	{
-		name: 'One-Page Website',
-		blurb: 'A single, high-converting page — great for a new business, a service, or a launch.',
-		points: ['Custom design', 'Mobile-first & fast', 'Contact form', 'Live in ~1–2 weeks'],
+		name: 'Starter Site',
+		price: 'from $600',
+		blurb: 'A clean, custom one-page site to get your business online fast.',
+		points: ['Single high-converting page', 'Mobile-first & fast', 'Contact form', 'Live in ~1–2 weeks'],
 	},
 	{
-		name: 'Full Website + CMS',
-		blurb: 'A multi-page site you can edit yourself — services, about, portfolio, booking, and more.',
+		name: 'Business Website',
+		price: 'from $1,800',
+		blurb: 'A multi-page site with a CMS you can update yourself.',
 		points: ['Multi-page custom build', 'Easy self-edit CMS', 'Built for SEO', 'Contact / booking forms'],
 	},
 	{
 		name: 'Redesign / Migration',
-		blurb: 'Move off Wix, Squarespace, or an old site onto something fast, modern, and yours.',
+		price: 'from $1,200',
+		blurb: 'Move off Wix, Squarespace, or an old site onto something fast and yours.',
 		points: ['Rebuilt on a modern stack', 'Keep your content & SEO', 'Faster load times', 'Own your code'],
 	},
 	{
-		name: 'Care & Updates',
-		blurb: 'Ongoing changes and maintenance after launch — on call when you need something.',
-		points: ['Content & copy updates', 'New sections / pages', 'Fixes & tweaks', 'No long contracts'],
+		name: 'Web App / Custom Software',
+		price: 'custom quote',
+		blurb: 'Dashboards, portals, internal tools, automations, AI features — scoped to you.',
+		points: ['Full-stack web apps', 'Automations & integrations', 'AI features', 'Built by a senior engineer'],
 	},
 ]
 
@@ -32,7 +37,7 @@ const serviceSchema = {
 	'@type': 'ProfessionalService',
 	name: 'Tomas Gonzalez — Freelance Web Development',
 	description:
-		'Custom website design and development for small businesses — a website builder and web developer in Holmdel, NJ, serving Monmouth County and across New Jersey.',
+		'Custom website design and development for small businesses — a website builder and web developer in Holmdel, NJ, serving Monmouth County and across New Jersey. Also web apps and custom software.',
 	url: `${SITE}/freelance`,
 	provider: { '@type': 'Person', name: 'Tomas Gonzalez', url: SITE },
 	areaServed: [
@@ -46,7 +51,15 @@ const serviceSchema = {
 		addressRegion: 'NJ',
 		addressCountry: 'US',
 	},
-	serviceType: ['Website design', 'Web development', 'Website redesign', 'CMS website', 'Website builder'],
+	serviceType: [
+		'Website design',
+		'Web development',
+		'Website redesign',
+		'CMS website',
+		'Website builder',
+		'Web application development',
+		'Custom software',
+	],
 	priceRange: '$$',
 }
 ---
@@ -54,50 +67,73 @@ const serviceSchema = {
 <Layout
 	title="Freelance"
 	fullTitle="Website Builder & Web Developer in NJ · Tomas Gonzalez"
-	description="Freelance website builder and web developer in Holmdel, NJ. I design fast, custom websites for small businesses across Monmouth County and New Jersey — built to own and easy to update."
+	description="Freelance website builder and web developer in Holmdel, NJ. I build fast, custom websites — plus web apps and custom software — for businesses across Monmouth County and New Jersey. Built to own and easy to update."
 	extraSchema={serviceSchema}
 >
+	<!-- 1. Summary / hook -->
 	<section class="fl-hero">
 		<p class="greeting mono">Freelance web development</p>
 		<h1>Website builder &amp; web developer in Holmdel, NJ</h1>
 		<p class="fl-lede">
-			I design and build fast, custom websites for small businesses and professionals across
-			<strong>Holmdel, Monmouth County, and New Jersey</strong> — modern, mobile-first, easy to update, and built to own.
+			I build fast, custom <strong>websites</strong> — plus <strong>web apps and custom software</strong> — for small
+			businesses and professionals across Holmdel, Monmouth County, and New Jersey. Modern, mobile-first, easy to update,
+			and built to own. One person, start to finish: the one who builds it is the one you talk to.
 		</p>
 		<a class="fl-cta" href={`mailto:${EMAIL}?subject=Website%20project`}>Get a free quote →</a>
 	</section>
 
+	<!-- 2. Why choose me -->
 	<section>
-		<h2 class="section-heading">What I build</h2>
+		<h2 class="section-heading">Why choose me?</h2>
+		<div class="fl-why-grid">
+			<div class="panel">
+				<h3>Over the alternatives</h3>
+				<ul class="fl-list">
+					<li><strong>You work with me, not a sales team.</strong> No handoffs, no account-manager markup — faster answers, built by the person you actually hired.</li>
+					<li><strong>Custom, not a template.</strong> Hand-coded on a modern stack — loads fast, ranks better, and doesn't look like every other Squarespace site.</li>
+					<li><strong>You own everything.</strong> Your domain, your code, your content — no monthly platform rent, no lock-in.</li>
+					<li><strong>Local.</strong> Based in Holmdel, NJ — a real person down the road, not an overseas agency.</li>
+					<li><strong>A senior engineer.</strong> I also build full apps and software, so your site is built right — not just dragged and dropped.</li>
+				</ul>
+			</div>
+			<div class="panel">
+				<h3>In the age of AI</h3>
+				<ul class="fl-list">
+					<li><strong>AI builders give you a guess.</strong> Wix AI, ChatGPT site generators, and no-code tools spit out generic, templated sites that break the moment you need something specific — and you're renting them.</li>
+					<li><strong>I use AI to move faster, not to think for me.</strong> It speeds up the busywork and keeps your cost down; the judgment, the custom logic, the performance, and the ownership come from a real engineer.</li>
+					<li><strong>The result is actually yours.</strong> Fast, custom, and built to do what your business needs — not a cookie-cutter guess you're stuck paying for every month.</li>
+				</ul>
+			</div>
+		</div>
+	</section>
+
+	<!-- 3. My plans -->
+	<section>
+		<h2 class="section-heading">My plans</h2>
 		<div class="fl-grid">
 			{
-				services.map((s) => (
+				plans.map((p) => (
 					<div class="panel fl-card">
-						<h3>{s.name}</h3>
-						<p class="fl-blurb">{s.blurb}</p>
+						<div class="fl-card-head">
+							<h3>{p.name}</h3>
+							<span class="fl-price mono">{p.price}</span>
+						</div>
+						<p class="fl-blurb">{p.blurb}</p>
 						<ul class="fl-points mono">
-							{s.points.map((p) => (
-								<li>{p}</li>
+							{p.points.map((pt) => (
+								<li>{pt}</li>
 							))}
 						</ul>
 					</div>
 				))
 			}
 		</div>
+		<p class="fl-note mono text-muted">
+			+ ongoing care &amp; updates from $75/mo · Intro pricing while I build my portfolio — every project gets a custom quote.
+		</p>
 	</section>
 
-	<section>
-		<h2 class="section-heading">Why work with me</h2>
-		<div class="panel">
-			<ul class="fl-list">
-				<li><strong>Fast, custom-built</strong> — hand-coded, not a bloated template. Loads quick, ranks better.</li>
-				<li><strong>You own it</strong> — your domain, your code, your content. No platform lock-in, no monthly website rent.</li>
-				<li><strong>Easy to update</strong> — a simple CMS so you can change text and photos yourself.</li>
-				<li><strong>Local &amp; responsive</strong> — based in Holmdel, NJ; I answer and iterate quickly.</li>
-			</ul>
-		</div>
-	</section>
-
+	<!-- 4. Selected work -->
 	<section>
 		<h2 class="section-heading">Selected work</h2>
 		<div class="panel">
@@ -110,6 +146,7 @@ const serviceSchema = {
 		</div>
 	</section>
 
+	<!-- 5. Contact -->
 	<section class="fl-contact">
 		<h2 class="section-heading">Start a project</h2>
 		<div class="panel">
@@ -128,7 +165,7 @@ const serviceSchema = {
 		max-width: 20ch;
 	}
 	.fl-lede {
-		max-width: 60ch;
+		max-width: 62ch;
 		opacity: 0.85;
 		line-height: 1.6;
 	}
@@ -145,13 +182,27 @@ const serviceSchema = {
 	.fl-cta:hover {
 		opacity: 0.7;
 	}
+	.fl-why-grid,
 	.fl-grid {
 		display: grid;
 		grid-template-columns: 1fr 1fr;
 		gap: 1rem;
 	}
-	.fl-card h3 {
-		margin: 0 0 0.4rem;
+	.fl-card-head {
+		display: flex;
+		justify-content: space-between;
+		align-items: baseline;
+		gap: 0.75rem;
+		margin-bottom: 0.4rem;
+	}
+	.fl-card-head h3 {
+		margin: 0;
+	}
+	.fl-price {
+		font-size: 0.85rem;
+		font-weight: 600;
+		opacity: 0.9;
+		white-space: nowrap;
 	}
 	.fl-blurb {
 		margin: 0 0 0.9rem;
@@ -172,10 +223,18 @@ const serviceSchema = {
 		gap: 0.6rem;
 		line-height: 1.55;
 	}
+	.fl-why-grid h3 {
+		margin-top: 0;
+	}
+	.fl-note {
+		margin-top: 1rem;
+		font-size: 0.82rem;
+	}
 	.fl-contact {
 		margin-top: 1rem;
 	}
 	@media (max-width: 640px) {
+		.fl-why-grid,
 		.fl-grid {
 			grid-template-columns: 1fr;
 		}
