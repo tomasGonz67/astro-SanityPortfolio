@@ -5,17 +5,20 @@ import { client, urlFor } from '../lib/sanity'
 interface Props {
 	title: string
 	description?: string
+	fullTitle?: string
+	extraSchema?: Record<string, unknown>
 }
 
 const DEFAULT_DESCRIPTION =
-	'Tomas Gonzalez — full-stack engineer focused on AI/ML, backend systems, and cloud infrastructure. See my experience, projects, and skills.'
-const OG_TITLE = 'Tomas Gonzalez — Full-Stack & AI/ML Engineer'
+	'Tomas Gonzalez — software engineer and website builder in Holmdel, NJ. I design and build fast, custom websites for businesses across New Jersey, plus full-stack and AI/ML work. See my projects, experience, and freelance services.'
+const OG_TITLE = 'Tomas Gonzalez — Software Engineer & Website Builder in Holmdel, NJ'
 
-const { title, description = DEFAULT_DESCRIPTION } = Astro.props
+const { title, description = DEFAULT_DESCRIPTION, fullTitle, extraSchema } = Astro.props
 // "Home" wastes the strongest SEO field by putting the page's own name in
 // the title instead of what the site is actually about — use the full
 // name+role there, and prefix other pages with their own title instead.
-const pageTitle = title === 'Home' ? OG_TITLE : `${title} | ${OG_TITLE}`
+// `fullTitle` lets a page set its own complete, SEO-tuned title verbatim.
+const pageTitle = fullTitle ?? (title === 'Home' ? OG_TITLE : `${title} | ${OG_TITLE}`)
 const canonicalURL = new URL(Astro.url.pathname, Astro.site)
 
 interface Profile {
@@ -40,7 +43,22 @@ const personSchema = {
 	'@type': 'Person',
 	name: 'Tomas Gonzalez',
 	url: Astro.site?.toString(),
-	jobTitle: 'Full-Stack & AI/ML Engineer',
+	jobTitle: ['Software Engineer', 'Website Builder', 'Full-Stack & AI/ML Engineer'],
+	address: {
+		'@type': 'PostalAddress',
+		addressLocality: 'Holmdel',
+		addressRegion: 'NJ',
+		addressCountry: 'US',
+	},
+	knowsAbout: [
+		'Software Engineering',
+		'Web Development',
+		'Website Design',
+		'Astro',
+		'React',
+		'Cloud Infrastructure',
+		'AI/ML',
+	],
 	...(sameAs.length > 0 && { sameAs }),
 }
 
@@ -49,6 +67,7 @@ const navItems = [
 	{ href: '#about', label: 'About' },
 	{ href: '#experience', label: 'Experience' },
 	{ href: '#projects', label: 'Projects' },
+	{ href: '/freelance', label: 'Freelance' },
 	{ href: resumeUrl ?? '/resume', label: 'Resume', external: Boolean(resumeUrl) },
 ]
 
@@ -78,6 +97,7 @@ const EMAIL = 'thomasgonz67@gmail.com'
 		{ogImageUrl && <meta name="twitter:image" content={ogImageUrl} />}
 
 		<script type="application/ld+json" set:html={JSON.stringify(personSchema)} />
+		{extraSchema && <script type="application/ld+json" set:html={JSON.stringify(extraSchema)} />}
 		<script is:inline>
 			const stored = localStorage.getItem('theme')
 			if (stored === 'light') document.documentElement.setAttribute('data-theme', 'light')
@@ -92,7 +112,7 @@ const EMAIL = 'thomasgonz67@gmail.com'
 						data-nav-link={item.href}
 						target={item.external ? '_blank' : undefined}
 						rel={item.external ? 'noopener' : undefined}
-						class:list={{ active: !item.external && item.href === '/resume' && Astro.url.pathname === '/resume' }}
+						class:list={{ active: !item.external && item.href.startsWith('/') && item.href === Astro.url.pathname }}
 					>
 						{item.label}
 					</a>

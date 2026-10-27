@@ -3,5 +3,9 @@
 	"compatibility_date": "2026-08-09",
 	"assets": {
 		"directory": "./dist"
-	}
+	},
+	// Enables Cloudflare preview deployments for branches other than main
+	// (it runs `wrangler preview` for them) so changes get a temporary URL
+	// to review before merging to production. Can stay empty.
+	"previews": {}
 }

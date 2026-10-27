@@ -1,0 +1,183 @@
+---
+import Layout from '../layouts/Layout.astro'
+
+const EMAIL = 'thomasgonz67@gmail.com'
+const SITE = 'https://tomasgonz67.com'
+
+const services = [
+	{
+		name: 'One-Page Website',
+		blurb: 'A single, high-converting page — great for a new business, a service, or a launch.',
+		points: ['Custom design', 'Mobile-first & fast', 'Contact form', 'Live in ~1–2 weeks'],
+	},
+	{
+		name: 'Full Website + CMS',
+		blurb: 'A multi-page site you can edit yourself — services, about, portfolio, booking, and more.',
+		points: ['Multi-page custom build', 'Easy self-edit CMS', 'Built for SEO', 'Contact / booking forms'],
+	},
+	{
+		name: 'Redesign / Migration',
+		blurb: 'Move off Wix, Squarespace, or an old site onto something fast, modern, and yours.',
+		points: ['Rebuilt on a modern stack', 'Keep your content & SEO', 'Faster load times', 'Own your code'],
+	},
+	{
+		name: 'Care & Updates',
+		blurb: 'Ongoing changes and maintenance after launch — on call when you need something.',
+		points: ['Content & copy updates', 'New sections / pages', 'Fixes & tweaks', 'No long contracts'],
+	},
+]
+
+const serviceSchema = {
+	'@context': 'https://schema.org',
+	'@type': 'ProfessionalService',
+	name: 'Tomas Gonzalez — Freelance Web Development',
+	description:
+		'Custom website design and development for small businesses — a website builder and web developer in Holmdel, NJ, serving Monmouth County and across New Jersey.',
+	url: `${SITE}/freelance`,
+	provider: { '@type': 'Person', name: 'Tomas Gonzalez', url: SITE },
+	areaServed: [
+		{ '@type': 'City', name: 'Holmdel' },
+		{ '@type': 'AdministrativeArea', name: 'Monmouth County' },
+		{ '@type': 'State', name: 'New Jersey' },
+	],
+	address: {
+		'@type': 'PostalAddress',
+		addressLocality: 'Holmdel',
+		addressRegion: 'NJ',
+		addressCountry: 'US',
+	},
+	serviceType: ['Website design', 'Web development', 'Website redesign', 'CMS website', 'Website builder'],
+	priceRange: '$$',
+}
+---
+
+<Layout
+	title="Freelance"
+	fullTitle="Website Builder & Web Developer in NJ · Tomas Gonzalez"
+	description="Freelance website builder and web developer in Holmdel, NJ. I design fast, custom websites for small businesses across Monmouth County and New Jersey — built to own and easy to update."
+	extraSchema={serviceSchema}
+>
+	<section class="fl-hero">
+		<p class="greeting mono">Freelance web development</p>
+		<h1>Website builder &amp; web developer in Holmdel, NJ</h1>
+		<p class="fl-lede">
+			I design and build fast, custom websites for small businesses and professionals across
+			<strong>Holmdel, Monmouth County, and New Jersey</strong> — modern, mobile-first, easy to update, and built to own.
+		</p>
+		<a class="fl-cta" href={`mailto:${EMAIL}?subject=Website%20project`}>Get a free quote →</a>
+	</section>
+
+	<section>
+		<h2 class="section-heading">What I build</h2>
+		<div class="fl-grid">
+			{
+				services.map((s) => (
+					<div class="panel fl-card">
+						<h3>{s.name}</h3>
+						<p class="fl-blurb">{s.blurb}</p>
+						<ul class="fl-points mono">
+							{s.points.map((p) => (
+								<li>{p}</li>
+							))}
+						</ul>
+					</div>
+				))
+			}
+		</div>
+	</section>
+
+	<section>
+		<h2 class="section-heading">Why work with me</h2>
+		<div class="panel">
+			<ul class="fl-list">
+				<li><strong>Fast, custom-built</strong> — hand-coded, not a bloated template. Loads quick, ranks better.</li>
+				<li><strong>You own it</strong> — your domain, your code, your content. No platform lock-in, no monthly website rent.</li>
+				<li><strong>Easy to update</strong> — a simple CMS so you can change text and photos yourself.</li>
+				<li><strong>Local &amp; responsive</strong> — based in Holmdel, NJ; I answer and iterate quickly.</li>
+			</ul>
+		</div>
+	</section>
+
+	<section>
+		<h2 class="section-heading">Selected work</h2>
+		<div class="panel">
+			<p>A few recent builds — more on the <a href="/#projects">projects</a> section of my site.</p>
+			<ul class="fl-list">
+				<li><strong>Cadooga / Vanvir</strong> — marketing sites migrated to Astro on Cloudflare.</li>
+				<li><strong>Madz Photo</strong> — a photographer's portfolio and booking site.</li>
+				<li><strong>Tapse</strong> — a product site with a real staging workflow.</li>
+			</ul>
+		</div>
+	</section>
+
+	<section class="fl-contact">
+		<h2 class="section-heading">Start a project</h2>
+		<div class="panel">
+			<p>Tell me about your business and what you need — I'll reply with ideas and a quote.</p>
+			<a class="fl-cta" href={`mailto:${EMAIL}?subject=Website%20project`}>Email me →</a>
+		</div>
+	</section>
+</Layout>
+
+<style>
+	.fl-hero {
+		padding-block: 1rem 2.5rem;
+	}
+	.fl-hero h1 {
+		margin: 0.25rem 0 1rem;
+		max-width: 20ch;
+	}
+	.fl-lede {
+		max-width: 60ch;
+		opacity: 0.85;
+		line-height: 1.6;
+	}
+	.fl-cta {
+		display: inline-block;
+		margin-top: 1.5rem;
+		padding: 0.75rem 1.3rem;
+		border: 1px solid currentColor;
+		border-radius: 8px;
+		text-decoration: none;
+		font-weight: 600;
+		transition: opacity 0.15s ease;
+	}
+	.fl-cta:hover {
+		opacity: 0.7;
+	}
+	.fl-grid {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 1rem;
+	}
+	.fl-card h3 {
+		margin: 0 0 0.4rem;
+	}
+	.fl-blurb {
+		margin: 0 0 0.9rem;
+		opacity: 0.85;
+	}
+	.fl-points {
+		margin: 0;
+		padding-left: 1.1rem;
+		font-size: 0.85rem;
+		opacity: 0.8;
+		display: grid;
+		gap: 0.3rem;
+	}
+	.fl-list {
+		margin: 0.5rem 0 0;
+		padding-left: 1.2rem;
+		display: grid;
+		gap: 0.6rem;
+		line-height: 1.55;
+	}
+	.fl-contact {
+		margin-top: 1rem;
+	}
+	@media (max-width: 640px) {
+		.fl-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>
