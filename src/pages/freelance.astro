@@ -108,7 +108,10 @@ const serviceSchema = {
 	<!-- Collapsible sections -->
 	<details class="fl-section">
 		<summary class="fl-summary">
-			<h2 class="section-heading">Why choose me?</h2>
+			<div class="fl-summary-text">
+				<h2 class="section-heading">Why choose me?</h2>
+				<p class="fl-summary-desc">What sets me apart from an agency, a DIY builder, or just using AI.</p>
+			</div>
 			<span class="fl-toggle">
 				<span class="fl-toggle-more">See more →</span>
 				<span class="fl-toggle-less">See less →</span>
@@ -141,7 +144,10 @@ const serviceSchema = {
 
 	<details class="fl-section">
 		<summary class="fl-summary">
-			<h2 class="section-heading">What AI can't give you</h2>
+			<div class="fl-summary-text">
+				<h2 class="section-heading">What AI can't give you</h2>
+				<p class="fl-summary-desc">Accessibility, security, compliance, and judgment — the parts AI and templates skip.</p>
+			</div>
 			<span class="fl-toggle">
 				<span class="fl-toggle-more">See more →</span>
 				<span class="fl-toggle-less">See less →</span>
@@ -163,7 +169,10 @@ const serviceSchema = {
 
 	<details class="fl-section">
 		<summary class="fl-summary">
-			<h2 class="section-heading">My plans</h2>
+			<div class="fl-summary-text">
+				<h2 class="section-heading">My plans</h2>
+				<p class="fl-summary-desc">Packages and starting prices — from a one-page site to a custom web app.</p>
+			</div>
 			<span class="fl-toggle">
 				<span class="fl-toggle-more">See more →</span>
 				<span class="fl-toggle-less">See less →</span>
@@ -196,7 +205,10 @@ const serviceSchema = {
 
 	<details class="fl-section">
 		<summary class="fl-summary">
-			<h2 class="section-heading">Selected work</h2>
+			<div class="fl-summary-text">
+				<h2 class="section-heading">Selected work</h2>
+				<p class="fl-summary-desc">A few recent sites and apps I've built for clients.</p>
+			</div>
 			<span class="fl-toggle">
 				<span class="fl-toggle-more">See more →</span>
 				<span class="fl-toggle-less">See less →</span>
@@ -273,6 +285,15 @@ const serviceSchema = {
 	}
 	.fl-summary h2 {
 		margin: 0;
+	}
+	.fl-summary-text {
+		min-width: 0;
+	}
+	.fl-summary-desc {
+		margin: 0.3rem 0 0;
+		font-size: 0.9rem;
+		opacity: 0.75;
+		line-height: 1.4;
 	}
 	.fl-toggle {
 		flex: none;
@@ -365,6 +386,11 @@ const serviceSchema = {
 		.fl-why-grid,
 		.fl-grid {
 			grid-template-columns: 1fr;
+		}
+		.fl-summary {
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 0.6rem;
 		}
 	}
 </style>
