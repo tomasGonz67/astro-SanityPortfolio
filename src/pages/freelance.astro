@@ -6,7 +6,7 @@ const SITE = 'https://tomasgonz67.com'
 
 // Things a business gets from me that AI builders (Base44, ChatGPT/Claude,
 // Wix AI, no-code) can't give them.
-const edges = [
+const edges: Array<{ name: string; ai: string; limit: string; solve: string; facts?: string; process?: string }> = [
 	{
 		name: 'You own it — pay once',
 		ai: 'AI builders host your site for you, as a monthly subscription plus usage credits.',
@@ -24,6 +24,8 @@ const edges = [
 		ai: 'AI generators output markup that looks finished.',
 		limit: 'It’s almost never accessible — and most owners don’t know ADA applies to websites. Over 4,000 web-accessibility lawsuits hit U.S. businesses in 2025, most of them small or mid-sized, and settling typically runs $5,000–$25,000 plus legal fees — even if you fix the site afterward.',
 		solve: 'I build and test to WCAG 2.1 AA — automated scans plus hands-on manual testing (keyboard and screen reader) — so it genuinely meets the standard, not just looks finished.',
+		facts: 'Industry trackers logged ~4,000+ U.S. web-accessibility lawsuits in 2025 (UsableNet, Seyfarth, EcomBack) — most against small and mid-sized businesses. And accessibility "overlay" widgets don’t stop them.',
+		process: 'Automated scan (axe-core) wired into the build, then manual testing: full keyboard navigation, a screen-reader pass, focus order, color contrast, reflow, and status messages — all checked against WCAG 2.1 AA.',
 	},
 	{
 		name: 'Security, tested',
@@ -144,6 +146,26 @@ const serviceSchema = {
 							<span class="fl-step-label">Problem I solve</span>
 							<p>{e.solve}</p>
 						</div>
+						{(e.facts || e.process) && (
+							<details class="fl-facts">
+								<summary class="fl-facts-toggle">
+									<span class="fl-facts-more">Show the facts →</span>
+									<span class="fl-facts-less">Hide the facts →</span>
+								</summary>
+								{e.facts && (
+									<div class="fl-step">
+										<span class="fl-step-label">The facts</span>
+										<p>{e.facts}</p>
+									</div>
+								)}
+								{e.process && (
+									<div class="fl-step">
+										<span class="fl-step-label">My process</span>
+										<p>{e.process}</p>
+									</div>
+								)}
+							</details>
+						)}
 					</div>
 				))
 			}
@@ -318,6 +340,32 @@ const serviceSchema = {
 	}
 	.fl-step-solve p {
 		opacity: 1;
+	}
+	.fl-facts {
+		margin-top: 1rem;
+		border-top: 1px solid var(--border);
+		padding-top: 0.6rem;
+	}
+	.fl-facts-toggle {
+		list-style: none;
+		cursor: pointer;
+		color: var(--accent);
+		font-family: var(--font-mono);
+		font-size: 0.72rem;
+		letter-spacing: 0.05em;
+		text-transform: uppercase;
+	}
+	.fl-facts-toggle::-webkit-details-marker {
+		display: none;
+	}
+	.fl-facts-less {
+		display: none;
+	}
+	.fl-facts[open] .fl-facts-more {
+		display: none;
+	}
+	.fl-facts[open] .fl-facts-less {
+		display: inline;
 	}
 	.fl-card-head {
 		display: flex;
