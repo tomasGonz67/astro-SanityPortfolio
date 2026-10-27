@@ -4,7 +4,35 @@ import Layout from '../layouts/Layout.astro'
 const EMAIL = 'thomasgonz67@gmail.com'
 const SITE = 'https://tomasgonz67.com'
 
-// NOTE: intro placeholder pricing — Tomas to confirm/adjust the numbers.
+// Things a business gets from me that AI builders (Base44, ChatGPT/Claude,
+// Wix AI, no-code) can't give them.
+const edges = [
+	{
+		name: 'You own it — pay once',
+		blurb: 'Base44 and the AI builders are subscriptions ($16–$200/mo) plus credits, forever — stop paying and it’s gone. I build it once; you own the code and host it for a few dollars a month, anywhere. No subscription, no hosting rent, no lock-in.',
+	},
+	{
+		name: 'The right solution for your problem',
+		blurb: 'I start from what your business needs to do, then pick and tune the stack for your cost, performance, and growth — not a template or an AI default. No overpaying, no walls when you scale.',
+	},
+	{
+		name: 'Accessibility & ADA',
+		blurb: 'Built to WCAG 2.1 AA — reaches every customer and shields you from the web-accessibility lawsuits most AI and template sites are wide open to.',
+	},
+	{
+		name: 'Security, tested',
+		blurb: 'No leaked keys, open forms, spam floods, or mishandled data. I build it secure and check for the holes AI quietly leaves behind.',
+	},
+	{
+		name: 'Compliance-aware',
+		blurb: 'ADA, privacy policy, cookie consent, terms, email rules — built to them, with a heads-up when you genuinely need a lawyer. A layperson with AI doesn’t know these exist.',
+	},
+	{
+		name: 'Real engineering judgment',
+		blurb: 'AI writes code that looks right and is subtly broken, insecure, or unscalable — and can’t tell. I know when it’s wrong, and I fix it.',
+	},
+]
+
 const plans = [
 	{
 		name: 'Starter Site',
@@ -29,29 +57,6 @@ const plans = [
 		price: 'custom quote',
 		blurb: 'Dashboards, portals, internal tools, automations, AI features — scoped to you.',
 		points: ['Full-stack web apps', 'Automations & integrations', 'AI features', 'Built by a senior engineer'],
-	},
-]
-
-const moats = [
-	{
-		name: 'Accessibility & ADA',
-		blurb: 'Built to WCAG 2.1 AA — reaches every customer and shields you from the web-accessibility lawsuits most AI and template sites are wide open to.',
-	},
-	{
-		name: 'Security, tested',
-		blurb: 'No leaked keys, open forms, spam floods, or mishandled data. I build it secure and check for the holes AI quietly leaves behind.',
-	},
-	{
-		name: 'The right solution for your problem',
-		blurb: 'I start from what your business needs to do, then pick and tune the stack for your cost, performance, and growth — not a template or an AI default. No overpaying, no walls when you scale.',
-	},
-	{
-		name: 'Compliance-aware',
-		blurb: 'ADA, privacy policy, cookie consent, terms, email rules — built to them, with a heads-up when you genuinely need a lawyer. A layperson with AI doesn’t know these exist.',
-	},
-	{
-		name: 'Real engineering judgment',
-		blurb: 'AI writes code that looks right and is subtly broken, insecure, or unscalable — and can’t tell. I know when it’s wrong, and I fix it.',
 	},
 ]
 
@@ -93,7 +98,6 @@ const serviceSchema = {
 	description="Freelance website builder and web developer in Holmdel, NJ. I build fast, custom websites — plus web apps and custom software — for businesses across Monmouth County and New Jersey. Built to own and easy to update."
 	extraSchema={serviceSchema}
 >
-	<!-- 1. Summary / hook (always visible) -->
 	<section class="fl-hero">
 		<p class="greeting mono">Freelance web development</p>
 		<h1>Website builder &amp; web developer in Holmdel, NJ</h1>
@@ -105,130 +109,62 @@ const serviceSchema = {
 		<a class="fl-cta" href={`mailto:${EMAIL}?subject=Website%20project`}>Get a free quote →</a>
 	</section>
 
-	<!-- Collapsible sections -->
-	<details class="fl-section">
-		<summary class="fl-summary">
-			<div class="fl-summary-text">
-				<h2 class="section-heading">Why hire me in the age of AI</h2>
-				<p class="fl-summary-desc">When AI tools like Base44 can build a website in minutes, and ChatGPT or Claude can crank out code in seconds — why pay a person to do it?</p>
-			</div>
-			<span class="fl-toggle">
-				<span class="fl-toggle-more">See more →</span>
-				<span class="fl-toggle-less">See less →</span>
-			</span>
-		</summary>
-		<div class="fl-section-body">
-			<div class="fl-why-grid">
-				<div class="panel">
-					<h3>Over the alternatives</h3>
-					<ul class="fl-list">
-						<li><strong>You work with me, not a sales team.</strong> No handoffs, no account-manager markup — faster answers, built by the person you actually hired.</li>
-						<li><strong>Custom, not a template.</strong> Hand-coded on a modern stack — loads fast, ranks better, and doesn't look like every other Squarespace site.</li>
-						<li><strong>You own everything.</strong> Your domain, your code, your content — no monthly platform rent, no lock-in.</li>
-						<li><strong>Local.</strong> Based in Holmdel, NJ — a real person down the road, not an overseas agency.</li>
-						<li><strong>A senior engineer.</strong> I also build full apps and software, so your site is built right — not just dragged and dropped.</li>
-					</ul>
-				</div>
-				<div class="panel">
-					<h3>In the age of AI</h3>
-					<ul class="fl-list">
-						<li><strong>AI builders give you a guess.</strong> Wix AI, ChatGPT site generators, and no-code tools spit out generic, templated sites that break the moment you need something specific.</li>
-						<li><strong>You pay once — then you own it.</strong> Base44 and the AI builders are subscriptions ($16–$200/mo) plus credits, forever — stop paying and it's gone. I build it once; you own the code and host it for a few dollars a month, anywhere. No subscription, no hosting rent, no lock-in.</li>
-						<li><strong>AI builds whatever you ask — I figure out what you actually need.</strong> Then I pick and tune the stack for your budget, speed, and growth, instead of whatever the AI defaults to.</li>
-						<li><strong>I use AI to move faster, not to think for me.</strong> It speeds up the busywork and keeps your cost down; the judgment, the custom logic, the performance, and the ownership come from a real engineer.</li>
-						<li><strong>The result is actually yours.</strong> Fast, custom, and built to do what your business needs — not a cookie-cutter guess you're stuck paying for every month.</li>
-					</ul>
-				</div>
-			</div>
+	<section class="fl-block">
+		<h2 class="section-heading">Why hire me in the age of AI</h2>
+		<p class="fl-lede fl-intro">
+			When AI tools like Base44 can build a website in minutes, and ChatGPT or Claude can crank out code in seconds — why
+			pay a person? Because AI alone can't give you this:
+		</p>
+		<div class="fl-grid">
+			{
+				edges.map((e) => (
+					<div class="panel fl-card">
+						<h3>{e.name}</h3>
+						<p class="fl-blurb">{e.blurb}</p>
+					</div>
+				))
+			}
 		</div>
-	</details>
+	</section>
 
-	<details class="fl-section">
-		<summary class="fl-summary">
-			<div class="fl-summary-text">
-				<h2 class="section-heading">What AI can't give you</h2>
-				<p class="fl-summary-desc">Accessibility, security, compliance, and judgment — the parts AI and templates skip.</p>
-			</div>
-			<span class="fl-toggle">
-				<span class="fl-toggle-more">See more →</span>
-				<span class="fl-toggle-less">See less →</span>
-			</span>
-		</summary>
-		<div class="fl-section-body">
-			<div class="fl-grid">
-				{
-					moats.map((m) => (
-						<div class="panel fl-card">
-							<h3>{m.name}</h3>
-							<p class="fl-blurb">{m.blurb}</p>
+	<section class="fl-block">
+		<h2 class="section-heading">My plans</h2>
+		<div class="fl-grid">
+			{
+				plans.map((p) => (
+					<div class="panel fl-card">
+						<div class="fl-card-head">
+							<h3>{p.name}</h3>
+							<span class="fl-price mono">{p.price}</span>
 						</div>
-					))
-				}
-			</div>
+						<p class="fl-blurb">{p.blurb}</p>
+						<ul class="fl-points mono">
+							{p.points.map((pt) => (
+								<li>{pt}</li>
+							))}
+						</ul>
+					</div>
+				))
+			}
 		</div>
-	</details>
+		<p class="fl-note mono text-muted">
+			+ ongoing care &amp; updates from $75/mo · Intro pricing while I build my portfolio — every project gets a custom quote.
+		</p>
+	</section>
 
-	<details class="fl-section">
-		<summary class="fl-summary">
-			<div class="fl-summary-text">
-				<h2 class="section-heading">My plans</h2>
-				<p class="fl-summary-desc">Packages and starting prices — from a one-page site to a custom web app.</p>
-			</div>
-			<span class="fl-toggle">
-				<span class="fl-toggle-more">See more →</span>
-				<span class="fl-toggle-less">See less →</span>
-			</span>
-		</summary>
-		<div class="fl-section-body">
-			<div class="fl-grid">
-				{
-					plans.map((p) => (
-						<div class="panel fl-card">
-							<div class="fl-card-head">
-								<h3>{p.name}</h3>
-								<span class="fl-price mono">{p.price}</span>
-							</div>
-							<p class="fl-blurb">{p.blurb}</p>
-							<ul class="fl-points mono">
-								{p.points.map((pt) => (
-									<li>{pt}</li>
-								))}
-							</ul>
-						</div>
-					))
-				}
-			</div>
-			<p class="fl-note mono text-muted">
-				+ ongoing care &amp; updates from $75/mo · Intro pricing while I build my portfolio — every project gets a custom quote.
-			</p>
+	<section class="fl-block">
+		<h2 class="section-heading">Selected work</h2>
+		<div class="panel">
+			<p>A few recent builds — more on the <a href="/#projects">projects</a> section of my site.</p>
+			<ul class="fl-list">
+				<li><strong>Cadooga / Vanvir</strong> — marketing sites migrated to Astro on Cloudflare.</li>
+				<li><strong>Madz Photo</strong> — a photographer's portfolio and booking site.</li>
+				<li><strong>Tapse</strong> — a product site with a real staging workflow.</li>
+			</ul>
 		</div>
-	</details>
+	</section>
 
-	<details class="fl-section">
-		<summary class="fl-summary">
-			<div class="fl-summary-text">
-				<h2 class="section-heading">Selected work</h2>
-				<p class="fl-summary-desc">A few recent sites and apps I've built for clients.</p>
-			</div>
-			<span class="fl-toggle">
-				<span class="fl-toggle-more">See more →</span>
-				<span class="fl-toggle-less">See less →</span>
-			</span>
-		</summary>
-		<div class="fl-section-body">
-			<div class="panel">
-				<p>A few recent builds — more on the <a href="/#projects">projects</a> section of my site.</p>
-				<ul class="fl-list">
-					<li><strong>Cadooga / Vanvir</strong> — marketing sites migrated to Astro on Cloudflare.</li>
-					<li><strong>Madz Photo</strong> — a photographer's portfolio and booking site.</li>
-					<li><strong>Tapse</strong> — a product site with a real staging workflow.</li>
-				</ul>
-			</div>
-		</div>
-	</details>
-
-	<!-- Contact (always visible) -->
-	<section class="fl-contact">
+	<section class="fl-block fl-contact">
 		<h2 class="section-heading">Start a project</h2>
 		<div class="panel">
 			<p>Tell me about your business and what you need — I'll reply with ideas and a quote.</p>
@@ -239,7 +175,7 @@ const serviceSchema = {
 
 <style>
 	.fl-hero {
-		padding-block: 1rem 2.5rem;
+		padding-block: 1rem 1rem;
 	}
 	.fl-hero h1 {
 		margin: 0.25rem 0 1rem;
@@ -249,6 +185,9 @@ const serviceSchema = {
 		max-width: 62ch;
 		opacity: 0.85;
 		line-height: 1.6;
+	}
+	.fl-intro {
+		margin: 0 0 1.5rem;
 	}
 	.fl-cta {
 		display: inline-block;
@@ -264,76 +203,16 @@ const serviceSchema = {
 		opacity: 0.7;
 	}
 
-	/* Collapsible sections — each a themed panel with a See more/less button */
-	.fl-section {
-		background: var(--surface);
-		border: 1px solid var(--border);
-		border-radius: 6px;
-		padding: 6px 24px;
-		margin-bottom: 16px;
+	.fl-block {
+		margin-top: 3rem;
 	}
-	.fl-summary {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		gap: 1rem;
-		cursor: pointer;
-		list-style: none;
-		padding-block: 0.75rem;
-	}
-	.fl-summary::-webkit-details-marker {
-		display: none;
-	}
-	.fl-summary h2 {
-		margin: 0;
-	}
-	.fl-summary-text {
-		min-width: 0;
-	}
-	.fl-summary-desc {
-		margin: 0.3rem 0 0;
-		font-size: 0.9rem;
-		opacity: 0.75;
-		line-height: 1.4;
-	}
-	.fl-toggle {
-		flex: none;
-		display: inline-flex;
-		align-items: center;
-		color: var(--accent);
-		border: 1px solid var(--accent);
-		border-radius: 8px;
-		padding: 0.45rem 0.9rem;
-		font-size: 0.82rem;
-		font-weight: 600;
-		white-space: nowrap;
-		transition: opacity 0.15s ease;
-	}
-	.fl-summary:hover .fl-toggle {
-		opacity: 0.7;
-	}
-	.fl-toggle-less {
-		display: none;
-	}
-	details[open] > .fl-summary .fl-toggle-more {
-		display: none;
-	}
-	details[open] > .fl-summary .fl-toggle-less {
-		display: inline;
-	}
-	.fl-section-body {
-		padding-block: 0.25rem 1.25rem;
-	}
-	/* inner cards sit transparent inside the themed section (no box-in-box) */
-	.fl-section .panel {
-		background: transparent;
-	}
-
-	.fl-why-grid,
 	.fl-grid {
 		display: grid;
 		grid-template-columns: 1fr 1fr;
 		gap: 1rem;
+	}
+	.fl-card h3 {
+		margin: 0 0 0.4rem;
 	}
 	.fl-card-head {
 		display: flex;
@@ -345,9 +224,6 @@ const serviceSchema = {
 	.fl-card-head h3 {
 		margin: 0;
 	}
-	.fl-card h3 {
-		margin: 0 0 0.4rem;
-	}
 	.fl-price {
 		font-size: 0.85rem;
 		font-weight: 600;
@@ -355,11 +231,15 @@ const serviceSchema = {
 		white-space: nowrap;
 	}
 	.fl-blurb {
-		margin: 0 0 0.9rem;
+		margin: 0;
 		opacity: 0.85;
+		line-height: 1.5;
+	}
+	.fl-card .fl-blurb {
+		margin-bottom: 0;
 	}
 	.fl-points {
-		margin: 0;
+		margin: 0.9rem 0 0;
 		padding-left: 1.1rem;
 		font-size: 0.85rem;
 		opacity: 0.8;
@@ -373,25 +253,13 @@ const serviceSchema = {
 		gap: 0.6rem;
 		line-height: 1.55;
 	}
-	.fl-why-grid h3 {
-		margin-top: 0;
-	}
 	.fl-note {
 		margin-top: 1rem;
 		font-size: 0.82rem;
 	}
-	.fl-contact {
-		margin-top: 1.5rem;
-	}
 	@media (max-width: 640px) {
-		.fl-why-grid,
 		.fl-grid {
 			grid-template-columns: 1fr;
-		}
-		.fl-summary {
-			flex-direction: column;
-			align-items: flex-start;
-			gap: 0.6rem;
 		}
 	}
 </style>
