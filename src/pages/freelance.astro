@@ -22,9 +22,9 @@ const edges: Array<{ name: string; ai: string; limit: string; solve: string; fac
 	{
 		name: 'Accessibility & ADA',
 		ai: 'AI generators output markup that looks finished.',
-		limit: 'It’s almost never accessible — and most owners don’t know ADA applies to websites. Over 4,000 web-accessibility lawsuits hit U.S. businesses in 2025, most of them small or mid-sized, and settling typically runs $5,000–$25,000 plus legal fees — even if you fix the site afterward.',
+		limit: 'It’s almost never accessible — and most owners don’t know ADA applies to websites, leaving them open to accessibility lawsuits.',
 		solve: 'I build and test to WCAG 2.1 AA — automated scans plus hands-on manual testing (keyboard and screen reader) — so it genuinely meets the standard, not just looks finished.',
-		facts: 'Industry trackers logged ~4,000+ U.S. web-accessibility lawsuits in 2025 (UsableNet, Seyfarth, EcomBack) — most against small and mid-sized businesses. And accessibility "overlay" widgets don’t stop them.',
+		facts: 'Industry trackers logged ~4,000+ U.S. web-accessibility lawsuits in 2025 (UsableNet, Seyfarth, EcomBack), most against small and mid-sized businesses. Settling a demand letter commonly runs $5,000–$25,000 plus legal fees — even if you fix the site afterward. And accessibility "overlay" widgets don’t stop the suits.',
 		process: 'Automated scan (axe-core) wired into the build, then manual testing: full keyboard navigation, a screen-reader pass, focus order, color contrast, reflow, and status messages — all checked against WCAG 2.1 AA.',
 	},
 	{
@@ -131,7 +131,7 @@ const serviceSchema = {
 		</p>
 		<div class="fl-grid">
 			{
-				edges.map((e) => (
+				edges.map((e, i) => (
 					<div class="panel fl-card">
 						<h3>{e.name}</h3>
 						<div class="fl-step">
@@ -147,29 +147,38 @@ const serviceSchema = {
 							<p>{e.solve}</p>
 						</div>
 						{(e.facts || e.process) && (
-							<details class="fl-facts">
-								<summary class="fl-facts-toggle">
-									<span class="fl-facts-more">Show the facts →</span>
-									<span class="fl-facts-less">Hide the facts →</span>
-								</summary>
-								{e.facts && (
-									<div class="fl-step">
-										<span class="fl-step-label">The facts</span>
-										<p>{e.facts}</p>
-									</div>
-								)}
-								{e.process && (
-									<div class="fl-step">
-										<span class="fl-step-label">My process</span>
-										<p>{e.process}</p>
-									</div>
-								)}
-							</details>
+							<button type="button" class="fl-facts-btn" data-open={`facts-${i}`}>Show the facts →</button>
 						)}
 					</div>
 				))
 			}
 		</div>
+		{
+			edges.map((e, i) =>
+				e.facts || e.process ? (
+					<dialog class="fl-dialog" id={`facts-${i}`} aria-labelledby={`facts-${i}-title`}>
+						<div class="fl-dialog-inner">
+							<div class="fl-dialog-head">
+								<h3 id={`facts-${i}-title`} class="section-heading">{e.name}</h3>
+								<button type="button" class="fl-dialog-close" data-close aria-label="Close">✕</button>
+							</div>
+							{e.facts && (
+								<div class="fl-step">
+									<span class="fl-step-label">The facts</span>
+									<p>{e.facts}</p>
+								</div>
+							)}
+							{e.process && (
+								<div class="fl-step">
+									<span class="fl-step-label">My process</span>
+									<p>{e.process}</p>
+								</div>
+							)}
+						</div>
+					</dialog>
+				) : null
+			)
+		}
 	</section>
 
 	<section class="fl-block">
@@ -238,6 +247,20 @@ const serviceSchema = {
 			{ threshold: 0.15 }
 		)
 		panels.forEach((panel) => revealObserver.observe(panel))
+	}
+
+	// "Show the facts" pop-ups: open the matching <dialog>, close via x / Esc / backdrop.
+	for (const btn of document.querySelectorAll<HTMLElement>('[data-open]')) {
+		btn.addEventListener('click', () => {
+			const dlg = document.getElementById(btn.dataset.open ?? '') as HTMLDialogElement | null
+			dlg?.showModal()
+		})
+	}
+	for (const dlg of document.querySelectorAll<HTMLDialogElement>('dialog.fl-dialog')) {
+		dlg.querySelector('[data-close]')?.addEventListener('click', () => dlg.close())
+		dlg.addEventListener('click', (e) => {
+			if (e.target === dlg) dlg.close()
+		})
 	}
 </script>
 
@@ -341,13 +364,11 @@ const serviceSchema = {
 	.fl-step-solve p {
 		opacity: 1;
 	}
-	.fl-facts {
+	.fl-facts-btn {
 		margin-top: 1rem;
-		border-top: 1px solid var(--border);
-		padding-top: 0.6rem;
-	}
-	.fl-facts-toggle {
-		list-style: none;
+		background: none;
+		border: none;
+		padding: 0;
 		cursor: pointer;
 		color: var(--accent);
 		font-family: var(--font-mono);
@@ -355,17 +376,51 @@ const serviceSchema = {
 		letter-spacing: 0.05em;
 		text-transform: uppercase;
 	}
-	.fl-facts-toggle::-webkit-details-marker {
-		display: none;
+	.fl-facts-btn:hover {
+		opacity: 0.7;
 	}
-	.fl-facts-less {
-		display: none;
+	.fl-dialog {
+		padding: 0;
+		border: 1px solid var(--border);
+		border-radius: 10px;
+		background: var(--surface);
+		color: inherit;
+		width: calc(100% - 2rem);
+		max-width: 560px;
+		max-height: 85vh;
+		overflow: hidden;
 	}
-	.fl-facts[open] .fl-facts-more {
-		display: none;
+	.fl-dialog::backdrop {
+		background: rgba(0, 0, 0, 0.55);
 	}
-	.fl-facts[open] .fl-facts-less {
-		display: inline;
+	.fl-dialog-inner {
+		padding: 24px;
+		max-height: 85vh;
+		overflow-y: auto;
+	}
+	.fl-dialog-head {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1rem;
+		margin-bottom: 0.5rem;
+	}
+	.fl-dialog-head h3 {
+		margin: 0;
+	}
+	.fl-dialog-close {
+		flex: none;
+		background: none;
+		border: none;
+		color: inherit;
+		font-size: 1.1rem;
+		line-height: 1;
+		cursor: pointer;
+		opacity: 0.6;
+		padding: 0.3rem;
+	}
+	.fl-dialog-close:hover {
+		opacity: 1;
 	}
 	.fl-card-head {
 		display: flex;
