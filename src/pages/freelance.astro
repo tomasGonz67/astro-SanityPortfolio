@@ -109,7 +109,10 @@ const serviceSchema = {
 	<details class="fl-section">
 		<summary class="fl-summary">
 			<h2 class="section-heading">Why choose me?</h2>
-			<span class="fl-chevron" aria-hidden="true"></span>
+			<span class="fl-toggle">
+				<span class="fl-toggle-more">See more →</span>
+				<span class="fl-toggle-less">See less →</span>
+			</span>
 		</summary>
 		<div class="fl-section-body">
 			<div class="fl-why-grid">
@@ -139,7 +142,10 @@ const serviceSchema = {
 	<details class="fl-section">
 		<summary class="fl-summary">
 			<h2 class="section-heading">What AI can't give you</h2>
-			<span class="fl-chevron" aria-hidden="true"></span>
+			<span class="fl-toggle">
+				<span class="fl-toggle-more">See more →</span>
+				<span class="fl-toggle-less">See less →</span>
+			</span>
 		</summary>
 		<div class="fl-section-body">
 			<div class="fl-grid">
@@ -158,7 +164,10 @@ const serviceSchema = {
 	<details class="fl-section">
 		<summary class="fl-summary">
 			<h2 class="section-heading">My plans</h2>
-			<span class="fl-chevron" aria-hidden="true"></span>
+			<span class="fl-toggle">
+				<span class="fl-toggle-more">See more →</span>
+				<span class="fl-toggle-less">See less →</span>
+			</span>
 		</summary>
 		<div class="fl-section-body">
 			<div class="fl-grid">
@@ -188,7 +197,10 @@ const serviceSchema = {
 	<details class="fl-section">
 		<summary class="fl-summary">
 			<h2 class="section-heading">Selected work</h2>
-			<span class="fl-chevron" aria-hidden="true"></span>
+			<span class="fl-toggle">
+				<span class="fl-toggle-more">See more →</span>
+				<span class="fl-toggle-less">See less →</span>
+			</span>
 		</summary>
 		<div class="fl-section-body">
 			<div class="panel">
@@ -239,9 +251,13 @@ const serviceSchema = {
 		opacity: 0.7;
 	}
 
-	/* Collapsible sections */
+	/* Collapsible sections — each a themed panel with a See more/less button */
 	.fl-section {
-		border-top: 1px solid rgba(128, 128, 128, 0.25);
+		background: var(--surface);
+		border: 1px solid var(--border);
+		border-radius: 6px;
+		padding: 6px 24px;
+		margin-bottom: 16px;
 	}
 	.fl-summary {
 		display: flex;
@@ -250,7 +266,7 @@ const serviceSchema = {
 		gap: 1rem;
 		cursor: pointer;
 		list-style: none;
-		padding-block: 0.4rem;
+		padding-block: 0.75rem;
 	}
 	.fl-summary::-webkit-details-marker {
 		display: none;
@@ -258,24 +274,37 @@ const serviceSchema = {
 	.fl-summary h2 {
 		margin: 0;
 	}
-	.fl-chevron {
+	.fl-toggle {
 		flex: none;
-		width: 0.6rem;
-		height: 0.6rem;
-		border-right: 2px solid currentColor;
-		border-bottom: 2px solid currentColor;
-		transform: rotate(45deg);
-		transition: transform 0.2s ease;
-		opacity: 0.6;
+		display: inline-flex;
+		align-items: center;
+		color: var(--accent);
+		border: 1px solid var(--accent);
+		border-radius: 8px;
+		padding: 0.45rem 0.9rem;
+		font-size: 0.82rem;
+		font-weight: 600;
+		white-space: nowrap;
+		transition: opacity 0.15s ease;
 	}
-	details[open] > .fl-summary .fl-chevron {
-		transform: rotate(-135deg);
+	.fl-summary:hover .fl-toggle {
+		opacity: 0.7;
 	}
-	.fl-summary:hover .fl-chevron {
-		opacity: 1;
+	.fl-toggle-less {
+		display: none;
+	}
+	details[open] > .fl-summary .fl-toggle-more {
+		display: none;
+	}
+	details[open] > .fl-summary .fl-toggle-less {
+		display: inline;
 	}
 	.fl-section-body {
 		padding-block: 0.25rem 1.25rem;
+	}
+	/* inner cards sit transparent inside the themed section (no box-in-box) */
+	.fl-section .panel {
+		background: transparent;
 	}
 
 	.fl-why-grid,
