@@ -29,7 +29,7 @@ const edges: Array<{ name: string; ai: string; limit: string; solve: string; fac
 		limit: 'It’s almost never accessible — and most owners don’t know ADA applies to websites, leaving them open to accessibility lawsuits.',
 		solve: 'I build and test to WCAG 2.1 AA, so it genuinely meets the standard — not just looks finished.',
 		facts: 'Industry trackers logged ~4,000+ U.S. web-accessibility lawsuits in 2025 (UsableNet, Seyfarth, EcomBack), most against small and mid-sized businesses. Settling a demand letter commonly runs $5,000–$25,000 plus legal fees — even if you fix the site afterward. And accessibility "overlay" widgets don’t stop the suits.',
-		process: 'Automated scan (axe-core) wired into the build, then manual testing: full keyboard navigation, a screen-reader pass, focus order, color contrast, reflow, and status messages — all checked against WCAG 2.1 AA.',
+		process: 'I wire an automated scan (axe-core) into the build, then test by hand — full keyboard navigation, a screen-reader pass, focus order, color contrast, reflow, and status messages — all against WCAG 2.1 AA.',
 	},
 	{
 		name: 'Security, tested',
@@ -37,7 +37,7 @@ const edges: Array<{ name: string; ai: string; limit: string; solve: string; fac
 		limit: 'It routinely ships with security holes it never flags — until they bite.',
 		solve: 'I build it secure and test for the vulnerabilities before real customers and their data ever touch it.',
 		facts: 'A 2025 Veracode study found AI-generated code introduced a security vulnerability about 45% of the time. The usual culprits — leaked API keys, unvalidated forms, missing spam/rate-limiting — are exactly what the tools don’t flag in their own output.',
-		process: 'Secrets kept in environment variables (never in the code); inputs validated, sanitized, and rate-limited against spam and abuse; protected and tested against common attacks like XSS and injection; security headers and HTTPS enforced; and dependencies scanned for known vulnerabilities and kept patched.',
+		process: 'I keep secrets in environment variables (never in the code); validate, sanitize, and rate-limit every input against spam and abuse; protect and test against common attacks like XSS and injection; enforce security headers and HTTPS; and scan dependencies for known vulnerabilities and keep them patched.',
 	},
 	{
 		name: 'Compliance-aware',
