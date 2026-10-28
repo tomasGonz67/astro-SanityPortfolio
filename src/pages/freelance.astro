@@ -207,10 +207,14 @@ const compare: Array<{ feature: string; free: string; standard: string; note?: s
 	{ feature: 'Ongoing care & updates', free: '$75/mo', standard: '$75/mo' },
 ]
 
-const stories: Array<{ name: string; tag: string; before: string[]; after: string[] }> = [
+const stories: Array<{ name: string; tag: string; links?: Array<{ label: string; url: string }>; before: string[]; after: string[] }> = [
 	{
 		name: 'Cadooga & Vanvir',
 		tag: 'Two agency Webflow sites → custom sites on Cloudflare',
+		links: [
+			{ label: 'cadooga.com', url: 'https://cadooga.com' },
+			{ label: 'vanvir.com', url: 'https://vanvir.com' },
+		],
 		before: [
 			'Originally paid ~$10,000 to an agency for just 6 pages across two sites',
 			'$500/month in hosting fees',
@@ -231,6 +235,7 @@ const stories: Array<{ name: string; tag: string; before: string[]; after: strin
 	{
 		name: 'Madz Photo',
 		tag: 'A photographer’s website — plus her whole business setup',
+		links: [{ label: 'madzphotoco.com', url: 'https://madzphotoco.com' }],
 		before: [
 			'A new photography business that needed more than a website',
 			'No professional email or organized business setup',
@@ -573,6 +578,16 @@ const serviceSchema = {
 								<ul>{st.after.map((a) => <li set:html={a} />)}</ul>
 							</div>
 						</div>
+						{st.links && (
+							<p class="fl-story-links mono">
+								<span>See it live:</span>
+								{st.links.map((l) => (
+									<a href={l.url} target="_blank" rel="noopener">
+										{l.label} <span aria-hidden="true">↗</span>
+									</a>
+								))}
+							</p>
+						)}
 					</div>
 				))
 			}
@@ -1139,6 +1154,25 @@ const serviceSchema = {
 		.fl-story-cols {
 			grid-template-columns: 1fr;
 		}
+	}
+
+	.fl-story-links {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: baseline;
+		gap: 0.3rem 1.1rem;
+		margin: 1.1rem 0 0;
+		padding-top: 0.8rem;
+		border-top: 1px solid var(--border);
+		font-size: 0.82rem;
+	}
+	.fl-story-links span:first-child {
+		color: var(--text-muted);
+	}
+	.fl-story-links a {
+		color: var(--accent);
+		text-decoration: underline;
+		white-space: nowrap;
 	}
 
 	/* "included with every paid plan" assurance callout */
