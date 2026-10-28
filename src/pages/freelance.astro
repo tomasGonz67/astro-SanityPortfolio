@@ -101,6 +101,20 @@ const plans: Array<{ name: string; price: string; blurb: string; points: string[
 	},
 ]
 
+const addOns: Array<{ name: string; desc: string }> = [
+	{ name: 'Extra pages', desc: 'Add more pages to any plan as you grow.' },
+	{ name: 'Self-edit CMS', desc: 'Update text and images yourself — no code.' },
+	{ name: 'Contact / booking forms', desc: 'Let visitors reach you or book time directly.' },
+	{ name: 'Online store & payments', desc: 'Sell products or take payments on your site.' },
+	{ name: 'Blog or news section', desc: 'Publish updates and articles that help SEO.' },
+	{ name: 'SEO setup', desc: 'Titles, metadata, and sitemap tuned to rank.' },
+	{ name: 'Accessibility (ADA) audit', desc: 'Tested and fixed to WCAG 2.1 AA.' },
+	{ name: 'Analytics & tracking', desc: 'See your traffic and where it comes from.' },
+	{ name: 'Domain & professional email', desc: 'Get your domain and branded email set up.' },
+	{ name: 'Logo & brand basics', desc: 'A simple logo and consistent styling.' },
+	{ name: 'Ongoing care & updates', desc: 'Hosting, backups, and tweaks — from $75/mo.' },
+]
+
 const serviceSchema = {
 	'@context': 'https://schema.org',
 	'@type': 'ProfessionalService',
@@ -263,6 +277,23 @@ const serviceSchema = {
 		<p class="fl-note mono text-muted">
 			+ ongoing care &amp; updates from $75/mo · Intro pricing while I build my portfolio — every project gets a custom quote.
 		</p>
+	</section>
+
+	<section class="fl-block">
+		<h2 class="section-heading">Add-ons</h2>
+		<p class="fl-lede fl-intro">Start with a free page and add only what you need — each is quoted with your build, so you pay for what you use.</p>
+		<div class="panel">
+			<ul class="fl-addon-grid">
+				{
+					addOns.map((a) => (
+						<li class="fl-addon">
+							<span class="fl-addon-name mono">{a.name}</span>
+							<span class="fl-addon-desc">{a.desc}</span>
+						</li>
+					))
+				}
+			</ul>
+		</div>
 	</section>
 
 	<section class="fl-block">
@@ -457,6 +488,40 @@ const serviceSchema = {
 
 	.fl-block {
 		margin-top: 3rem;
+	}
+
+	/* add-ons grid */
+	.fl-addon-grid {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		gap: 1rem 1.75rem;
+	}
+	.fl-addon {
+		display: flex;
+		flex-direction: column;
+		gap: 0.15rem;
+	}
+	.fl-addon-name {
+		font-size: 0.9rem;
+		font-weight: 700;
+		color: var(--accent);
+	}
+	.fl-addon-name::before {
+		content: '+ ';
+		opacity: 0.55;
+	}
+	.fl-addon-desc {
+		font-size: 0.82rem;
+		line-height: 1.45;
+		opacity: 0.75;
+	}
+	@media (max-width: 640px) {
+		.fl-addon-grid {
+			grid-template-columns: 1fr;
+		}
 	}
 	.fl-grid {
 		display: grid;
