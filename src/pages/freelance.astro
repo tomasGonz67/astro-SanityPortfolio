@@ -75,7 +75,7 @@ const edges: Array<{ name: string; ai: string; limit: string; solve: string; why
 
 // unit: 'once' (default) one-time $, 'mo' recurring $/mo, 'page' per-page $.
 // from: true means the amount is a starting estimate.
-type AddOn = { name: string; price: string; amount: number; unit?: 'mo' | 'page'; from?: boolean }
+type AddOn = { name: string; price: string; amount: number; unit?: 'mo' | 'page'; from?: boolean; qty?: boolean }
 const plans: Array<{
 	name: string
 	price: string
@@ -93,7 +93,7 @@ const plans: Array<{
 		blurb: 'A clean, custom single-page site to get you online — on me. Add what you need from there.',
 		points: ['Single static page', 'Mobile-first & fast', 'Yours to own'],
 		addons: [
-			{ name: 'Extra page', price: '$250', amount: 250 },
+			{ name: 'Extra page', price: '$125/page', amount: 125, qty: true },
 			{ name: 'Self-edit CMS', price: '$700', amount: 700 },
 			{ name: 'SEO setup', price: '$500', amount: 500 },
 			{ name: 'Accessibility (ADA) audit', price: '$700', amount: 700 },
@@ -122,7 +122,7 @@ const plans: Array<{
 			'Starter legal pages (privacy · terms · accessibility)',
 		],
 		addons: [
-			{ name: 'Extra page (beyond 5)', price: '$250', amount: 250 },
+			{ name: 'Extra page (beyond 5)', price: '$50/page', amount: 50, qty: true },
 			{ name: 'Blog / news section', price: '$600', amount: 600 },
 			{ name: 'Online store & payments', price: 'from $1,200', amount: 1200, from: true },
 			{ name: 'Analytics & tracking', price: '$150', amount: 150 },
@@ -345,21 +345,39 @@ const serviceSchema = {
 							<p class="fl-addon-dialog-sub mono">Starts at {p.price} · tick what you'd like to add</p>
 							<form class="fl-addon-form" data-base={String(p.base ?? 0)} data-plan={p.name} data-email={EMAIL}>
 								<ul class="fl-addon-options">
-									{p.addons.map((a) => (
-										<li>
-											<label class="fl-opt">
-												<input
-													type="checkbox"
+									{p.addons.map((a) =>
+										a.qty ? (
+											<li class="fl-opt fl-opt-qty">
+												<span class="fl-opt-name">
+													{a.name} <span class="fl-opt-per mono">+ {a.price}</span>
+												</span>
+												<div
+													class="fl-stepper"
 													data-amount={String(a.amount)}
 													data-unit={a.unit ?? 'once'}
 													data-name={a.name}
-													data-from={a.from ? 'true' : 'false'}
-												/>
-												<span class="fl-opt-name">{a.name}</span>
-												<span class="fl-opt-price mono">+ {a.price}</span>
-											</label>
-										</li>
-									))}
+												>
+													<button type="button" class="fl-step-btn" data-step="-1" aria-label={`Fewer ${a.name}`}>−</button>
+													<span class="fl-step-n mono" data-count>0</span>
+													<button type="button" class="fl-step-btn" data-step="1" aria-label={`More ${a.name}`}>+</button>
+												</div>
+											</li>
+										) : (
+											<li>
+												<label class="fl-opt">
+													<input
+														type="checkbox"
+														data-amount={String(a.amount)}
+														data-unit={a.unit ?? 'once'}
+														data-name={a.name}
+														data-from={a.from ? 'true' : 'false'}
+													/>
+													<span class="fl-opt-name">{a.name}</span>
+													<span class="fl-opt-price mono">+ {a.price}</span>
+												</label>
+											</li>
+										)
+									)}
 								</ul>
 							</form>
 							<div class="fl-addon-total">
@@ -505,6 +523,15 @@ const serviceSchema = {
 				if (cb.dataset.from === 'true') fromFlag = true
 				chosen.push(cb.dataset.name ?? '')
 			}
+			for (const st of form.querySelectorAll<HTMLElement>('.fl-stepper')) {
+				const count = Number(st.querySelector('[data-count]')?.textContent) || 0
+				if (!count) continue
+				const amt = Number(st.dataset.amount) || 0
+				if (st.dataset.unit === 'mo') perMonth += amt * count
+				else if (st.dataset.unit === 'page') perPage += amt * count
+				else once += amt * count
+				chosen.push((st.dataset.name ?? '') + ' ×' + count)
+			}
 			let text = (fromFlag ? 'from ' : '') + money(once)
 			const extras: string[] = []
 			if (perMonth) extras.push('+ $' + perMonth + '/mo')
@@ -524,6 +551,15 @@ const serviceSchema = {
 			}
 		}
 		form.addEventListener('change', update)
+		for (const btn of form.querySelectorAll<HTMLButtonElement>('.fl-step-btn')) {
+			btn.addEventListener('click', () => {
+				const countEl = btn.parentElement?.querySelector('[data-count]')
+				if (!countEl) return
+				const next = Math.max(0, (Number(countEl.textContent) || 0) + Number(btn.dataset.step || 0))
+				countEl.textContent = String(next)
+				update()
+			})
+		}
 		update()
 	}
 
@@ -728,6 +764,44 @@ const serviceSchema = {
 		font-weight: 700;
 		font-size: 0.85rem;
 		white-space: nowrap;
+	}
+	.fl-opt-qty {
+		justify-content: space-between;
+	}
+	.fl-opt-per {
+		color: var(--accent);
+		font-weight: 700;
+		font-size: 0.78rem;
+		white-space: nowrap;
+	}
+	.fl-stepper {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		flex: none;
+	}
+	.fl-step-btn {
+		width: 1.6rem;
+		height: 1.6rem;
+		border: 1px solid var(--accent);
+		background: transparent;
+		color: var(--accent);
+		border-radius: 6px;
+		font-size: 1rem;
+		line-height: 1;
+		cursor: pointer;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+	.fl-step-btn:hover {
+		background: var(--accent);
+		color: var(--bg);
+	}
+	.fl-step-n {
+		min-width: 1.2rem;
+		text-align: center;
+		font-weight: 700;
 	}
 	.fl-addon-total {
 		display: flex;
