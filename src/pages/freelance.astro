@@ -207,7 +207,14 @@ const compare: Array<{ feature: string; free: string; standard: string; note?: s
 	{ feature: 'Ongoing care & updates', free: '$75/mo', standard: '$75/mo' },
 ]
 
-const stories: Array<{ name: string; tag: string; links?: Array<{ label: string; url: string }>; before: string[]; after: string[] }> = [
+const stories: Array<{
+	name: string
+	tag: string
+	links?: Array<{ label: string; url: string }>
+	quote?: { text: string; name: string; role: string } // a real, approved client quote; renders nothing when absent
+	before: string[]
+	after: string[]
+}> = [
 	{
 		name: 'Cadooga & Vanvir',
 		tag: 'Two agency Webflow sites → custom sites on Cloudflare',
@@ -615,6 +622,14 @@ const serviceSchema = {
 								<ul>{st.after.map((a) => <li set:html={a} />)}</ul>
 							</div>
 						</div>
+						{st.quote && (
+							<blockquote class="fl-story-quote">
+								<p>“{st.quote.text}”</p>
+								<footer>
+									— {st.quote.name}, <cite>{st.quote.role}</cite>
+								</footer>
+							</blockquote>
+						)}
 						{st.links && (
 							<p class="fl-story-links mono">
 								<span>See it live:</span>
@@ -1275,6 +1290,26 @@ const serviceSchema = {
 	.fl-plan .fl-addons-btn,
 	.fl-plan .fl-card-custom {
 		margin-top: auto;
+	}
+
+	/* client quote at the bottom of a story card (only renders when a quote exists) */
+	.fl-story-quote {
+		margin: 1.4rem 0 0;
+		padding: 0.2rem 0 0.2rem 1.1rem;
+		border-left: 3px solid var(--accent);
+	}
+	.fl-story-quote p {
+		margin: 0 0 0.5rem;
+		font-size: 1rem;
+		line-height: 1.6;
+	}
+	.fl-story-quote footer {
+		font-family: var(--font-mono);
+		font-size: 0.8rem;
+		color: var(--text-muted);
+	}
+	.fl-story-quote cite {
+		font-style: normal;
 	}
 
 	/* "included with every paid plan" assurance callout */
