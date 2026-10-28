@@ -3,6 +3,11 @@ import Layout from '../layouts/Layout.astro'
 
 const EMAIL = 'thomasgonz67@gmail.com'
 const SITE = 'https://tomasgonz67.com'
+// Contact form: sent through Web3Forms (web3forms.com), which emails it to me. The access key is public by design
+// (it only says who the form is for) and comes from PUBLIC_WEB3FORMS_KEY: a local .env for dev, and the Cloudflare
+// project's build variables for production. With no key the page falls back to plain email links.
+const WEB3FORMS_KEY = import.meta.env.PUBLIC_WEB3FORMS_KEY ?? ''
+const formEnabled = WEB3FORMS_KEY !== ''
 
 // Things a business gets from me that AI builders (Base44, ChatGPT/Claude,
 // Wix AI, no-code) can't give them.
@@ -476,7 +481,7 @@ const serviceSchema = {
 			<div class="panel fl-card fl-cta-card">
 				<h3>Something else entirely?</h3>
 				<p class="fl-blurb">Anything from a little game or a weekend passion project to large-scale, cutting-edge builds — computer vision, facial recognition, blockchain. If it doesn’t fit a box above, tell me what you’re imagining and we’ll scope it together.</p>
-				<a class="fl-cta" href={`mailto:${EMAIL}?subject=Custom%20project`}>Let’s talk →</a>
+				<a class="fl-cta" href={formEnabled ? '#contact' : `mailto:${EMAIL}?subject=Custom%20project`} data-topic="Custom project">Let’s talk →</a>
 			</div>
 		</div>
 
@@ -538,7 +543,11 @@ const serviceSchema = {
 								<span class="fl-total-label mono">Estimate</span>
 								<span class="fl-total-amount mono">{p.base ? `$${p.base.toLocaleString()}` : '$0'}</span>
 							</div>
-							<a class="fl-cta fl-addon-cta" href={`mailto:${EMAIL}?subject=Website%20project`}>Email me this setup →</a>
+							{formEnabled ? (
+								<button type="button" class="fl-cta fl-addon-cta" data-send-setup>Send me this setup →</button>
+							) : (
+								<a class="fl-cta fl-addon-cta" href={`mailto:${EMAIL}?subject=Website%20project`}>Email me this setup →</a>
+							)}
 						</div>
 					</dialog>
 				) : null
@@ -669,11 +678,31 @@ const serviceSchema = {
 		</div>
 	</section>
 
-	<section class="fl-block fl-contact">
+	<section class="fl-block fl-contact" id="contact">
 		<h2 class="section-heading">Start a project</h2>
 		<div class="panel">
 			<p>Tell me about your business and what you need — I'll reply with ideas and a quote.</p>
-			<a class="fl-cta" href={`mailto:${EMAIL}?subject=Website%20project`}>Email me →</a>
+			{
+				formEnabled ? (
+					<form class="fl-form" id="contact-form" action="https://api.web3forms.com/submit" method="POST" data-email={EMAIL}>
+						<input type="hidden" name="access_key" value={WEB3FORMS_KEY} />
+						<input type="hidden" name="subject" value="New project inquiry from tomasgonz67.com" />
+						<input type="hidden" name="from_name" value="tomasgonz67.com" />
+						<!-- spam trap: hidden from people, bots tick it (Web3Forms drops those) -->
+						<input type="checkbox" name="botcheck" class="botcheck" tabindex="-1" autocomplete="off" aria-hidden="true" />
+						<div class="fl-form-fields">
+							<label><span>Name</span><input type="text" name="name" autocomplete="name" required /></label>
+							<label><span>Email</span><input type="email" name="email" autocomplete="email" required /></label>
+							<label class="wide"><span>What do you need?</span><textarea name="message" rows="6" required></textarea></label>
+						</div>
+						<button type="submit" class="fl-cta">Send message →</button>
+						<p class="fl-form-status" role="status" aria-live="polite"></p>
+						<p class="fl-form-note">Your message goes straight to my inbox through Web3Forms and is only used to reply. No mailing list, no trackers.</p>
+					</form>
+				) : (
+					<a class="fl-cta" href={`mailto:${EMAIL}?subject=Website%20project`}>Email me →</a>
+				)
+			}
 		</div>
 	</section>
 </Layout>
@@ -722,7 +751,7 @@ const serviceSchema = {
 		const planName = form.dataset.plan ?? ''
 		const email = form.dataset.email ?? ''
 		const totalEl = dialog.querySelector('.fl-total-amount')
-		const cta = dialog.querySelector<HTMLAnchorElement>('.fl-addon-cta')
+		const cta = dialog.querySelector<HTMLElement>('.fl-addon-cta')
 		const update = () => {
 			let once = base
 			let perMonth = 0
@@ -760,7 +789,8 @@ const serviceSchema = {
 				'',
 				'A bit about my business and what I need:',
 			].join('\n')
-			if (cta) {
+			dialog.dataset.summary = body
+			if (cta instanceof HTMLAnchorElement) {
 				cta.href =
 					'mailto:' + email + '?subject=' + encodeURIComponent('Website project — ' + planName) + '&body=' + encodeURIComponent(body)
 			}
@@ -817,6 +847,52 @@ const serviceSchema = {
 		m.addEventListener('mouseleave', hideTip)
 		m.addEventListener('focus', () => showTip(m))
 		m.addEventListener('blur', hideTip)
+	}
+
+	// Contact form: send without leaving the page, and let the plan pop-up / catch-all card pre-fill it.
+	const contactForm = document.querySelector<HTMLFormElement>('#contact-form')
+	if (contactForm) {
+		const status = contactForm.querySelector<HTMLElement>('.fl-form-status')!
+		const sendBtn = contactForm.querySelector<HTMLButtonElement>('button[type="submit"]')!
+		const message = contactForm.querySelector<HTMLTextAreaElement>('textarea[name="message"]')!
+		const failText = 'Something went wrong. Please try again, or email me at ' + (contactForm.dataset.email ?? '') + '.'
+		contactForm.addEventListener('submit', async (event) => {
+			event.preventDefault()
+			sendBtn.disabled = true
+			status.textContent = 'Sending\u2026'
+			try {
+				const response = await fetch(contactForm.action, { method: 'POST', headers: { Accept: 'application/json' }, body: new FormData(contactForm) })
+				const result = await response.json()
+				if (response.ok && result.success) {
+					contactForm.reset()
+					status.textContent = 'Thank you! I\u2019ll reply soon.'
+				} else {
+					status.textContent = failText
+				}
+			} catch {
+				status.textContent = failText
+			} finally {
+				sendBtn.disabled = false
+			}
+		})
+		const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+		const focusEnd = () => { message.focus(); message.setSelectionRange(message.value.length, message.value.length) }
+		for (const btn of document.querySelectorAll<HTMLElement>('[data-send-setup]')) {
+			btn.addEventListener('click', () => {
+				const dlg = btn.closest('dialog')
+				const summary = dlg?.dataset.summary ?? ''
+				dlg?.close()
+				message.value = message.value.trim() ? message.value.trimEnd() + '\n\n' + summary : summary
+				document.getElementById('contact')?.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' })
+				setTimeout(focusEnd, reduce ? 0 : 450)
+			})
+		}
+		for (const link of document.querySelectorAll<HTMLElement>('[data-topic]')) {
+			link.addEventListener('click', () => {
+				if (!message.value.trim()) message.value = (link.dataset.topic ?? '') + ' \u2014 here\u2019s what I\u2019m imagining:\n'
+				setTimeout(focusEnd, reduce ? 0 : 450)
+			})
+		}
 	}
 
 </script>
@@ -1318,6 +1394,84 @@ const serviceSchema = {
 	}
 	.fl-story-quote cite {
 		font-style: normal;
+	}
+
+	/* contact form */
+	.botcheck {
+		display: none;
+	}
+	#contact {
+		scroll-margin-top: 90px;
+	}
+	.fl-form {
+		margin-top: 1.1rem;
+	}
+	.fl-form-fields {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 1rem 1.25rem;
+	}
+	.fl-form-fields label {
+		display: flex;
+		flex-direction: column;
+		gap: 0.35rem;
+	}
+	.fl-form-fields label.wide {
+		grid-column: 1 / -1;
+	}
+	.fl-form-fields span {
+		font-family: var(--font-mono);
+		font-size: 0.75rem;
+		letter-spacing: 0.04em;
+		text-transform: uppercase;
+		color: var(--text-muted);
+	}
+	.fl-form-fields input,
+	.fl-form-fields textarea {
+		width: 100%;
+		box-sizing: border-box;
+		padding: 0.6rem 0.75rem;
+		font: inherit;
+		font-size: 0.95rem;
+		color: var(--text);
+		background: var(--bg);
+		border: 1px solid var(--text-muted);
+		border-radius: 6px;
+	}
+	.fl-form-fields textarea {
+		min-height: 7rem;
+		resize: vertical;
+	}
+	.fl-form-fields input:focus-visible,
+	.fl-form-fields textarea:focus-visible {
+		outline: 2px solid var(--accent);
+		outline-offset: 1px;
+	}
+	button.fl-cta {
+		background: transparent;
+		color: inherit;
+		font: inherit;
+		font-weight: 600;
+		cursor: pointer;
+	}
+	button.fl-cta:disabled {
+		opacity: 0.6;
+		cursor: wait;
+	}
+	.fl-form-status {
+		min-height: 1.4em;
+		margin: 0.7rem 0 0;
+		font-size: 0.9rem;
+	}
+	.fl-form-note {
+		margin: 0.4rem 0 0;
+		font-size: 0.78rem;
+		color: var(--text-muted);
+	}
+	@media (max-width: 640px) {
+		.fl-form-fields {
+			grid-template-columns: 1fr;
+		}
 	}
 
 	/* "included with every paid plan" assurance callout */
