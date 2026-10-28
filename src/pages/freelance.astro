@@ -6,7 +6,7 @@ const SITE = 'https://tomasgonz67.com'
 
 // Things a business gets from me that AI builders (Base44, ChatGPT/Claude,
 // Wix AI, no-code) can't give them.
-const edges: Array<{ name: string; ai: string; limit: string; solve: string; why?: string; fact?: string; process?: string }> = [
+const edges: Array<{ name: string; ai: string; limit: string; solve: string; why?: string; fact?: string; source?: string; sourceUrl?: string; process?: string }> = [
 	{
 		name: 'You own it — pay once',
 		ai: 'AI builders host your site for you, on a subscription plus usage credits.',
@@ -14,6 +14,8 @@ const edges: Array<{ name: string; ai: string; limit: string; solve: string; why
 		solve: 'I build it once; you own the code and host it anywhere for next to nothing. No subscription, no lock-in.',
 		why: 'You pay a builder every month, forever, for a site you don’t own — and can’t take with you.',
 		fact: 'Base44 (now Wix-owned) and similar AI builders run <strong>$16–$200/mo</strong> plus usage credits that don’t roll over. Cloudflare hosting for a static site is <strong>free up to ~100k requests a day, then about $5/mo</strong>.',
+		source: 'Base44 & Cloudflare pricing',
+		sourceUrl: 'https://developers.cloudflare.com/workers/platform/pricing/',
 		process: 'I hand over everything, in your name: the code in your own repo, your domain, your Cloudflare hosting, and every other service it uses (CMS, email, etc.). It’s yours to keep, move, or hand to another developer — no leash.',
 	},
 	{
@@ -23,6 +25,8 @@ const edges: Array<{ name: string; ai: string; limit: string; solve: string; why
 		solve: 'I build and test to WCAG 2.1 AA, so it genuinely meets the standard — not just looks finished.',
 		why: 'An inaccessible site is a lawsuit waiting to happen — and settling costs real money even if you fix it afterward.',
 		fact: 'Industry trackers logged <strong>~4,000+ U.S. web-accessibility lawsuits in 2025</strong> (UsableNet, Seyfarth, EcomBack), most against small and mid-sized businesses. Settling a demand letter commonly runs <strong>$5,000–$25,000 plus legal fees</strong>, and "overlay" widgets don’t stop the suits.',
+		source: 'UsableNet & Seyfarth litigation trackers, 2025',
+		sourceUrl: 'https://info.usablenet.com/ada-website-compliance-lawsuit-tracker',
 		process: 'I run automated accessibility scans (axe-core and WAVE) across the build, then test by hand — full keyboard navigation, a screen-reader pass, focus order, color contrast, reflow, and status messages — all against WCAG 2.1 AA.',
 	},
 	{
@@ -32,6 +36,8 @@ const edges: Array<{ name: string; ai: string; limit: string; solve: string; why
 		solve: 'I build it secure and test for the vulnerabilities before real customers and their data ever touch it.',
 		why: 'A breach, a spam flood, or leaked customer data lands on you — not the tool that wrote the code.',
 		fact: 'A 2025 Veracode study found AI-generated code introduced a <strong>security vulnerability about 45% of the time</strong> — leaked API keys, unvalidated forms, and missing spam/rate-limiting, the stuff the tools don’t flag in their own output.',
+		source: 'Veracode GenAI Code Security Report, 2025',
+		sourceUrl: 'https://www.veracode.com/resources/analyst-reports/2025-genai-code-security-report/',
 		process: 'I keep secrets in environment variables (never in the code); validate, sanitize, and rate-limit every input against spam and abuse; protect and test against common attacks like XSS and injection; enforce security headers and HTTPS; and scan dependencies for known vulnerabilities and keep them patched.',
 	},
 	{
@@ -41,6 +47,8 @@ const edges: Array<{ name: string; ai: string; limit: string; solve: string; why
 		solve: 'I’m your technical consultant: I learn your business, architect the right system, and steer the AI to build it — direction, not just code.',
 		why: 'A slow, generic build quietly loses you customers and search rankings — speed is money.',
 		fact: 'Google found <strong>53% of mobile visitors leave a site that takes more than 3 seconds to load</strong>; faster pages convert better; and page speed (Core Web Vitals) is a Google ranking factor.',
+		source: 'Google — “The Need for Mobile Speed”',
+		sourceUrl: 'https://www.marketingdive.com/news/google-53-of-mobile-users-abandon-sites-that-take-over-3-seconds-to-load/426070/',
 		process: 'Because I use these tools daily, I know how to steer AI and LLMs to produce precise, efficient results — not generic guesses. And the way I build — static-first on a fast stack — means your site typically loads in under a second, well under Google’s 3-second bar — without trading away features, accessibility, or SEO to get there.',
 	},
 	{
@@ -187,6 +195,18 @@ const serviceSchema = {
 								<div class="fl-step">
 									<span class="fl-step-label">Fact</span>
 									<p set:html={e.fact}></p>
+									{e.source && (
+										<p class="fl-source">
+											Source:{' '}
+											{e.sourceUrl ? (
+												<a href={e.sourceUrl} target="_blank" rel="noopener">
+													{e.source}
+												</a>
+											) : (
+												e.source
+											)}
+										</p>
+									)}
 								</div>
 							)}
 							{e.process && (
@@ -381,6 +401,15 @@ const serviceSchema = {
 	}
 	.fl-step strong {
 		font-weight: 700;
+	}
+	.fl-source {
+		margin: 0.4rem 0 0;
+		font-size: 0.72rem;
+		opacity: 0.6;
+	}
+	.fl-source a {
+		color: var(--accent);
+		text-decoration: underline;
 	}
 	.fl-step-solve .fl-step-label {
 		color: var(--accent);
