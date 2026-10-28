@@ -595,12 +595,12 @@ const serviceSchema = {
 										fields={p.intake ?? []}
 										accessKey={WEB3FORMS_KEY}
 										email={EMAIL}
-										submitLabel="Send this setup →"
+										submitLabel="Send this setup to me →"
 										withSummary
 									/>
 								</div>
 							) : (
-								<a class="fl-cta fl-addon-cta" href={`mailto:${EMAIL}?subject=Website%20project`}>Email me this setup →</a>
+								<a class="fl-cta fl-addon-cta" href={`mailto:${EMAIL}?subject=Website%20project`}>Send this setup to me →</a>
 							)}
 						</div>
 					</dialog>
@@ -763,10 +763,10 @@ const serviceSchema = {
 						fields={[field('message', 'What do you need?', 'textarea', true, 6)]}
 						accessKey={WEB3FORMS_KEY}
 						email={EMAIL}
-						submitLabel="Send message →"
+						submitLabel="Send this to me →"
 					/>
 				) : (
-					<a class="fl-cta" href={`mailto:${EMAIL}?subject=Website%20project`}>Email me →</a>
+					<a class="fl-cta" href={`mailto:${EMAIL}?subject=Website%20project`}>Send this to me →</a>
 				)
 			}
 		</div>
