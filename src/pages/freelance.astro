@@ -75,7 +75,16 @@ const edges: Array<{ name: string; ai: string; limit: string; solve: string; why
 
 // unit: 'once' (default) one-time $, 'mo' recurring $/mo, 'page' per-page $.
 // from: true means the amount is a starting estimate.
-type AddOn = { name: string; price: string; amount: number; unit?: 'mo' | 'page'; from?: boolean; qty?: boolean }
+type AddOn = {
+	name: string
+	price: string
+	amount: number
+	unit?: 'mo' | 'page'
+	from?: boolean
+	qty?: boolean
+	key?: string // marks a trigger item (e.g. 'accessibility')
+	accessibilityRider?: boolean // show "+ accessibility" when the accessibility item is ticked
+}
 const plans: Array<{
 	name: string
 	price: string
@@ -96,10 +105,10 @@ const plans: Array<{
 			{ name: 'Extra page', price: '$125/page', amount: 125, qty: true },
 			{ name: 'Self-edit CMS', price: '$750', amount: 750 },
 			{ name: 'SEO setup', price: '$750', amount: 750 },
-			{ name: 'Accessibility (ADA) audit + statement', price: '$1,000', amount: 1000 },
+			{ name: 'Accessibility (ADA) audit', price: '$1,000', amount: 1000, key: 'accessibility' },
 			{ name: 'Contact form', price: '$150', amount: 150 },
 			{ name: 'Booking / scheduling', price: 'from $400', amount: 400, from: true },
-			{ name: 'Legal pages (privacy + terms)', price: '$150', amount: 150 },
+			{ name: 'Legal pages (privacy + terms)', price: '$150', amount: 150, accessibilityRider: true },
 			{ name: 'Blog / news section', price: '$600', amount: 600 },
 			{ name: 'Online store & payments', price: 'from $1,200', amount: 1200, from: true },
 			{ name: 'Analytics & tracking', price: '$150', amount: 150 },
@@ -159,7 +168,7 @@ const compare: Array<{ feature: string; free: string; standard: string; note?: s
 	{ feature: 'Yours to own', free: 'inc', standard: 'inc' },
 	{ feature: 'Self-edit CMS', free: 'add', standard: 'inc' },
 	{ feature: 'SEO setup', free: 'add', standard: 'inc' },
-	{ feature: 'Accessibility (ADA) + statement', free: 'add', standard: 'inc' },
+	{ feature: 'Accessibility (ADA)', free: 'add', standard: 'inc' },
 	{ feature: 'Contact form', free: 'add', standard: 'inc' },
 	{ feature: 'Booking / scheduling', free: 'add', standard: 'add' },
 	{ feature: 'Legal pages (privacy + terms)', free: 'add', standard: 'inc' },
@@ -375,8 +384,14 @@ const serviceSchema = {
 														data-unit={a.unit ?? 'once'}
 														data-name={a.name}
 														data-from={a.from ? 'true' : 'false'}
+														data-key={a.key}
 													/>
-													<span class="fl-opt-name">{a.name}</span>
+													<span class="fl-opt-name">
+														{a.name}
+														{a.accessibilityRider && (
+															<span class="fl-rider" data-rider="accessibility" hidden> + accessibility</span>
+														)}
+													</span>
 													<span class="fl-opt-price mono">+ {a.price}</span>
 												</label>
 											</li>
@@ -555,6 +570,13 @@ const serviceSchema = {
 			}
 		}
 		form.addEventListener('change', update)
+		const accCb = form.querySelector<HTMLInputElement>('input[data-key="accessibility"]')
+		const rider = form.querySelector<HTMLElement>('[data-rider="accessibility"]')
+		if (accCb && rider) {
+			const syncRider = () => { rider.hidden = !accCb.checked }
+			accCb.addEventListener('change', syncRider)
+			syncRider()
+		}
 		for (const btn of form.querySelectorAll<HTMLButtonElement>('.fl-step-btn')) {
 			btn.addEventListener('click', () => {
 				const countEl = btn.parentElement?.querySelector('[data-count]')
@@ -762,6 +784,10 @@ const serviceSchema = {
 	.fl-opt-name {
 		flex: 1;
 		font-size: 0.9rem;
+	}
+	.fl-rider {
+		color: var(--accent);
+		font-weight: 700;
 	}
 	.fl-opt-price {
 		color: var(--accent);
