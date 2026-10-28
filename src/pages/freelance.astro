@@ -84,6 +84,7 @@ type AddOn = {
 	qty?: boolean
 	key?: string // marks a trigger item (e.g. 'accessibility')
 	accessibilityRider?: boolean // show "+ accessibility" when the accessibility item is ticked
+	fee?: string // hover note: may carry a third-party subscription/fee, paid to that service
 }
 const plans: Array<{
 	name: string
@@ -94,6 +95,7 @@ const plans: Array<{
 	badge?: string
 	featured?: boolean
 	custom?: boolean
+	fee?: string
 	addons?: AddOn[]
 }> = [
 	{
@@ -108,12 +110,12 @@ const plans: Array<{
 			{ name: 'SEO setup', price: '$750', amount: 750 },
 			{ name: 'Accessibility (ADA) audit', price: '$1,000', amount: 1000, key: 'accessibility' },
 			{ name: 'Contact form', price: '$150', amount: 150 },
-			{ name: 'Booking / scheduling', price: 'from $400', amount: 400, from: true },
+			{ name: 'Booking / scheduling', price: 'from $400', amount: 400, from: true, fee: 'Some schedulers (e.g. Calendly) charge for advanced features — paid to that service, not to me.' },
 			{ name: 'Legal pages (privacy + terms)', price: '$150', amount: 150, accessibilityRider: true },
 			{ name: 'Blog / news section', price: '$600', amount: 600 },
-			{ name: 'Payments / Buy button', price: '$300', amount: 300 },
+			{ name: 'Payments / Buy button', price: '$300', amount: 300, fee: 'Payment processors (e.g. Stripe) charge a small per-sale fee (~2.9% + 30¢) — paid to them, not to me.' },
 			{ name: 'Analytics & tracking', price: '$150', amount: 150 },
-			{ name: 'Domain & email setup', price: '$150', amount: 150 },
+			{ name: 'Domain & email setup', price: '$150', amount: 150, fee: 'Domains renew yearly and pro email (e.g. Google Workspace) is a monthly fee — paid to the provider, not to me.' },
 			{ name: 'Logo & brand basics', price: '$400', amount: 400 },
 			{ name: 'Content writing', price: '$100/page', amount: 100, unit: 'page' },
 			{ name: 'Ongoing care & updates', price: '$75/mo', amount: 75, unit: 'mo' },
@@ -136,11 +138,11 @@ const plans: Array<{
 		],
 		addons: [
 			{ name: 'Extra page (beyond 5)', price: '$50/page', amount: 50, qty: true },
-			{ name: 'Booking / scheduling', price: 'from $400', amount: 400, from: true },
+			{ name: 'Booking / scheduling', price: 'from $400', amount: 400, from: true, fee: 'Some schedulers (e.g. Calendly) charge for advanced features — paid to that service, not to me.' },
 			{ name: 'Blog / news section', price: '$600', amount: 600 },
-			{ name: 'Payments / Buy button', price: '$300', amount: 300 },
+			{ name: 'Payments / Buy button', price: '$300', amount: 300, fee: 'Payment processors (e.g. Stripe) charge a small per-sale fee (~2.9% + 30¢) — paid to them, not to me.' },
 			{ name: 'Analytics & tracking', price: '$150', amount: 150 },
-			{ name: 'Domain & email setup', price: '$150', amount: 150 },
+			{ name: 'Domain & email setup', price: '$150', amount: 150, fee: 'Domains renew yearly and pro email (e.g. Google Workspace) is a monthly fee — paid to the provider, not to me.' },
 			{ name: 'Logo & brand basics', price: '$400', amount: 400 },
 			{ name: 'Content writing', price: '$100/page', amount: 100, unit: 'page' },
 			{ name: 'Ongoing care & updates', price: '$75/mo', amount: 75, unit: 'mo' },
@@ -151,6 +153,7 @@ const plans: Array<{
 		price: 'from $2,500+',
 		badge: 'Limited-time offer',
 		custom: true,
+		fee: 'A store platform (e.g. Shopify) may charge its own monthly fee plus payment fees — paid to that service, not to me.',
 		blurb: 'A clean storefront for a focused catalog — product pages, cart, and secure checkout, built into your own site.',
 		points: ['Storefront + product pages', 'Cart & secure checkout', 'Self-edit product CMS', 'Yours to own'],
 	},
@@ -159,6 +162,7 @@ const plans: Array<{
 		price: 'from $5,000+',
 		badge: 'Limited-time offer',
 		custom: true,
+		fee: 'A store platform (e.g. Shopify) may charge its own monthly fee plus payment fees — paid to that service, not to me.',
 		blurb: 'A larger store with variants, inventory, discounts, shipping & tax — scoped to your catalog.',
 		points: ['Larger catalog & variants', 'Inventory & discounts', 'Shipping & tax setup', 'Integrations & automations'],
 	},
@@ -345,7 +349,10 @@ const serviceSchema = {
 						{p.badge && <span class:list={['fl-plan-badge mono', { 'fl-plan-badge-offer': !p.featured }]}>{p.badge}</span>}
 						<div class="fl-card-head">
 							<h3>{p.name}</h3>
-							<span class="fl-price mono">{p.price}</span>
+							<span class="fl-price mono">
+								{p.price}
+								{p.fee && <span class="fl-fee" title={p.fee} role="img" aria-label={`Note: ${p.fee}`}>ⓘ</span>}
+							</span>
 						</div>
 						<p class="fl-blurb">{p.blurb}</p>
 						<ul class="fl-points mono">
@@ -406,6 +413,7 @@ const serviceSchema = {
 													/>
 													<span class="fl-opt-name">
 														{a.name}
+														{a.fee && <span class="fl-fee" title={a.fee} role="img" aria-label={`Note: ${a.fee}`}>ⓘ</span>}
 														{a.accessibilityRider && (
 															<span class="fl-rider" data-rider="accessibility" hidden> + accessibility</span>
 														)}
@@ -718,6 +726,27 @@ const serviceSchema = {
 	/* featured plan: persistent accent highlight + badge */
 	.fl-plan-badged {
 		position: relative;
+	}
+	/* "ⓘ" marker: hover (native title) note that an item may carry a third-party fee */
+	.fl-fee {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 1rem;
+		height: 1rem;
+		margin-left: 0.3rem;
+		border-radius: 50%;
+		color: var(--text-muted);
+		font-size: 0.7rem;
+		font-weight: 400;
+		font-style: normal;
+		letter-spacing: 0;
+		text-transform: none;
+		cursor: help;
+		vertical-align: middle;
+	}
+	.fl-fee:hover {
+		color: var(--accent);
 	}
 	.fl-plan-featured {
 		position: relative;
