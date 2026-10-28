@@ -370,7 +370,7 @@ const serviceSchema = {
 		<div class="fl-grid">
 			{
 				edges.map((e, i) => (
-					<div class="panel fl-card" data-open={e.why || e.fact || e.process ? `facts-${i}` : undefined}>
+					<div class="panel fl-card fl-edge" data-open={e.why || e.fact || e.process ? `facts-${i}` : undefined}>
 						<h3>{e.name}</h3>
 						<div class="fl-step">
 							<span class="fl-step-label">How AI does it</span>
@@ -1251,6 +1251,19 @@ const serviceSchema = {
 		:global(html) {
 			scroll-behavior: auto;
 		}
+	}
+
+	/* 'age of AI' cards: same idea, 'More details' pinned to the bottom of each card */
+	.fl-edge {
+		display: flex;
+		flex-direction: column;
+	}
+	.fl-edge .fl-step-solve {
+		margin-bottom: 1rem;
+	}
+	.fl-edge .fl-facts-btn {
+		margin-top: auto;
+		align-self: flex-start;
 	}
 
 	/* plan cards: equal-height columns with the button (or custom note) pinned to the bottom */
