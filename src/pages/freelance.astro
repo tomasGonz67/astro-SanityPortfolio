@@ -152,16 +152,19 @@ const serviceSchema = {
 	<section class="fl-proof-strip">
 		<div class="fl-proof-grid">
 			<div class="panel fl-proof">
-				<p class="fl-proof-value">Weeks, not months</p>
-				<p class="fl-proof-note">Most sites go live in 1–2 weeks. One person, start to finish — nothing sits in a queue waiting on a team.</p>
+				<p class="fl-proof-value">Live in 1–2 weeks</p>
+				<p class="fl-proof-note">I build most sites start to finish in a week or two — one person, nothing stuck in a queue waiting on a team.</p>
+				<p class="fl-proof-bench">Typical agency build: <strong>6–10 weeks</strong></p>
 			</div>
 			<div class="panel fl-proof">
-				<p class="fl-proof-value">A fraction of agency cost</p>
-				<p class="fl-proof-note">Senior-level work without the agency markup. You pay for the build itself, not the overhead on top of it.</p>
+				<p class="fl-proof-value">A fraction of the cost</p>
+				<p class="fl-proof-note">You pay for the build itself, not agency overhead — quoted flat and upfront, with no surprise add-ons.</p>
+				<p class="fl-proof-bench">Agencies commonly charge <strong>$3,000–$15,000+</strong></p>
 			</div>
 			<div class="panel fl-proof">
-				<p class="fl-proof-value">Built to own, built to last</p>
-				<p class="fl-proof-note">Accessible, secure, and loads in under a second. It's yours to keep — no subscription, no lock-in.</p>
+				<p class="fl-proof-value">Yours, forever</p>
+				<p class="fl-proof-note">Accessible, secure, and loads in under a second — and hosted for just a few dollars a month.</p>
+				<p class="fl-proof-bench">No <strong>$17–$45/mo</strong> builder subscription, no lock-in</p>
 			</div>
 		</div>
 	</section>
@@ -382,6 +385,18 @@ const serviceSchema = {
 		font-size: 0.85rem;
 		line-height: 1.55;
 		opacity: 0.8;
+	}
+	.fl-proof-bench {
+		margin: 0.7rem 0 0;
+		padding-top: 0.55rem;
+		border-top: 1px solid var(--border);
+		font-family: var(--font-mono);
+		font-size: 0.72rem;
+		opacity: 0.55;
+	}
+	.fl-proof-bench strong {
+		font-weight: 700;
+		opacity: 0.9;
 	}
 	@media (max-width: 640px) {
 		.fl-proof-grid {
