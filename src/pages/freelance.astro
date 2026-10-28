@@ -97,12 +97,14 @@ const plans: Array<{
 	featured?: boolean
 	custom?: boolean
 	fee?: string
+	timeline?: string
 	addons?: AddOn[]
 }> = [
 	{
 		name: 'Starter Page',
 		price: 'Free',
 		base: 0,
+		timeline: '1–7 days',
 		blurb: 'A clean, custom single-page site to get you online — on me. Add what you need from there.',
 		points: ['Single static page', 'Mobile-first & fast', 'Yours to own'],
 		addons: [
@@ -126,6 +128,7 @@ const plans: Array<{
 		name: 'Standard Website',
 		price: '$3,000',
 		base: 3000,
+		timeline: '1–2 weeks',
 		badge: 'Best Value',
 		featured: true,
 		blurb: 'A custom multi-page site — accessible, built for search, and editable by you.',
@@ -357,6 +360,7 @@ const serviceSchema = {
 							</span>
 						</div>
 						<p class="fl-blurb">{p.blurb}</p>
+						{p.timeline && <p class="fl-timeline mono">Live in {p.timeline}</p>}
 						<ul class="fl-points mono">
 							{p.points.map((pt) => (
 								<li>{pt}</li>
@@ -452,6 +456,7 @@ const serviceSchema = {
 			</ul>
 			<p class="fl-assurance-head mono fl-assurance-head-2">Included in every plan</p>
 			<ul class="fl-assurance-list">
+				<li>Free design mockup before you commit</li>
 				<li>Free hosting — up to ~100k requests/day, then about $5/mo</li>
 				<li>Yours to own — no platform subscription, no lock-in</li>
 			</ul>
@@ -882,6 +887,12 @@ const serviceSchema = {
 	.fl-addons-btn:hover {
 		background: var(--accent);
 		color: var(--bg);
+	}
+	.fl-timeline {
+		margin: 0 0 0.85rem;
+		font-size: 0.8rem;
+		font-weight: 700;
+		color: var(--accent);
 	}
 	.fl-card-custom {
 		margin-top: 0.9rem;
