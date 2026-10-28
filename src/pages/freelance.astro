@@ -6,13 +6,14 @@ const SITE = 'https://tomasgonz67.com'
 
 // Things a business gets from me that AI builders (Base44, ChatGPT/Claude,
 // Wix AI, no-code) can't give them.
-const edges: Array<{ name: string; ai: string; limit: string; solve: string; facts?: string; process?: string }> = [
+const edges: Array<{ name: string; ai: string; limit: string; solve: string; why?: string; fact?: string; process?: string }> = [
 	{
 		name: 'You own it — pay once',
 		ai: 'AI builders host your site for you, on a subscription plus usage credits.',
 		limit: 'You rent it forever and own none of it. Stop paying, and it’s gone.',
 		solve: 'I build it once; you own the code and host it anywhere for next to nothing. No subscription, no lock-in.',
-		facts: 'Base44 (now owned by Wix) and similar AI builders run on monthly subscriptions (<strong>$16–$200/mo</strong>) plus usage credits that don’t roll over — and your site lives on their platform. Cloudflare hosting for a static site is <strong>free up to ~100k requests a day, then about $5/mo</strong>.',
+		why: 'You pay a builder every month, forever, for a site you don’t own — and can’t take with you.',
+		fact: 'Base44 (now Wix-owned) and similar AI builders run <strong>$16–$200/mo</strong> plus usage credits that don’t roll over. Cloudflare hosting for a static site is <strong>free up to ~100k requests a day, then about $5/mo</strong>.',
 		process: 'I hand over everything, in your name: the code in your own repo, your domain, your Cloudflare hosting, and every other service it uses (CMS, email, etc.). It’s yours to keep, move, or hand to another developer — no leash.',
 	},
 	{
@@ -20,7 +21,8 @@ const edges: Array<{ name: string; ai: string; limit: string; solve: string; fac
 		ai: 'AI generators output markup that looks finished.',
 		limit: 'It’s almost never accessible — and most owners don’t know ADA applies to websites, leaving them open to accessibility lawsuits.',
 		solve: 'I build and test to WCAG 2.1 AA, so it genuinely meets the standard — not just looks finished.',
-		facts: 'Industry trackers logged <strong>~4,000+ U.S. web-accessibility lawsuits in 2025</strong> (UsableNet, Seyfarth, EcomBack), most against small and mid-sized businesses. Settling a demand letter commonly runs <strong>$5,000–$25,000 plus legal fees</strong> — even if you fix the site afterward. And accessibility "overlay" widgets don’t stop the suits.',
+		why: 'An inaccessible site is a lawsuit waiting to happen — and settling costs real money even if you fix it afterward.',
+		fact: 'Industry trackers logged <strong>~4,000+ U.S. web-accessibility lawsuits in 2025</strong> (UsableNet, Seyfarth, EcomBack), most against small and mid-sized businesses. Settling a demand letter commonly runs <strong>$5,000–$25,000 plus legal fees</strong>, and "overlay" widgets don’t stop the suits.',
 		process: 'I run automated accessibility scans (axe-core and WAVE) across the build, then test by hand — full keyboard navigation, a screen-reader pass, focus order, color contrast, reflow, and status messages — all against WCAG 2.1 AA.',
 	},
 	{
@@ -28,7 +30,8 @@ const edges: Array<{ name: string; ai: string; limit: string; solve: string; fac
 		ai: 'AI produces code that runs and looks fine.',
 		limit: 'It routinely ships with security holes it never flags — until they bite.',
 		solve: 'I build it secure and test for the vulnerabilities before real customers and their data ever touch it.',
-		facts: 'A 2025 Veracode study found AI-generated code introduced a <strong>security vulnerability about 45% of the time</strong> — leaked API keys, unvalidated forms, missing spam/rate-limiting, the stuff the tools don’t flag in their own output. A breach, a spam flood, or leaked customer data lands on you, not the tool.',
+		why: 'A breach, a spam flood, or leaked customer data lands on you — not the tool that wrote the code.',
+		fact: 'A 2025 Veracode study found AI-generated code introduced a <strong>security vulnerability about 45% of the time</strong> — leaked API keys, unvalidated forms, and missing spam/rate-limiting, the stuff the tools don’t flag in their own output.',
 		process: 'I keep secrets in environment variables (never in the code); validate, sanitize, and rate-limit every input against spam and abuse; protect and test against common attacks like XSS and injection; enforce security headers and HTTPS; and scan dependencies for known vulnerabilities and keep them patched.',
 	},
 	{
@@ -36,7 +39,8 @@ const edges: Array<{ name: string; ai: string; limit: string; solve: string; fac
 		ai: 'AI code tools — Claude, ChatGPT, Copilot — generate code fast, but only what you ask, and only as good as the prompt.',
 		limit: 'Turning that into a real, working system takes architecture and system-design experience it can’t give you.',
 		solve: 'I’m your technical consultant: I learn your business, architect the right system, and steer the AI to build it — direction, not just code.',
-		facts: 'AI builders and templates tend to ship heavy, one-size-fits-all code that loads slower than it should — and speed is money. Google found <strong>53% of mobile visitors leave a site that takes more than 3 seconds to load</strong>; faster pages convert better; and page speed (Core Web Vitals) is a Google ranking factor.',
+		why: 'A slow, generic build quietly loses you customers and search rankings — speed is money.',
+		fact: 'Google found <strong>53% of mobile visitors leave a site that takes more than 3 seconds to load</strong>; faster pages convert better; and page speed (Core Web Vitals) is a Google ranking factor.',
 		process: 'Because I use these tools daily, I know how to steer AI and LLMs to produce precise, efficient results — not generic guesses. And the way I build — static-first on a fast stack — means your site typically loads in under a second, well under Google’s 3-second bar — without trading away features, accessibility, or SEO to get there.',
 	},
 	{
@@ -44,7 +48,8 @@ const edges: Array<{ name: string; ai: string; limit: string; solve: string; fac
 		ai: 'AI site builders — Wix, Squarespace, Base44 — assemble your site from their pre-set blocks, themes, and features.',
 		limit: 'You’re boxed into what the platform allows — their layouts, their features, their plan tiers. Want something they didn’t build? You can’t have it.',
 		solve: 'It’s custom code — no ceiling: any design, any feature, even a full web app, scaling as big as you grow.',
-		facts: 'Outgrow a builder and you don’t upgrade — you <strong>rebuild from scratch</strong>. It can only do what its editor and app marketplace allow, so anything past a basic site — a real database, a dashboard or admin panel, file storage, user accounts, automations, or a full web app like a booking or planning system — is off the table or capped by your plan tier.',
+		why: 'Outgrow a builder and you don’t upgrade — you <strong>rebuild from scratch</strong>.',
+		fact: 'A builder can only do what its editor and app marketplace allow, so anything past a basic site — a real database, a dashboard or admin panel, file storage, user accounts, automations, or a full web app like a booking or planning system — is off the table or capped by your plan tier.',
 		process: 'I build whatever your business actually needs — the site, plus any database, dashboard, file storage, integrations, or custom system (a booking tool, a planning system, a client portal) it calls for. I handle all of it, and hand it over as yours.',
 	},
 	{
@@ -52,7 +57,8 @@ const edges: Array<{ name: string; ai: string; limit: string; solve: string; fac
 		ai: 'AI builds the page; compliance isn’t its job and it won’t bring it up.',
 		limit: 'A site can trigger legal obligations most owners don’t even know exist — until there’s a problem.',
 		solve: 'I build to them, and flag when you genuinely need a lawyer.',
-		facts: 'Depending on who you serve, a site can trigger privacy-policy, cookie-consent (GDPR/CCPA), terms-of-service, email (CAN-SPAM), and ADA obligations — and <strong>the fines or complaints land on your business, not the builder</strong>. Most AI builders address none of them.',
+		why: '<strong>The fines or complaints land on your business, not the builder</strong> — and most AI builders address none of it.',
+		fact: 'Depending on who you serve, a site can trigger privacy-policy, cookie-consent (GDPR/CCPA), terms-of-service, email (CAN-SPAM), and ADA obligations.',
 		process: 'I build to the ones that apply — privacy policy, cookie consent, and safe handling of any form data — and flag clearly when something genuinely needs a lawyer. I’m not one, and I’ll tell you when you need one.',
 	},
 ]
@@ -142,7 +148,7 @@ const serviceSchema = {
 		<div class="fl-grid">
 			{
 				edges.map((e, i) => (
-					<div class="panel fl-card" data-open={e.facts || e.process ? `facts-${i}` : undefined}>
+					<div class="panel fl-card" data-open={e.why || e.fact || e.process ? `facts-${i}` : undefined}>
 						<h3>{e.name}</h3>
 						<div class="fl-step">
 							<span class="fl-step-label">How AI does it</span>
@@ -156,7 +162,7 @@ const serviceSchema = {
 							<span class="fl-step-label">Problem I solve</span>
 							<p>{e.solve}</p>
 						</div>
-						{(e.facts || e.process) && (
+						{(e.why || e.fact || e.process) && (
 							<button type="button" class="fl-facts-btn">More details →</button>
 						)}
 					</div>
@@ -165,17 +171,22 @@ const serviceSchema = {
 		</div>
 		{
 			edges.map((e, i) =>
-				e.facts || e.process ? (
+				e.why || e.fact || e.process ? (
 					<dialog class="fl-dialog" id={`facts-${i}`} aria-labelledby={`facts-${i}-title`}>
 						<div class="fl-dialog-inner">
 							<div class="fl-dialog-head">
-								<h3 id={`facts-${i}-title`} class="section-heading">{e.name}</h3>
 								<button type="button" class="fl-dialog-close" data-close aria-label="Close">✕</button>
 							</div>
-							{e.facts && (
+							{e.why && (
 								<div class="fl-step">
 									<span class="fl-step-label">Why it matters</span>
-									<p set:html={e.facts}></p>
+									<p set:html={e.why}></p>
+								</div>
+							)}
+							{e.fact && (
+								<div class="fl-step">
+									<span class="fl-step-label">Fact</span>
+									<p set:html={e.fact}></p>
 								</div>
 							)}
 							{e.process && (
@@ -184,6 +195,7 @@ const serviceSchema = {
 									<p>{e.process}</p>
 								</div>
 							)}
+							<h3 id={`facts-${i}-title`} class="section-heading fl-dialog-title-bottom">{e.name}</h3>
 						</div>
 					</dialog>
 				) : null
@@ -417,12 +429,15 @@ const serviceSchema = {
 	.fl-dialog-head {
 		display: flex;
 		align-items: center;
-		justify-content: space-between;
-		gap: 1rem;
-		margin-bottom: 0.5rem;
+		justify-content: flex-end;
+		margin-bottom: 0.25rem;
 	}
-	.fl-dialog-head h3 {
-		margin: 0;
+	.fl-dialog-title-bottom {
+		margin: 1.5rem 0 0;
+		padding-top: 1rem;
+		border-top: 1px solid var(--border);
+		font-size: 1.05rem;
+		color: var(--accent);
 	}
 	.fl-dialog-close {
 		flex: none;
