@@ -73,50 +73,56 @@ const edges: Array<{ name: string; ai: string; limit: string; solve: string; why
 	},
 ]
 
+// unit: 'once' (default) one-time $, 'mo' recurring $/mo, 'page' per-page $.
+// from: true means the amount is a starting estimate.
+type AddOn = { name: string; price: string; amount: number; unit?: 'mo' | 'page'; from?: boolean }
 const plans: Array<{
 	name: string
 	price: string
+	base?: number
 	blurb: string
 	points: string[]
 	badge?: string
 	custom?: boolean
-	addons?: Array<{ name: string; price: string }>
+	addons?: AddOn[]
 }> = [
 	{
 		name: 'Starter Page',
 		price: 'Free',
+		base: 0,
 		blurb: 'A clean, custom single-page site to get you online — on me. Add what you need from there.',
 		points: ['Single static page', 'Mobile-first & fast', 'Yours to own'],
 		addons: [
-			{ name: 'Extra page', price: '$250' },
-			{ name: 'Self-edit CMS', price: '$700' },
-			{ name: 'SEO setup', price: '$500' },
-			{ name: 'Accessibility (ADA) audit', price: '$700' },
-			{ name: 'Contact / booking form', price: '$250' },
-			{ name: 'Blog / news section', price: '$600' },
-			{ name: 'Online store & payments', price: 'from $1,200' },
-			{ name: 'Analytics & tracking', price: '$150' },
-			{ name: 'Domain & email setup', price: '$150' },
-			{ name: 'Logo & brand basics', price: '$400' },
-			{ name: 'Content writing', price: '$100/page' },
-			{ name: 'Ongoing care & updates', price: '$75/mo' },
+			{ name: 'Extra page', price: '$250', amount: 250 },
+			{ name: 'Self-edit CMS', price: '$700', amount: 700 },
+			{ name: 'SEO setup', price: '$500', amount: 500 },
+			{ name: 'Accessibility (ADA) audit', price: '$700', amount: 700 },
+			{ name: 'Contact / booking form', price: '$250', amount: 250 },
+			{ name: 'Blog / news section', price: '$600', amount: 600 },
+			{ name: 'Online store & payments', price: 'from $1,200', amount: 1200, from: true },
+			{ name: 'Analytics & tracking', price: '$150', amount: 150 },
+			{ name: 'Domain & email setup', price: '$150', amount: 150 },
+			{ name: 'Logo & brand basics', price: '$400', amount: 400 },
+			{ name: 'Content writing', price: '$100/page', amount: 100, unit: 'page' },
+			{ name: 'Ongoing care & updates', price: '$75/mo', amount: 75, unit: 'mo' },
 		],
 	},
 	{
 		name: 'Standard Website',
 		price: '$3,000',
+		base: 3000,
 		badge: 'Best Value',
 		blurb: 'A custom multi-page site — accessible, built for search, and editable by you.',
 		points: ['1–5 custom pages', 'ADA-compliant & SEO-optimized', 'Free, self-edit CMS', 'Contact / booking forms'],
 		addons: [
-			{ name: 'Extra page (beyond 5)', price: '$250' },
-			{ name: 'Blog / news section', price: '$600' },
-			{ name: 'Online store & payments', price: 'from $1,200' },
-			{ name: 'Analytics & tracking', price: '$150' },
-			{ name: 'Domain & email setup', price: '$150' },
-			{ name: 'Logo & brand basics', price: '$400' },
-			{ name: 'Content writing', price: '$100/page' },
-			{ name: 'Ongoing care & updates', price: '$75/mo' },
+			{ name: 'Extra page (beyond 5)', price: '$250', amount: 250 },
+			{ name: 'Blog / news section', price: '$600', amount: 600 },
+			{ name: 'Online store & payments', price: 'from $1,200', amount: 1200, from: true },
+			{ name: 'Analytics & tracking', price: '$150', amount: 150 },
+			{ name: 'Domain & email setup', price: '$150', amount: 150 },
+			{ name: 'Logo & brand basics', price: '$400', amount: 400 },
+			{ name: 'Content writing', price: '$100/page', amount: 100, unit: 'page' },
+			{ name: 'Ongoing care & updates', price: '$75/mo', amount: 75, unit: 'mo' },
 		],
 	},
 	{
@@ -295,7 +301,7 @@ const serviceSchema = {
 		<h2 class="section-heading">My plans</h2>
 		<div class="fl-grid">
 			{
-				plans.map((p) => (
+				plans.map((p, i) => (
 					<div class="panel fl-card" class:list={{ 'fl-plan-featured': p.badge }}>
 						{p.badge && <span class="fl-plan-badge mono">{p.badge}</span>}
 						<div class="fl-card-head">
@@ -309,23 +315,55 @@ const serviceSchema = {
 							))}
 						</ul>
 						{p.addons && (
-							<details class="fl-card-addons">
-								<summary><span class="fl-addons-label mono">+ Add-ons</span></summary>
-								<ul class="fl-addons-list mono">
-									{p.addons.map((a) => (
-										<li>
-											<span class="fl-addon-n">{a.name}</span>
-											<span class="fl-addon-p">{a.price}</span>
-										</li>
-									))}
-								</ul>
-							</details>
+							<button type="button" class="fl-addons-btn mono" data-open={`addons-${i}`}>
+								+ Add-ons &amp; pricing
+							</button>
 						)}
 						{p.custom && <p class="fl-card-custom mono">Fully custom — everything scoped into your quote.</p>}
 					</div>
 				))
 			}
 		</div>
+
+		{
+			plans.map((p, i) =>
+				p.addons ? (
+					<dialog class="fl-dialog fl-addon-dialog" id={`addons-${i}`} aria-labelledby={`addons-${i}-title`}>
+						<div class="fl-dialog-inner">
+							<div class="fl-dialog-head">
+								<h3 id={`addons-${i}-title`} class="fl-addon-dialog-title">{p.name} — build your setup</h3>
+								<button type="button" class="fl-dialog-close" data-close aria-label="Close">✕</button>
+							</div>
+							<p class="fl-addon-dialog-sub mono">Starts at {p.price} · tick what you'd like to add</p>
+							<form class="fl-addon-form" data-base={String(p.base ?? 0)} data-plan={p.name} data-email={EMAIL}>
+								<ul class="fl-addon-options">
+									{p.addons.map((a) => (
+										<li>
+											<label class="fl-opt">
+												<input
+													type="checkbox"
+													data-amount={String(a.amount)}
+													data-unit={a.unit ?? 'once'}
+													data-name={a.name}
+													data-from={a.from ? 'true' : 'false'}
+												/>
+												<span class="fl-opt-name">{a.name}</span>
+												<span class="fl-opt-price mono">+ {a.price}</span>
+											</label>
+										</li>
+									))}
+								</ul>
+							</form>
+							<div class="fl-addon-total">
+								<span class="fl-total-label mono">Estimate</span>
+								<span class="fl-total-amount mono">{p.base ? `$${p.base.toLocaleString()}` : '$0'}</span>
+							</div>
+							<a class="fl-cta fl-addon-cta" href={`mailto:${EMAIL}?subject=Website%20project`}>Email me this setup →</a>
+						</div>
+					</dialog>
+				) : null
+			)
+		}
 		<p class="fl-note mono text-muted">
 			Intro pricing while I build my portfolio — every project gets a custom quote.
 		</p>
@@ -434,6 +472,53 @@ const serviceSchema = {
 			if (e.target === dlg) dlg.close()
 		})
 	}
+	// "Build your setup" calculator: tick add-ons -> live total + prefilled email.
+	const money = (n: number) => '$' + n.toLocaleString()
+	for (const form of document.querySelectorAll<HTMLFormElement>('.fl-addon-form')) {
+		const dialog = form.closest('dialog')
+		if (!dialog) continue
+		const base = Number(form.dataset.base) || 0
+		const planName = form.dataset.plan ?? ''
+		const email = form.dataset.email ?? ''
+		const totalEl = dialog.querySelector('.fl-total-amount')
+		const cta = dialog.querySelector<HTMLAnchorElement>('.fl-addon-cta')
+		const update = () => {
+			let once = base
+			let perMonth = 0
+			let perPage = 0
+			let fromFlag = false
+			const chosen: string[] = []
+			for (const cb of form.querySelectorAll<HTMLInputElement>('input[type="checkbox"]')) {
+				if (!cb.checked) continue
+				const amt = Number(cb.dataset.amount) || 0
+				if (cb.dataset.unit === 'mo') perMonth += amt
+				else if (cb.dataset.unit === 'page') perPage += amt
+				else once += amt
+				if (cb.dataset.from === 'true') fromFlag = true
+				chosen.push(cb.dataset.name ?? '')
+			}
+			let text = (fromFlag ? 'from ' : '') + money(once)
+			const extras: string[] = []
+			if (perMonth) extras.push('+ $' + perMonth + '/mo')
+			if (perPage) extras.push('+ $' + perPage + '/page')
+			if (extras.length) text += ' ' + extras.join(' ')
+			if (totalEl) totalEl.textContent = text
+			const body = [
+				'Plan: ' + planName,
+				'Add-ons: ' + (chosen.length ? chosen.join(', ') : 'none'),
+				'Estimate: ' + text,
+				'',
+				'A bit about my business and what I need:',
+			].join('\n')
+			if (cta) {
+				cta.href =
+					'mailto:' + email + '?subject=' + encodeURIComponent('Website project — ' + planName) + '&body=' + encodeURIComponent(body)
+			}
+		}
+		form.addEventListener('change', update)
+		update()
+	}
+
 </script>
 
 <style>
@@ -572,56 +657,23 @@ const serviceSchema = {
 		margin-top: 3rem;
 	}
 
-	/* per-card add-ons */
-	.fl-card-addons {
+	/* per-card add-ons button + "build your setup" modal */
+	.fl-addons-btn {
 		margin-top: 0.9rem;
-		border-top: 1px solid var(--border);
-		padding-top: 0.6rem;
-	}
-	.fl-card-addons summary {
+		width: 100%;
+		background: transparent;
+		border: 1px solid var(--accent);
+		color: var(--accent);
+		font-weight: 700;
+		font-size: 0.82rem;
+		padding: 0.5rem 0.75rem;
+		border-radius: 6px;
 		cursor: pointer;
-		list-style: none;
-		font-size: 0.8rem;
-		color: var(--text-muted);
+		transition: background 0.15s ease, color 0.15s ease;
 	}
-	.fl-card-addons summary::-webkit-details-marker {
-		display: none;
-	}
-	.fl-addons-label {
-		color: var(--accent);
-		font-weight: 700;
-	}
-	.fl-card-addons[open] .fl-addons-label::after {
-		content: ' ▲';
-		font-size: 0.6rem;
-	}
-	.fl-card-addons:not([open]) .fl-addons-label::after {
-		content: ' ▼';
-		font-size: 0.6rem;
-	}
-	.fl-addons-list {
-		list-style: none;
-		margin: 0.6rem 0 0;
-		padding: 0;
-		font-size: 0.8rem;
-	}
-	.fl-addons-list li {
-		display: flex;
-		justify-content: space-between;
-		gap: 0.75rem;
-		padding: 0.28rem 0;
-		border-bottom: 1px dashed var(--border);
-	}
-	.fl-addons-list li:last-child {
-		border-bottom: none;
-	}
-	.fl-addon-n {
-		opacity: 0.85;
-	}
-	.fl-addon-p {
-		color: var(--accent);
-		font-weight: 700;
-		white-space: nowrap;
+	.fl-addons-btn:hover {
+		background: var(--accent);
+		color: var(--bg);
 	}
 	.fl-card-custom {
 		margin-top: 0.9rem;
@@ -629,6 +681,70 @@ const serviceSchema = {
 		padding-top: 0.6rem;
 		font-size: 0.78rem;
 		opacity: 0.6;
+	}
+	.fl-addon-dialog-title {
+		margin: 0;
+		font-size: 1.05rem;
+	}
+	.fl-addon-dialog-sub {
+		margin: 0.1rem 0 1rem;
+		font-size: 0.78rem;
+		opacity: 0.7;
+	}
+	.fl-addon-options {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+	.fl-opt {
+		display: flex;
+		align-items: center;
+		gap: 0.6rem;
+		padding: 0.55rem 0;
+		border-bottom: 1px dashed var(--border);
+		cursor: pointer;
+	}
+	.fl-opt input {
+		width: 1.05rem;
+		height: 1.05rem;
+		accent-color: var(--accent);
+		flex: none;
+		cursor: pointer;
+	}
+	.fl-opt-name {
+		flex: 1;
+		font-size: 0.9rem;
+	}
+	.fl-opt-price {
+		color: var(--accent);
+		font-weight: 700;
+		font-size: 0.85rem;
+		white-space: nowrap;
+	}
+	.fl-addon-total {
+		display: flex;
+		justify-content: space-between;
+		align-items: baseline;
+		margin-top: 1rem;
+		padding-top: 0.75rem;
+		border-top: 2px solid var(--border);
+	}
+	.fl-total-label {
+		font-size: 0.8rem;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+		opacity: 0.7;
+	}
+	.fl-total-amount {
+		font-size: 1.15rem;
+		font-weight: 700;
+		color: var(--accent);
+		text-align: right;
+	}
+	.fl-addon-cta {
+		display: block;
+		margin-top: 1rem;
+		text-align: center;
 	}
 
 	/* chart toggle */
