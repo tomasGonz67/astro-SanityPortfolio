@@ -431,6 +431,15 @@ const serviceSchema = {
 				) : null
 			)
 		}
+		<div class="panel fl-assurance">
+			<p class="fl-assurance-head mono">Included with every paid plan</p>
+			<ul class="fl-assurance-list">
+				<li>Built &amp; security-tested before launch</li>
+				<li>Free security &amp; dependency patches for critical vulnerabilities</li>
+				<li>30-day warranty — if something I built breaks, I fix it free</li>
+			</ul>
+			<p class="fl-assurance-note">Ongoing changes, content edits &amp; upkeep are covered by the optional care plan ($75/mo).</p>
+		</div>
 		<p class="fl-note mono text-muted">
 			Intro pricing while I build my portfolio — every project gets a custom quote.
 		</p>
@@ -972,6 +981,46 @@ const serviceSchema = {
 		display: block;
 		margin-top: 1rem;
 		text-align: center;
+	}
+
+	/* "included with every paid plan" assurance callout */
+	.fl-assurance {
+		margin-top: 1.25rem;
+	}
+	.fl-assurance-head {
+		margin: 0 0 0.7rem;
+		color: var(--accent);
+		font-weight: 700;
+		font-size: 0.78rem;
+		text-transform: uppercase;
+		letter-spacing: 0.06em;
+	}
+	.fl-assurance-list {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: grid;
+		gap: 0.5rem;
+	}
+	.fl-assurance-list li {
+		position: relative;
+		padding-left: 1.5rem;
+		font-size: 0.9rem;
+		line-height: 1.4;
+	}
+	.fl-assurance-list li::before {
+		content: '✓';
+		position: absolute;
+		left: 0;
+		color: var(--accent);
+		font-weight: 700;
+	}
+	.fl-assurance-note {
+		margin: 0.85rem 0 0;
+		padding-top: 0.7rem;
+		border-top: 1px solid var(--border);
+		font-size: 0.8rem;
+		opacity: 0.75;
 	}
 
 	/* chart toggle */
