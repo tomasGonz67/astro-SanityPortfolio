@@ -101,18 +101,22 @@ const plans: Array<{ name: string; price: string; blurb: string; points: string[
 	},
 ]
 
-const addOns: Array<{ name: string; desc: string }> = [
-	{ name: 'Extra pages', desc: 'Add more pages to any plan as you grow.' },
-	{ name: 'Self-edit CMS', desc: 'Update text and images yourself — no code.' },
-	{ name: 'Contact / booking forms', desc: 'Let visitors reach you or book time directly.' },
-	{ name: 'Online store & payments', desc: 'Sell products or take payments on your site.' },
-	{ name: 'Blog or news section', desc: 'Publish updates and articles that help SEO.' },
-	{ name: 'SEO setup', desc: 'Titles, metadata, and sitemap tuned to rank.' },
-	{ name: 'Accessibility (ADA) audit', desc: 'Tested and fixed to WCAG 2.1 AA.' },
-	{ name: 'Analytics & tracking', desc: 'See your traffic and where it comes from.' },
-	{ name: 'Domain & professional email', desc: 'Get your domain and branded email set up.' },
-	{ name: 'Logo & brand basics', desc: 'A simple logo and consistent styling.' },
-	{ name: 'Ongoing care & updates', desc: 'Hosting, backups, and tweaks — from $75/mo.' },
+// Each feature is 'inc' (included), 'add' (available add-on), or literal text.
+const compare: Array<{ feature: string; free: string; standard: string; note?: string }> = [
+	{ feature: 'Pages', free: '1 static', standard: '1–5' },
+	{ feature: 'Custom design', free: 'inc', standard: 'inc' },
+	{ feature: 'Mobile-first & fast', free: 'inc', standard: 'inc' },
+	{ feature: 'Yours to own', free: 'inc', standard: 'inc' },
+	{ feature: 'Self-edit CMS', free: 'add', standard: 'inc' },
+	{ feature: 'SEO setup', free: 'add', standard: 'inc' },
+	{ feature: 'Accessibility (ADA)', free: 'add', standard: 'inc' },
+	{ feature: 'Contact / booking forms', free: 'add', standard: 'inc' },
+	{ feature: 'Blog or news section', free: 'add', standard: 'add' },
+	{ feature: 'Online store & payments', free: 'add', standard: 'add' },
+	{ feature: 'Analytics & tracking', free: 'add', standard: 'add' },
+	{ feature: 'Domain & professional email', free: 'add', standard: 'add' },
+	{ feature: 'Logo & brand basics', free: 'add', standard: 'add' },
+	{ feature: 'Ongoing care & updates', free: 'add', standard: 'add', note: 'from $75/mo' },
 ]
 
 const serviceSchema = {
@@ -280,19 +284,49 @@ const serviceSchema = {
 	</section>
 
 	<section class="fl-block">
-		<h2 class="section-heading">Add-ons</h2>
-		<p class="fl-lede fl-intro">Start with a free page and add only what you need — each is quoted with your build, so you pay for what you use.</p>
+		<h2 class="section-heading">What's included</h2>
+		<p class="fl-lede fl-intro">
+			Start with a free page and add only what you need. <span class="fl-legend"><span class="fl-yes">✓</span> included</span> <span class="fl-legend"><span class="fl-add">+</span> available add-on</span>
+		</p>
 		<div class="panel">
-			<ul class="fl-addon-grid">
-				{
-					addOns.map((a) => (
-						<li class="fl-addon">
-							<span class="fl-addon-name mono">{a.name}</span>
-							<span class="fl-addon-desc">{a.desc}</span>
-						</li>
-					))
-				}
-			</ul>
+			<table class="fl-compare">
+				<thead>
+					<tr>
+						<th scope="col">Feature</th>
+						<th scope="col">Starter<span class="fl-compare-price mono">Free</span></th>
+						<th scope="col">Standard<span class="fl-compare-price mono">$3,000</span></th>
+					</tr>
+				</thead>
+				<tbody>
+					{
+						compare.map((row) => (
+							<tr>
+								<th scope="row">{row.feature}</th>
+								<td>
+									{row.free === 'inc' ? (
+										<span class="fl-yes" aria-label="Included">✓</span>
+									) : row.free === 'add' ? (
+										<span class="fl-add" aria-label="Available add-on">+</span>
+									) : (
+										<span class="fl-compare-text">{row.free}</span>
+									)}
+								</td>
+								<td>
+									{row.standard === 'inc' ? (
+										<span class="fl-yes" aria-label="Included">✓</span>
+									) : row.standard === 'add' ? (
+										<span class="fl-add" aria-label="Available add-on">+</span>
+									) : (
+										<span class="fl-compare-text">{row.standard}</span>
+									)}
+									{row.note && <span class="fl-compare-note">{row.note}</span>}
+								</td>
+							</tr>
+						))
+					}
+				</tbody>
+			</table>
+			<p class="fl-note mono text-muted">Web App plans are fully custom — every feature you need is scoped into the build.</p>
 		</div>
 	</section>
 
@@ -490,37 +524,82 @@ const serviceSchema = {
 		margin-top: 3rem;
 	}
 
-	/* add-ons grid */
-	.fl-addon-grid {
-		list-style: none;
-		margin: 0;
-		padding: 0;
-		display: grid;
-		grid-template-columns: repeat(2, 1fr);
-		gap: 1rem 1.75rem;
-	}
-	.fl-addon {
-		display: flex;
-		flex-direction: column;
-		gap: 0.15rem;
-	}
-	.fl-addon-name {
-		font-size: 0.9rem;
-		font-weight: 700;
-		color: var(--accent);
-	}
-	.fl-addon-name::before {
-		content: '+ ';
-		opacity: 0.55;
-	}
-	.fl-addon-desc {
+	/* compare table */
+	.fl-legend {
+		display: inline-block;
+		margin-left: 0.9rem;
 		font-size: 0.82rem;
-		line-height: 1.45;
-		opacity: 0.75;
+		white-space: nowrap;
 	}
-	@media (max-width: 640px) {
-		.fl-addon-grid {
-			grid-template-columns: 1fr;
+	.fl-compare {
+		width: 100%;
+		border-collapse: collapse;
+		font-size: 0.9rem;
+	}
+	.fl-compare th,
+	.fl-compare td {
+		padding: 0.6rem 0.5rem;
+		border-bottom: 1px solid var(--border);
+		text-align: center;
+	}
+	.fl-compare thead th {
+		font-family: var(--font-sans);
+		font-weight: 700;
+		border-bottom-width: 2px;
+	}
+	.fl-compare tbody th {
+		text-align: left;
+		font-weight: 500;
+		color: var(--text-muted);
+	}
+	/* subtle accent tint on the featured Standard column */
+	.fl-compare th:last-child,
+	.fl-compare td:last-child {
+		background: rgba(255, 180, 84, 0.06);
+	}
+	.fl-compare-price {
+		display: block;
+		font-size: 0.75rem;
+		font-weight: 400;
+		opacity: 0.7;
+		margin-top: 0.1rem;
+	}
+	.fl-compare tbody tr:last-child th,
+	.fl-compare tbody tr:last-child td {
+		border-bottom: none;
+	}
+	.fl-yes {
+		color: var(--accent);
+		font-weight: 700;
+	}
+	.fl-add {
+		color: var(--text-muted);
+		font-weight: 700;
+	}
+	.fl-compare-text {
+		font-family: var(--font-mono);
+		font-size: 0.82rem;
+	}
+	.fl-compare-note {
+		display: block;
+		font-family: var(--font-mono);
+		font-size: 0.68rem;
+		opacity: 0.6;
+		margin-top: 0.1rem;
+	}
+	@media (max-width: 560px) {
+		.fl-compare th,
+		.fl-compare td {
+			padding: 0.5rem 0.3rem;
+		}
+		.fl-compare,
+		.fl-compare-text {
+			font-size: 0.82rem;
+		}
+		.fl-legend {
+			margin-left: 0;
+			display: inline-block;
+			margin-right: 0.8rem;
 		}
 	}
 	.fl-grid {
