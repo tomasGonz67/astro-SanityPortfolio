@@ -20,6 +20,8 @@ const { title, description = DEFAULT_DESCRIPTION, fullTitle, extraSchema } = Ast
 // `fullTitle` lets a page set its own complete, SEO-tuned title verbatim.
 const pageTitle = fullTitle ?? (title === 'Home' ? OG_TITLE : `${title} | ${OG_TITLE}`)
 const canonicalURL = new URL(Astro.url.pathname, Astro.site)
+// Production builds give page paths a trailing slash ('/web-design/') but the nav hrefs have none, so compare without it.
+const currentPath = Astro.url.pathname.replace(/\/+$/, '') || '/'
 
 interface Profile {
 	githubUrl?: string
@@ -118,7 +120,7 @@ const EMAIL = 'thomasgonz67@gmail.com'
 						target={item.external ? '_blank' : undefined}
 						rel={item.external ? 'noopener' : undefined}
 						data-astro-prefetch={!item.external && item.href.startsWith('/') ? 'hover' : undefined}
-						class:list={{ active: !item.external && item.href.startsWith('/') && item.href === Astro.url.pathname, 'nav-home': item.href === '/' }}
+						class:list={{ active: !item.external && item.href.startsWith('/') && item.href === currentPath, 'nav-home': item.href === '/' }}
 					>
 						{item.href === '/' && <span class="nav-logo" aria-hidden="true" />}
 						{item.label}
