@@ -218,10 +218,12 @@ const stories: Array<{ name: string; tag: string; before: string[]; after: strin
 			'A much weaker product for the money',
 		],
 		after: [
-			'Free hosting on Cloudflare — no more monthly fees',
+			'<strong>~80% less time</strong> spent updating the site — a much easier workflow',
+			'Accessibility issues found and <strong>fixed</strong>',
+			'Free hosting on Cloudflare — <strong>no more monthly fees</strong>',
 			'One-time payment, and they own it',
-			'Form submissions flow straight into their existing GCP infrastructure and admin dashboard',
-			'Leads sit in one place, right next to the rest of their property data',
+			'Form submissions flow straight into their existing GCP infrastructure and admin dashboard, right next to the rest of their property data',
+			'<strong>Saves them money</strong> — no extra form or CRM tool to pay for, since it runs on infrastructure they already had',
 		],
 	},
 	{
@@ -553,11 +555,11 @@ const serviceSchema = {
 						<div class="fl-story-cols">
 							<div class="fl-story-col">
 								<span class="fl-story-label fl-story-before mono">Before</span>
-								<ul>{st.before.map((b) => <li>{b}</li>)}</ul>
+								<ul>{st.before.map((b) => <li set:html={b} />)}</ul>
 							</div>
 							<div class="fl-story-col fl-story-col-after">
 								<span class="fl-story-label fl-story-after mono">After</span>
-								<ul>{st.after.map((a) => <li>{a}</li>)}</ul>
+								<ul>{st.after.map((a) => <li set:html={a} />)}</ul>
 							</div>
 						</div>
 					</div>
