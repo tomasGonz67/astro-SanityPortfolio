@@ -352,7 +352,7 @@ const serviceSchema = {
 							<h3>{p.name}</h3>
 							<span class="fl-price mono">
 								{p.price}
-								{p.fee && <span class="fl-fee" title={p.fee} role="img" aria-label={`Note: ${p.fee}`}>ⓘ</span>}
+								{p.fee && <span class="fl-fee" data-tip={p.fee} tabindex="0" role="note" aria-label={p.fee}>ⓘ</span>}
 							</span>
 						</div>
 						<p class="fl-blurb">{p.blurb}</p>
@@ -414,7 +414,7 @@ const serviceSchema = {
 													/>
 													<span class="fl-opt-name">
 														{a.name}
-														{a.fee && <span class="fl-fee" title={a.fee} role="img" aria-label={`Note: ${a.fee}`}>ⓘ</span>}
+														{a.fee && <span class="fl-fee" data-tip={a.fee} tabindex="0" role="note" aria-label={a.fee}>ⓘ</span>}
 														{a.accessibilityRider && (
 															<span class="fl-rider" data-rider="accessibility" hidden> + accessibility</span>
 														)}
@@ -728,26 +728,64 @@ const serviceSchema = {
 	.fl-plan-badged {
 		position: relative;
 	}
-	/* "ⓘ" marker: hover (native title) note that an item may carry a third-party fee */
+	/* "ⓘ" marker + styled info popup (hover or focus) that a third-party fee may apply */
 	.fl-fee {
+		position: relative;
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
-		width: 1rem;
-		height: 1rem;
-		margin-left: 0.3rem;
+		width: 1.05rem;
+		height: 1.05rem;
+		margin-left: 0.35rem;
+		border: 1px solid var(--text-muted);
 		border-radius: 50%;
 		color: var(--text-muted);
-		font-size: 0.7rem;
-		font-weight: 400;
+		font-size: 0.66rem;
+		font-weight: 700;
 		font-style: normal;
 		letter-spacing: 0;
 		text-transform: none;
 		cursor: help;
 		vertical-align: middle;
+		outline: none;
 	}
-	.fl-fee:hover {
+	.fl-fee:hover,
+	.fl-fee:focus-visible {
 		color: var(--accent);
+		border-color: var(--accent);
+	}
+	.fl-fee::after {
+		content: attr(data-tip);
+		position: absolute;
+		top: 150%;
+		right: 0;
+		width: 230px;
+		max-width: 72vw;
+		background: var(--bg);
+		border: 1px solid var(--accent);
+		border-radius: 8px;
+		padding: 0.55rem 0.7rem;
+		font-family: var(--font-sans);
+		font-size: 0.74rem;
+		font-weight: 400;
+		line-height: 1.45;
+		letter-spacing: normal;
+		text-transform: none;
+		text-align: left;
+		color: var(--text);
+		box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+		opacity: 0;
+		visibility: hidden;
+		transform: translateY(-4px);
+		transition: opacity 0.15s ease, transform 0.15s ease;
+		z-index: 60;
+	}
+	.fl-fee:hover::after,
+	.fl-fee:focus::after,
+	.fl-fee:focus-visible::after {
+		opacity: 1;
+		visibility: visible;
+		transform: translateY(0);
 	}
 	.fl-plan-featured {
 		position: relative;
