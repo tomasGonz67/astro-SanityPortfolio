@@ -187,18 +187,18 @@ const compare: Array<{ feature: string; free: string; standard: string; note?: s
 	{ feature: 'Custom design', free: 'inc', standard: 'inc' },
 	{ feature: 'Mobile-first & fast', free: 'inc', standard: 'inc' },
 	{ feature: 'Yours to own', free: 'inc', standard: 'inc' },
-	{ feature: 'Self-edit CMS', free: 'add', standard: 'inc' },
-	{ feature: 'SEO setup', free: 'add', standard: 'inc' },
-	{ feature: 'Accessibility (ADA)', free: 'add', standard: 'inc' },
-	{ feature: 'Contact form', free: 'add', standard: 'inc' },
-	{ feature: 'Booking / scheduling', free: 'add', standard: 'add' },
-	{ feature: 'Legal pages (privacy + terms)', free: 'add', standard: 'inc' },
-	{ feature: 'Blog or news section', free: 'add', standard: 'add' },
-	{ feature: 'Payments / Buy button', free: 'add', standard: 'add' },
-	{ feature: 'Integration / automation', free: 'add', standard: 'add' },
-	{ feature: 'Analytics & tracking', free: 'add', standard: 'add' },
-	{ feature: 'Domain & professional email', free: 'add', standard: 'add' },
-	{ feature: 'Ongoing care & updates', free: 'add', standard: 'add', note: 'from $75/mo' },
+	{ feature: 'Self-edit CMS', free: '$750', standard: 'inc' },
+	{ feature: 'SEO setup', free: '$750', standard: 'inc' },
+	{ feature: 'Accessibility (ADA)', free: '$1,000', standard: 'inc' },
+	{ feature: 'Contact form', free: '$150', standard: 'inc' },
+	{ feature: 'Booking / scheduling', free: 'from $400', standard: 'from $300' },
+	{ feature: 'Legal pages (privacy + terms)', free: '$150', standard: 'inc' },
+	{ feature: 'Blog or news section', free: '$600', standard: '$300' },
+	{ feature: 'Payments / Buy button', free: '$300', standard: '$200' },
+	{ feature: 'Integration / automation', free: 'from $300', standard: 'from $200' },
+	{ feature: 'Analytics & tracking', free: '$100', standard: '$50' },
+	{ feature: 'Domain & professional email', free: '$150', standard: '$50' },
+	{ feature: 'Ongoing care & updates', free: '$75/mo', standard: '$75/mo' },
 ]
 
 const serviceSchema = {
@@ -452,7 +452,7 @@ const serviceSchema = {
 		<details class="fl-chart-toggle">
 			<summary><span class="fl-chart-toggle-label mono">See full comparison chart</span></summary>
 			<p class="fl-lede fl-intro fl-chart-legend">
-				<span class="fl-legend"><span class="fl-yes">✓</span> included</span> <span class="fl-legend"><span class="fl-add">+</span> available add-on</span>
+				<span class="fl-legend"><span class="fl-yes">✓</span> included</span> <span class="fl-legend">a price = optional add-on</span>
 			</p>
 			<div class="panel">
 				<table class="fl-compare">
