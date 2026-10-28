@@ -73,7 +73,7 @@ const edges: Array<{ name: string; ai: string; limit: string; solve: string; why
 	},
 ]
 
-const plans = [
+const plans: Array<{ name: string; price: string; blurb: string; points: string[]; badge?: string }> = [
 	{
 		name: 'Starter Page',
 		price: 'Free',
@@ -83,6 +83,7 @@ const plans = [
 	{
 		name: 'Standard Website',
 		price: '$3,000',
+		badge: 'Best Value',
 		blurb: 'A custom multi-page site — accessible, built for search, and editable by you.',
 		points: ['1–5 custom pages', 'ADA-compliant & SEO-optimized', 'Free, self-edit CMS', 'Contact / booking forms'],
 	},
@@ -243,7 +244,8 @@ const serviceSchema = {
 		<div class="fl-grid">
 			{
 				plans.map((p) => (
-					<div class="panel fl-card">
+					<div class="panel fl-card" class:list={{ 'fl-plan-featured': p.badge }}>
+						{p.badge && <span class="fl-plan-badge mono">{p.badge}</span>}
 						<div class="fl-card-head">
 							<h3>{p.name}</h3>
 							<span class="fl-price mono">{p.price}</span>
@@ -426,6 +428,26 @@ const serviceSchema = {
 	.fl-card:hover {
 		border-color: var(--accent);
 		box-shadow: 0 0 20px rgba(52, 199, 89, 0.22);
+	}
+	/* featured plan: persistent accent highlight + badge */
+	.fl-plan-featured {
+		position: relative;
+		border-color: var(--accent);
+		box-shadow: 0 0 22px rgba(52, 199, 89, 0.24);
+	}
+	.fl-plan-badge {
+		position: absolute;
+		top: 0;
+		right: 16px;
+		transform: translateY(-50%);
+		background: var(--accent);
+		color: var(--bg);
+		font-size: 0.68rem;
+		font-weight: 700;
+		letter-spacing: 0.05em;
+		text-transform: uppercase;
+		padding: 0.2rem 0.6rem;
+		border-radius: 999px;
 	}
 	@media (prefers-reduced-motion: reduce) {
 		.panel {
