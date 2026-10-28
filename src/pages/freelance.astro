@@ -338,7 +338,7 @@ const serviceSchema = {
 			professionals, from a first storefront to an established company. Based in Holmdel, NJ. I work with clients located anywhere. Modern, mobile-first, easy to update,
 			and built to own. One person, start to finish: the one who builds it is the one you talk to — senior-level work, without the agency overhead.
 		</p>
-		<a class="fl-cta" href={`mailto:${EMAIL}?subject=Website%20project`}>Get a free quote →</a>
+		<a class="fl-cta" href="#plans">See plans &amp; pricing →</a>
 	</section>
 
 	<section class="fl-proof-strip">
@@ -430,7 +430,7 @@ const serviceSchema = {
 		}
 	</section>
 
-	<section class="fl-block">
+	<section class="fl-block" id="plans">
 		<h2 class="section-heading">Website design plans &amp; pricing</h2>
 		<div class="fl-grid">
 			{
@@ -1238,6 +1238,19 @@ const serviceSchema = {
 		font-size: 0.9rem;
 		line-height: 1.55;
 		color: var(--text-muted);
+	}
+
+	/* hero CTA scrolls to the plans: leave room for the sticky nav, animate unless reduced motion */
+	#plans {
+		scroll-margin-top: 90px;
+	}
+	:global(html) {
+		scroll-behavior: smooth;
+	}
+	@media (prefers-reduced-motion: reduce) {
+		:global(html) {
+			scroll-behavior: auto;
+		}
 	}
 
 	/* "included with every paid plan" assurance callout */
