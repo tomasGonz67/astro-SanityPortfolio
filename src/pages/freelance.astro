@@ -73,12 +73,34 @@ const edges: Array<{ name: string; ai: string; limit: string; solve: string; why
 	},
 ]
 
-const plans: Array<{ name: string; price: string; blurb: string; points: string[]; badge?: string }> = [
+const plans: Array<{
+	name: string
+	price: string
+	blurb: string
+	points: string[]
+	badge?: string
+	custom?: boolean
+	addons?: Array<{ name: string; price: string }>
+}> = [
 	{
 		name: 'Starter Page',
 		price: 'Free',
 		blurb: 'A clean, custom single-page site to get you online — on me. Add what you need from there.',
-		points: ['Single static page', 'Mobile-first & fast', 'Yours to own', 'Add-ons priced individually'],
+		points: ['Single static page', 'Mobile-first & fast', 'Yours to own'],
+		addons: [
+			{ name: 'Extra page', price: '$250' },
+			{ name: 'Self-edit CMS', price: '$700' },
+			{ name: 'SEO setup', price: '$500' },
+			{ name: 'Accessibility (ADA) audit', price: '$700' },
+			{ name: 'Contact / booking form', price: '$250' },
+			{ name: 'Blog / news section', price: '$600' },
+			{ name: 'Online store & payments', price: 'from $1,200' },
+			{ name: 'Analytics & tracking', price: '$150' },
+			{ name: 'Domain & email setup', price: '$150' },
+			{ name: 'Logo & brand basics', price: '$400' },
+			{ name: 'Content writing', price: '$100/page' },
+			{ name: 'Ongoing care & updates', price: '$75/mo' },
+		],
 	},
 	{
 		name: 'Standard Website',
@@ -86,16 +108,28 @@ const plans: Array<{ name: string; price: string; blurb: string; points: string[
 		badge: 'Best Value',
 		blurb: 'A custom multi-page site — accessible, built for search, and editable by you.',
 		points: ['1–5 custom pages', 'ADA-compliant & SEO-optimized', 'Free, self-edit CMS', 'Contact / booking forms'],
+		addons: [
+			{ name: 'Extra page (beyond 5)', price: '$250' },
+			{ name: 'Blog / news section', price: '$600' },
+			{ name: 'Online store & payments', price: 'from $1,200' },
+			{ name: 'Analytics & tracking', price: '$150' },
+			{ name: 'Domain & email setup', price: '$150' },
+			{ name: 'Logo & brand basics', price: '$400' },
+			{ name: 'Content writing', price: '$100/page' },
+			{ name: 'Ongoing care & updates', price: '$75/mo' },
+		],
 	},
 	{
 		name: 'Small Web App',
 		price: 'from $8,000+',
+		custom: true,
 		blurb: 'One core system — a booking tool, client portal, dashboard, or internal tool — with a database and secure login.',
 		points: ['Custom full-stack build', 'Database + user login', 'One core workflow', 'Built by a senior engineer'],
 	},
 	{
 		name: 'Medium Web App',
 		price: 'from $20,000+',
+		custom: true,
 		blurb: 'A real product: multiple features, user accounts, integrations, automations, and AI — scoped to you.',
 		points: ['Multi-feature product', 'User accounts & roles', 'Integrations & automations', 'AI features'],
 	},
@@ -274,22 +308,35 @@ const serviceSchema = {
 								<li>{pt}</li>
 							))}
 						</ul>
+						{p.addons && (
+							<details class="fl-card-addons">
+								<summary><span class="fl-addons-label mono">+ Add-ons</span></summary>
+								<ul class="fl-addons-list mono">
+									{p.addons.map((a) => (
+										<li>
+											<span class="fl-addon-n">{a.name}</span>
+											<span class="fl-addon-p">{a.price}</span>
+										</li>
+									))}
+								</ul>
+							</details>
+						)}
+						{p.custom && <p class="fl-card-custom mono">Fully custom — everything scoped into your quote.</p>}
 					</div>
 				))
 			}
 		</div>
 		<p class="fl-note mono text-muted">
-			+ ongoing care &amp; updates from $75/mo · Intro pricing while I build my portfolio — every project gets a custom quote.
+			Intro pricing while I build my portfolio — every project gets a custom quote.
 		</p>
-	</section>
 
-	<section class="fl-block">
-		<h2 class="section-heading">What's included</h2>
-		<p class="fl-lede fl-intro">
-			Start with a free page and add only what you need. <span class="fl-legend"><span class="fl-yes">✓</span> included</span> <span class="fl-legend"><span class="fl-add">+</span> available add-on</span>
-		</p>
-		<div class="panel">
-			<table class="fl-compare">
+		<details class="fl-chart-toggle">
+			<summary><span class="fl-chart-toggle-label mono">See full comparison chart</span></summary>
+			<p class="fl-lede fl-intro fl-chart-legend">
+				<span class="fl-legend"><span class="fl-yes">✓</span> included</span> <span class="fl-legend"><span class="fl-add">+</span> available add-on</span>
+			</p>
+			<div class="panel">
+				<table class="fl-compare">
 				<thead>
 					<tr>
 						<th scope="col">Feature</th>
@@ -326,8 +373,9 @@ const serviceSchema = {
 					}
 				</tbody>
 			</table>
-			<p class="fl-note mono text-muted">Web App plans are fully custom — every feature you need is scoped into the build.</p>
-		</div>
+				<p class="fl-note mono text-muted">Web App plans are fully custom — every feature you need is scoped into the build.</p>
+			</div>
+		</details>
 	</section>
 
 	<section class="fl-block">
@@ -522,6 +570,95 @@ const serviceSchema = {
 
 	.fl-block {
 		margin-top: 3rem;
+	}
+
+	/* per-card add-ons */
+	.fl-card-addons {
+		margin-top: 0.9rem;
+		border-top: 1px solid var(--border);
+		padding-top: 0.6rem;
+	}
+	.fl-card-addons summary {
+		cursor: pointer;
+		list-style: none;
+		font-size: 0.8rem;
+		color: var(--text-muted);
+	}
+	.fl-card-addons summary::-webkit-details-marker {
+		display: none;
+	}
+	.fl-addons-label {
+		color: var(--accent);
+		font-weight: 700;
+	}
+	.fl-card-addons[open] .fl-addons-label::after {
+		content: ' ▲';
+		font-size: 0.6rem;
+	}
+	.fl-card-addons:not([open]) .fl-addons-label::after {
+		content: ' ▼';
+		font-size: 0.6rem;
+	}
+	.fl-addons-list {
+		list-style: none;
+		margin: 0.6rem 0 0;
+		padding: 0;
+		font-size: 0.8rem;
+	}
+	.fl-addons-list li {
+		display: flex;
+		justify-content: space-between;
+		gap: 0.75rem;
+		padding: 0.28rem 0;
+		border-bottom: 1px dashed var(--border);
+	}
+	.fl-addons-list li:last-child {
+		border-bottom: none;
+	}
+	.fl-addon-n {
+		opacity: 0.85;
+	}
+	.fl-addon-p {
+		color: var(--accent);
+		font-weight: 700;
+		white-space: nowrap;
+	}
+	.fl-card-custom {
+		margin-top: 0.9rem;
+		border-top: 1px solid var(--border);
+		padding-top: 0.6rem;
+		font-size: 0.78rem;
+		opacity: 0.6;
+	}
+
+	/* chart toggle */
+	.fl-chart-toggle {
+		margin-top: 1.25rem;
+	}
+	.fl-chart-toggle summary {
+		cursor: pointer;
+		list-style: none;
+		display: inline-block;
+	}
+	.fl-chart-toggle summary::-webkit-details-marker {
+		display: none;
+	}
+	.fl-chart-toggle-label {
+		color: var(--accent);
+		font-weight: 700;
+		font-size: 0.85rem;
+		text-decoration: underline;
+	}
+	.fl-chart-toggle[open] .fl-chart-toggle-label::after {
+		content: ' ▲';
+		font-size: 0.6rem;
+	}
+	.fl-chart-toggle:not([open]) .fl-chart-toggle-label::after {
+		content: ' ▼';
+		font-size: 0.6rem;
+	}
+	.fl-chart-legend {
+		margin-top: 0.9rem;
 	}
 
 	/* compare table */
