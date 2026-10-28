@@ -92,6 +92,7 @@ const plans: Array<{
 	blurb: string
 	points: string[]
 	badge?: string
+	featured?: boolean
 	custom?: boolean
 	addons?: AddOn[]
 }> = [
@@ -123,6 +124,7 @@ const plans: Array<{
 		price: '$3,000',
 		base: 3000,
 		badge: 'Best Value',
+		featured: true,
 		blurb: 'A custom multi-page site — accessible, built for search, and editable by you.',
 		points: [
 			'1–5 custom pages',
@@ -147,6 +149,7 @@ const plans: Array<{
 	{
 		name: 'Small Online Store',
 		price: 'from $2,500+',
+		badge: 'Limited-time offer',
 		custom: true,
 		blurb: 'A clean storefront for a focused catalog — product pages, cart, and secure checkout, built into your own site.',
 		points: ['Storefront + product pages', 'Cart & secure checkout', 'Self-edit product CMS', 'Yours to own'],
@@ -154,6 +157,7 @@ const plans: Array<{
 	{
 		name: 'Medium Online Store',
 		price: 'from $5,000+',
+		badge: 'Limited-time offer',
 		custom: true,
 		blurb: 'A larger store with variants, inventory, discounts, shipping & tax — scoped to your catalog.',
 		points: ['Larger catalog & variants', 'Inventory & discounts', 'Shipping & tax setup', 'Integrations & automations'],
@@ -337,8 +341,8 @@ const serviceSchema = {
 		<div class="fl-grid">
 			{
 				plans.map((p, i) => (
-					<div class="panel fl-card" class:list={{ 'fl-plan-featured': p.badge }}>
-						{p.badge && <span class="fl-plan-badge mono">{p.badge}</span>}
+					<div class="panel fl-card" class:list={{ 'fl-plan-featured': p.featured, 'fl-plan-badged': p.badge }}>
+						{p.badge && <span class:list={['fl-plan-badge mono', { 'fl-plan-badge-offer': !p.featured }]}>{p.badge}</span>}
 						<div class="fl-card-head">
 							<h3>{p.name}</h3>
 							<span class="fl-price mono">{p.price}</span>
@@ -712,6 +716,9 @@ const serviceSchema = {
 		box-shadow: 0 0 20px rgba(52, 199, 89, 0.22);
 	}
 	/* featured plan: persistent accent highlight + badge */
+	.fl-plan-badged {
+		position: relative;
+	}
 	.fl-plan-featured {
 		position: relative;
 		box-shadow: 0 0 12px rgba(255, 180, 84, 0.3), 0 0 30px rgba(255, 180, 84, 0.4);
@@ -729,6 +736,12 @@ const serviceSchema = {
 		text-transform: uppercase;
 		padding: 0.2rem 0.6rem;
 		border-radius: 999px;
+	}
+	/* outline variant for the limited-time offer tag (not the featured pill) */
+	.fl-plan-badge-offer {
+		background: var(--surface);
+		color: var(--accent);
+		border: 1px solid var(--accent);
 	}
 	@media (prefers-reduced-motion: reduce) {
 		.panel {
