@@ -207,6 +207,37 @@ const compare: Array<{ feature: string; free: string; standard: string; note?: s
 	{ feature: 'Ongoing care & updates', free: '$75/mo', standard: '$75/mo' },
 ]
 
+const stories: Array<{ name: string; tag: string; before: string[]; after: string[] }> = [
+	{
+		name: 'Cadooga',
+		tag: 'Agency Webflow site → custom site on Cloudflare',
+		before: [
+			'Originally paid ~$10,000 to an agency',
+			'$500/month in hosting fees',
+			'Built on Webflow — slow and awkward to update',
+			'A much weaker product for the money',
+		],
+		after: [
+			'Free hosting on Cloudflare — no more monthly fees',
+			'One-time payment, and they own it',
+			'Form submissions flow straight into their existing GCP infrastructure and admin dashboard',
+			'Leads sit in one place, right next to the rest of their property data',
+		],
+	},
+	{
+		name: 'Madz Photo',
+		tag: 'Portfolio & booking site for a photographer',
+		before: ['Needed a site that shows the work and takes bookings'],
+		after: ['A fast, custom portfolio the photographer owns end to end'],
+	},
+	{
+		name: 'Tapse',
+		tag: 'Product site with a real staging workflow',
+		before: ['Needed a safe way to ship changes without breaking the live site'],
+		after: ['Separate staging that auto-deploys, so changes are checked before they go live'],
+	},
+]
+
 const serviceSchema = {
 	'@context': 'https://schema.org',
 	'@type': 'ProfessionalService',
@@ -513,14 +544,27 @@ const serviceSchema = {
 
 	<section class="fl-block">
 		<h2 class="section-heading">Selected work</h2>
-		<div class="panel">
-			<p>A few recent builds — more on the <a href="/#projects">projects</a> section of my site.</p>
-			<ul class="fl-list">
-				<li><strong>Cadooga / Vanvir</strong> — marketing sites migrated to Astro on Cloudflare.</li>
-				<li><strong>Madz Photo</strong> — a photographer's portfolio and booking site.</li>
-				<li><strong>Tapse</strong> — a product site with a real staging workflow.</li>
-			</ul>
+		<div class="fl-stories">
+			{
+				stories.map((st) => (
+					<div class="panel fl-story">
+						<h3>{st.name}</h3>
+						<p class="fl-story-tag mono">{st.tag}</p>
+						<div class="fl-story-cols">
+							<div class="fl-story-col">
+								<span class="fl-story-label fl-story-before mono">Before</span>
+								<ul>{st.before.map((b) => <li>{b}</li>)}</ul>
+							</div>
+							<div class="fl-story-col fl-story-col-after">
+								<span class="fl-story-label fl-story-after mono">After</span>
+								<ul>{st.after.map((a) => <li>{a}</li>)}</ul>
+							</div>
+						</div>
+					</div>
+				))
+			}
 		</div>
+		<p class="fl-note mono text-muted">More builds in the <a href="/#projects">projects</a> section of my site.</p>
 	</section>
 
 	<section class="fl-block fl-contact">
@@ -1019,6 +1063,69 @@ const serviceSchema = {
 	.fl-cta-card .fl-blurb {
 		max-width: 60ch;
 		margin: 0 auto 1.1rem;
+	}
+
+	/* selected-work stories */
+	.fl-stories {
+		display: grid;
+		gap: 1rem;
+	}
+	.fl-story h3 {
+		margin: 0 0 0.2rem;
+	}
+	.fl-story-tag {
+		margin: 0 0 1rem;
+		font-size: 0.78rem;
+		opacity: 0.65;
+	}
+	.fl-story-cols {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 1.25rem;
+	}
+	.fl-story-label {
+		display: inline-block;
+		margin-bottom: 0.5rem;
+		font-size: 0.72rem;
+		font-weight: 700;
+		text-transform: uppercase;
+		letter-spacing: 0.06em;
+	}
+	.fl-story-before {
+		color: var(--text-muted);
+	}
+	.fl-story-after {
+		color: var(--accent);
+	}
+	.fl-story-col ul {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: grid;
+		gap: 0.45rem;
+	}
+	.fl-story-col li {
+		position: relative;
+		padding-left: 1.1rem;
+		font-size: 0.88rem;
+		line-height: 1.45;
+	}
+	.fl-story-col li::before {
+		content: '–';
+		position: absolute;
+		left: 0;
+		opacity: 0.5;
+	}
+	.fl-story-col-after li::before {
+		content: '✓';
+		color: var(--accent);
+		opacity: 1;
+		font-weight: 700;
+	}
+	@media (max-width: 640px) {
+		.fl-story-cols {
+			grid-template-columns: 1fr;
+		}
 	}
 
 	/* "included with every paid plan" assurance callout */
