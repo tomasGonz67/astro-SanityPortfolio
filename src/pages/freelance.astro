@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro'
+import IntakeForm, { type Field } from '../components/IntakeForm.astro'
 
 const EMAIL = 'thomasgonz67@gmail.com'
 const SITE = 'https://tomasgonz67.com'
@@ -78,6 +79,29 @@ const edges: Array<{ name: string; ai: string; limit: string; solve: string; why
 	},
 ]
 
+// Questions each plan's request form asks after name + email. Required ones are marked; the rest show '(optional)'.
+const field = (name: string, label: string, kind: Field['kind'] = 'text', required = false, rows = 3, autocomplete?: string): Field => ({ name, label, kind, required, rows, autocomplete })
+const business = field('business', 'Business or project name', 'text', false, 3, 'organization')
+const INTAKE = {
+	starter: [business, field('message', 'What does your business do? (a sentence or two)', 'textarea')],
+	standard: [business, field('message', 'What should the site do for your business?', 'textarea', true)],
+	smallStore: [business, field('products', 'What will you sell, and roughly how many products?', 'textarea', true), field('message', 'Anything else I should know?', 'textarea')],
+	mediumStore: [
+		business,
+		field('products', 'What will you sell, and roughly how many products?', 'textarea', true),
+		field('integrations', 'Anything it needs to connect to? (shipping, accounting, inventory…)', 'textarea'),
+		field('message', 'Anything else I should know?', 'textarea'),
+	],
+	smallApp: [business, field('goal', 'What should the app do?', 'textarea', true), field('users', 'Who will use it?')],
+	mediumApp: [
+		business,
+		field('goal', 'What should the product do?', 'textarea', true),
+		field('users', 'Who will use it, and roughly how many people?'),
+		field('integrations', 'Any tools it must connect to? (CRM, payments, email…)', 'textarea'),
+		field('message', 'Anything else I should know?', 'textarea'),
+	],
+}
+
 // unit: 'once' (default) one-time $, 'mo' recurring $/mo, 'page' per-page $.
 // from: true means the amount is a starting estimate.
 type AddOn = {
@@ -103,10 +127,12 @@ const plans: Array<{
 	custom?: boolean
 	fee?: string
 	timeline?: string
+	intake?: Field[]
 	addons?: AddOn[]
 }> = [
 	{
 		name: 'Starter Page',
+		intake: INTAKE.starter,
 		price: 'Free',
 		base: 0,
 		timeline: '1–7 days',
@@ -131,6 +157,7 @@ const plans: Array<{
 	},
 	{
 		name: 'Standard Website',
+		intake: INTAKE.standard,
 		price: '$3,000',
 		base: 3000,
 		timeline: '1–2 weeks',
@@ -159,6 +186,7 @@ const plans: Array<{
 	},
 	{
 		name: 'Small Online Store',
+		intake: INTAKE.smallStore,
 		price: 'from $2,500+',
 		badge: 'Limited-time offer',
 		custom: true,
@@ -168,6 +196,7 @@ const plans: Array<{
 	},
 	{
 		name: 'Medium Online Store',
+		intake: INTAKE.mediumStore,
 		price: 'from $5,000+',
 		badge: 'Limited-time offer',
 		custom: true,
@@ -177,6 +206,7 @@ const plans: Array<{
 	},
 	{
 		name: 'Small Web App',
+		intake: INTAKE.smallApp,
 		price: 'from $8,000+',
 		custom: true,
 		blurb: 'One core system — a booking tool, a simple CRM, client portal, dashboard, or internal tool — with a database and secure login.',
@@ -184,6 +214,7 @@ const plans: Array<{
 	},
 	{
 		name: 'Medium Web App',
+		intake: INTAKE.mediumApp,
 		price: 'from $20,000+',
 		custom: true,
 		blurb: 'A real product: multiple features, user accounts, integrations, automations, and AI (a full CRM, for example) — scoped to you.',
@@ -474,6 +505,18 @@ const serviceSchema = {
 								+ Add-ons &amp; pricing
 							</button>
 						)}
+						{
+							p.custom &&
+								(formEnabled ? (
+									<button type="button" class="fl-addons-btn mono" data-open={`quote-${i}`}>
+										Request a quote &rarr;
+									</button>
+								) : (
+									<a class="fl-addons-btn mono" href={`mailto:${EMAIL}?subject=${encodeURIComponent(p.name + ' inquiry')}`}>
+										Request a quote &rarr;
+									</a>
+								))
+						}
 						{p.custom && <p class="fl-card-custom mono">Fully custom — everything scoped into your quote.</p>}
 					</div>
 				))
@@ -544,10 +587,40 @@ const serviceSchema = {
 								<span class="fl-total-amount mono">{p.base ? `$${p.base.toLocaleString()}` : '$0'}</span>
 							</div>
 							{formEnabled ? (
-								<button type="button" class="fl-cta fl-addon-cta" data-send-setup>Send me this setup →</button>
+								<div class="fl-intake-wrap">
+									<p class="fl-intake-title mono">Send this to me</p>
+									<IntakeForm
+										plan={p.name}
+										subject={`New ${p.name} inquiry — tomasgonz67.com`}
+										fields={p.intake ?? []}
+										accessKey={WEB3FORMS_KEY}
+										email={EMAIL}
+										submitLabel="Send this setup →"
+										withSummary
+									/>
+								</div>
 							) : (
 								<a class="fl-cta fl-addon-cta" href={`mailto:${EMAIL}?subject=Website%20project`}>Email me this setup →</a>
 							)}
+						</div>
+					</dialog>
+				) : p.custom && formEnabled ? (
+					<dialog class="fl-dialog fl-addon-dialog" id={`quote-${i}`} aria-labelledby={`quote-${i}-title`}>
+						<div class="fl-dialog-inner">
+							<div class="fl-dialog-head">
+								<h3 id={`quote-${i}-title`} class="fl-addon-dialog-title">{p.name} — request a quote</h3>
+								<button type="button" class="fl-dialog-close" data-close aria-label="Close">✕</button>
+							</div>
+							<p class="fl-addon-dialog-sub mono">{p.price} · fully custom, scoped to you</p>
+							<p class="fl-quote-lead">{p.blurb}</p>
+							<IntakeForm
+								plan={p.name}
+								subject={`New ${p.name} inquiry — tomasgonz67.com`}
+								fields={p.intake ?? []}
+								accessKey={WEB3FORMS_KEY}
+								email={EMAIL}
+								submitLabel="Request a quote →"
+							/>
 						</div>
 					</dialog>
 				) : null
@@ -684,21 +757,14 @@ const serviceSchema = {
 			<p>Tell me about your business and what you need — I'll reply with ideas and a quote.</p>
 			{
 				formEnabled ? (
-					<form class="fl-form" id="contact-form" action="https://api.web3forms.com/submit" method="POST" data-email={EMAIL}>
-						<input type="hidden" name="access_key" value={WEB3FORMS_KEY} />
-						<input type="hidden" name="subject" value="New project inquiry from tomasgonz67.com" />
-						<input type="hidden" name="from_name" value="tomasgonz67.com" />
-						<!-- spam trap: hidden from people, bots tick it (Web3Forms drops those) -->
-						<input type="checkbox" name="botcheck" class="botcheck" tabindex="-1" autocomplete="off" aria-hidden="true" />
-						<div class="fl-form-fields">
-							<label><span>Name</span><input type="text" name="name" autocomplete="name" required /></label>
-							<label><span>Email</span><input type="email" name="email" autocomplete="email" required /></label>
-							<label class="wide"><span>What do you need?</span><textarea name="message" rows="6" required></textarea></label>
-						</div>
-						<button type="submit" class="fl-cta">Send message →</button>
-						<p class="fl-form-status" role="status" aria-live="polite"></p>
-						<p class="fl-form-note">Your message goes straight to my inbox through Web3Forms and is only used to reply. No mailing list, no trackers.</p>
-					</form>
+					<IntakeForm
+						id="contact-form"
+						subject="New project inquiry — tomasgonz67.com"
+						fields={[field('message', 'What do you need?', 'textarea', true, 6)]}
+						accessKey={WEB3FORMS_KEY}
+						email={EMAIL}
+						submitLabel="Send message →"
+					/>
 				) : (
 					<a class="fl-cta" href={`mailto:${EMAIL}?subject=Website%20project`}>Email me →</a>
 				)
@@ -789,7 +855,7 @@ const serviceSchema = {
 				'',
 				'A bit about my business and what I need:',
 			].join('\n')
-			dialog.dataset.summary = body
+			dialog.dataset.summary = ['Plan: ' + planName, 'Add-ons: ' + (chosen.length ? chosen.join(', ') : 'none'), 'Estimate: ' + text].join('\n')
 			if (cta instanceof HTMLAnchorElement) {
 				cta.href =
 					'mailto:' + email + '?subject=' + encodeURIComponent('Website project — ' + planName) + '&body=' + encodeURIComponent(body)
@@ -849,22 +915,25 @@ const serviceSchema = {
 		m.addEventListener('blur', hideTip)
 	}
 
-	// Contact form: send without leaving the page, and let the plan pop-up / catch-all card pre-fill it.
-	const contactForm = document.querySelector<HTMLFormElement>('#contact-form')
-	if (contactForm) {
-		const status = contactForm.querySelector<HTMLElement>('.fl-form-status')!
-		const sendBtn = contactForm.querySelector<HTMLButtonElement>('button[type="submit"]')!
-		const message = contactForm.querySelector<HTMLTextAreaElement>('textarea[name="message"]')!
-		const failText = 'Something went wrong. Please try again, or email me at ' + (contactForm.dataset.email ?? '') + '.'
-		contactForm.addEventListener('submit', async (event) => {
+	// Request forms (the main contact form and each plan's own): send without leaving the page.
+	for (const reqForm of document.querySelectorAll<HTMLFormElement>('form.fl-form')) {
+		const status = reqForm.querySelector<HTMLElement>('.fl-form-status')!
+		const sendBtn = reqForm.querySelector<HTMLButtonElement>('button[type="submit"]')!
+		const failText = 'Something went wrong. Please try again, or email me at ' + (reqForm.dataset.email ?? '') + '.'
+		reqForm.addEventListener('submit', async (event) => {
 			event.preventDefault()
+			if (reqForm.dataset.summary) {
+				// plan pop-ups: attach the add-on selection and estimate the visitor built
+				const setup = reqForm.querySelector<HTMLInputElement>('input[name="setup"]')
+				if (setup) setup.value = reqForm.closest('dialog')?.dataset.summary ?? ''
+			}
 			sendBtn.disabled = true
 			status.textContent = 'Sending\u2026'
 			try {
-				const response = await fetch(contactForm.action, { method: 'POST', headers: { Accept: 'application/json' }, body: new FormData(contactForm) })
+				const response = await fetch(reqForm.action, { method: 'POST', headers: { Accept: 'application/json' }, body: new FormData(reqForm) })
 				const result = await response.json()
 				if (response.ok && result.success) {
-					contactForm.reset()
+					reqForm.reset()
 					status.textContent = 'Thank you! I\u2019ll reply soon.'
 				} else {
 					status.textContent = failText
@@ -875,22 +944,16 @@ const serviceSchema = {
 				sendBtn.disabled = false
 			}
 		})
+	}
+
+	// "Let's talk" card: jump to the main form with a starter line.
+	const mainMessage = document.querySelector<HTMLTextAreaElement>('#contact-form textarea[name="message"]')
+	if (mainMessage) {
 		const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-		const focusEnd = () => { message.focus(); message.setSelectionRange(message.value.length, message.value.length) }
-		for (const btn of document.querySelectorAll<HTMLElement>('[data-send-setup]')) {
-			btn.addEventListener('click', () => {
-				const dlg = btn.closest('dialog')
-				const summary = dlg?.dataset.summary ?? ''
-				dlg?.close()
-				message.value = message.value.trim() ? message.value.trimEnd() + '\n\n' + summary : summary
-				document.getElementById('contact')?.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' })
-				setTimeout(focusEnd, reduce ? 0 : 450)
-			})
-		}
 		for (const link of document.querySelectorAll<HTMLElement>('[data-topic]')) {
 			link.addEventListener('click', () => {
-				if (!message.value.trim()) message.value = (link.dataset.topic ?? '') + ' \u2014 here\u2019s what I\u2019m imagining:\n'
-				setTimeout(focusEnd, reduce ? 0 : 450)
+				if (!mainMessage.value.trim()) mainMessage.value = (link.dataset.topic ?? '') + ' \u2014 here\u2019s what I\u2019m imagining:\n'
+				setTimeout(() => { mainMessage.focus(); mainMessage.setSelectionRange(mainMessage.value.length, mainMessage.value.length) }, reduce ? 0 : 450)
 			})
 		}
 	}
@@ -1371,8 +1434,7 @@ const serviceSchema = {
 	.fl-plan .fl-points {
 		margin-bottom: 0.9rem;
 	}
-	.fl-plan .fl-addons-btn,
-	.fl-plan .fl-card-custom {
+	.fl-plan .fl-addons-btn {
 		margin-top: auto;
 	}
 
@@ -1396,82 +1458,34 @@ const serviceSchema = {
 		font-style: normal;
 	}
 
-	/* contact form */
-	.botcheck {
-		display: none;
-	}
 	#contact {
 		scroll-margin-top: 90px;
 	}
-	.fl-form {
+	/* plan request forms inside the pop-ups */
+	.fl-intake-wrap {
 		margin-top: 1.1rem;
+		padding-top: 1rem;
+		border-top: 1px solid var(--border);
 	}
-	.fl-form-fields {
-		display: grid;
-		grid-template-columns: 1fr 1fr;
-		gap: 1rem 1.25rem;
-	}
-	.fl-form-fields label {
-		display: flex;
-		flex-direction: column;
-		gap: 0.35rem;
-	}
-	.fl-form-fields label.wide {
-		grid-column: 1 / -1;
-	}
-	.fl-form-fields span {
-		font-family: var(--font-mono);
-		font-size: 0.75rem;
-		letter-spacing: 0.04em;
-		text-transform: uppercase;
-		color: var(--text-muted);
-	}
-	.fl-form-fields input,
-	.fl-form-fields textarea {
-		width: 100%;
-		box-sizing: border-box;
-		padding: 0.6rem 0.75rem;
-		font: inherit;
-		font-size: 0.95rem;
-		color: var(--text);
-		background: var(--bg);
-		border: 1px solid var(--text-muted);
-		border-radius: 6px;
-	}
-	.fl-form-fields textarea {
-		min-height: 7rem;
-		resize: vertical;
-	}
-	.fl-form-fields input:focus-visible,
-	.fl-form-fields textarea:focus-visible {
-		outline: 2px solid var(--accent);
-		outline-offset: 1px;
-	}
-	button.fl-cta {
-		background: transparent;
-		color: inherit;
-		font: inherit;
-		font-weight: 600;
-		cursor: pointer;
-	}
-	button.fl-cta:disabled {
-		opacity: 0.6;
-		cursor: wait;
-	}
-	.fl-form-status {
-		min-height: 1.4em;
-		margin: 0.7rem 0 0;
-		font-size: 0.9rem;
-	}
-	.fl-form-note {
-		margin: 0.4rem 0 0;
+	.fl-intake-title {
+		margin: 0 0 0.8rem;
 		font-size: 0.78rem;
+		font-weight: 700;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+		color: var(--accent);
+	}
+	.fl-quote-lead {
+		margin: 0 0 1rem;
+		font-size: 0.9rem;
+		line-height: 1.55;
 		color: var(--text-muted);
 	}
-	@media (max-width: 640px) {
-		.fl-form-fields {
-			grid-template-columns: 1fr;
-		}
+	a.fl-addons-btn {
+		display: block;
+		box-sizing: border-box;
+		text-align: center;
+		text-decoration: none;
 	}
 
 	/* "included with every paid plan" assurance callout */

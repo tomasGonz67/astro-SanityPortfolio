@@ -1,0 +1,157 @@
+---
+// A small request form that emails me through Web3Forms (web3forms.com). Used for the main "Start a project"
+// form and for each plan's own request form, so they look and behave the same.
+//
+// The page's script (freelance.astro) handles the submit: it posts the form, shows the thank-you / error text in
+// the .fl-form-status line, and, when `withSummary` is set, copies the add-on summary from the surrounding
+// pop-up into the hidden "setup" field first. Without JavaScript the form still posts to Web3Forms normally.
+export interface Field {
+	name: string
+	label: string
+	kind?: 'text' | 'textarea'
+	required?: boolean
+	rows?: number
+	autocomplete?: string
+}
+
+interface Props {
+	id?: string
+	plan?: string // shown in the email so I know which plan it came from
+	subject: string
+	fields: Field[] // extra questions after name + email
+	accessKey: string
+	email: string // my address, shown if sending fails
+	submitLabel?: string
+	withSummary?: boolean // include the add-on selection from the pop-up
+	note?: string
+}
+
+const {
+	id,
+	plan,
+	subject,
+	fields,
+	accessKey,
+	email,
+	submitLabel = 'Send →',
+	withSummary = false,
+	note = 'Your message goes straight to my inbox through Web3Forms and is only used to reply. No mailing list, no trackers.',
+} = Astro.props
+---
+
+<form class="fl-form" id={id} action="https://api.web3forms.com/submit" method="POST" data-email={email} data-summary={withSummary ? 'true' : undefined}>
+	<input type="hidden" name="access_key" value={accessKey} />
+	<input type="hidden" name="subject" value={subject} />
+	<input type="hidden" name="from_name" value="tomasgonz67.com" />
+	{plan && <input type="hidden" name="plan" value={plan} />}
+	{withSummary && <input type="hidden" name="setup" value="" />}
+	<!-- spam trap: hidden from people, bots tick it (Web3Forms drops those) -->
+	<input type="checkbox" name="botcheck" class="botcheck" tabindex="-1" autocomplete="off" aria-hidden="true" />
+
+	<div class="fl-form-fields">
+		<label><span>Name</span><input type="text" name="name" autocomplete="name" required /></label>
+		<label><span>Email</span><input type="email" name="email" autocomplete="email" required /></label>
+		{
+			fields.map((f) => (
+				<label class="wide">
+					<span>
+						{f.label}
+						{f.required ? '' : ' (optional)'}
+					</span>
+					{f.kind === 'textarea' ? (
+						<textarea name={f.name} rows={f.rows ?? 3} required={f.required} />
+					) : (
+						<input type="text" name={f.name} autocomplete={f.autocomplete} required={f.required} />
+					)}
+				</label>
+			))
+		}
+	</div>
+
+	<button type="submit" class="fl-form-submit">{submitLabel}</button>
+	<p class="fl-form-status" role="status" aria-live="polite"></p>
+	<p class="fl-form-note">{note}</p>
+</form>
+
+<style>
+	.botcheck {
+		display: none;
+	}
+	.fl-form-fields {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 1rem 1.25rem;
+	}
+	.fl-form-fields label {
+		display: flex;
+		flex-direction: column;
+		gap: 0.35rem;
+	}
+	.fl-form-fields label.wide {
+		grid-column: 1 / -1;
+	}
+	.fl-form-fields span {
+		font-family: var(--font-mono);
+		font-size: 0.75rem;
+		letter-spacing: 0.04em;
+		text-transform: uppercase;
+		color: var(--text-muted);
+	}
+	/* borders use the muted text colour so the fields meet WCAG 1.4.11 (3:1) on both themes */
+	.fl-form-fields input,
+	.fl-form-fields textarea {
+		width: 100%;
+		box-sizing: border-box;
+		padding: 0.6rem 0.75rem;
+		font: inherit;
+		font-size: 0.95rem;
+		color: var(--text);
+		background: var(--bg);
+		border: 1px solid var(--text-muted);
+		border-radius: 6px;
+	}
+	.fl-form-fields textarea {
+		min-height: 5rem;
+		resize: vertical;
+	}
+	.fl-form-fields input:focus-visible,
+	.fl-form-fields textarea:focus-visible {
+		outline: 2px solid var(--accent);
+		outline-offset: 1px;
+	}
+	.fl-form-submit {
+		display: inline-block;
+		margin-top: 1.1rem;
+		padding: 0.75rem 1.3rem;
+		border: 1px solid currentColor;
+		border-radius: 8px;
+		background: transparent;
+		color: inherit;
+		font: inherit;
+		font-weight: 600;
+		cursor: pointer;
+		transition: opacity 0.15s ease;
+	}
+	.fl-form-submit:hover {
+		opacity: 0.7;
+	}
+	.fl-form-submit:disabled {
+		opacity: 0.6;
+		cursor: wait;
+	}
+	.fl-form-status {
+		min-height: 1.4em;
+		margin: 0.7rem 0 0;
+		font-size: 0.9rem;
+	}
+	.fl-form-note {
+		margin: 0.4rem 0 0;
+		font-size: 0.78rem;
+		color: var(--text-muted);
+	}
+	@media (max-width: 640px) {
+		.fl-form-fields {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>
