@@ -134,7 +134,7 @@ const plans: Array<{
 		blurb: 'A custom multi-page site — accessible, built for search, and editable by you.',
 		points: [
 			'1–5 custom pages',
-			'ADA-compliant, with accessibility statement',
+			'ADA-compliant, statement included',
 			'SEO-optimized',
 			'Free, self-edit CMS',
 			'Contact form',
@@ -435,7 +435,7 @@ const serviceSchema = {
 		<div class="fl-grid">
 			{
 				plans.map((p, i) => (
-					<div class="panel fl-card" class:list={{ 'fl-plan-featured': p.featured, 'fl-plan-badged': p.badge }}>
+					<div class="panel fl-card fl-plan" class:list={{ 'fl-plan-featured': p.featured, 'fl-plan-badged': p.badge }}>
 						{p.badge && <span class:list={['fl-plan-badge mono', { 'fl-plan-badge-offer': !p.featured }]}>{p.badge}</span>}
 						<div class="fl-card-head">
 							<h3>{p.name}</h3>
@@ -1014,7 +1014,7 @@ const serviceSchema = {
 		color: var(--bg);
 	}
 	.fl-timeline {
-		margin: 0 0 0.85rem;
+		margin: 0.55rem 0 0;
 		font-size: 0.8rem;
 		font-weight: 700;
 		color: var(--accent);
@@ -1251,6 +1251,19 @@ const serviceSchema = {
 		:global(html) {
 			scroll-behavior: auto;
 		}
+	}
+
+	/* plan cards: equal-height columns with the button (or custom note) pinned to the bottom */
+	.fl-plan {
+		display: flex;
+		flex-direction: column;
+	}
+	.fl-plan .fl-points {
+		margin-bottom: 0.9rem;
+	}
+	.fl-plan .fl-addons-btn,
+	.fl-plan .fl-card-custom {
+		margin-top: auto;
 	}
 
 	/* "included with every paid plan" assurance callout */
@@ -1542,18 +1555,18 @@ const serviceSchema = {
 	}
 	.fl-card-head {
 		display: flex;
-		justify-content: space-between;
-		align-items: baseline;
-		gap: 0.75rem;
-		margin-bottom: 0.4rem;
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 0.1rem;
+		margin-bottom: 0.55rem;
 	}
 	.fl-card-head h3 {
 		margin: 0;
 	}
 	.fl-price {
-		font-size: 0.85rem;
-		font-weight: 600;
-		opacity: 0.9;
+		font-size: 1.05rem;
+		font-weight: 700;
+		color: var(--accent);
 		white-space: nowrap;
 	}
 	.fl-blurb {
