@@ -98,6 +98,7 @@ const plans: Array<{
 			{ name: 'SEO setup', price: '$500', amount: 500 },
 			{ name: 'Accessibility (ADA) audit', price: '$700', amount: 700 },
 			{ name: 'Contact / booking form', price: '$250', amount: 250 },
+			{ name: 'Legal pages (privacy, terms, accessibility)', price: '$200', amount: 200 },
 			{ name: 'Blog / news section', price: '$600', amount: 600 },
 			{ name: 'Online store & payments', price: 'from $1,200', amount: 1200, from: true },
 			{ name: 'Analytics & tracking', price: '$150', amount: 150 },
@@ -113,7 +114,13 @@ const plans: Array<{
 		base: 3000,
 		badge: 'Best Value',
 		blurb: 'A custom multi-page site — accessible, built for search, and editable by you.',
-		points: ['1–5 custom pages', 'ADA-compliant & SEO-optimized', 'Free, self-edit CMS', 'Contact / booking forms'],
+		points: [
+			'1–5 custom pages',
+			'ADA-compliant & SEO-optimized',
+			'Free, self-edit CMS',
+			'Contact / booking forms',
+			'Starter legal pages (privacy · terms · accessibility)',
+		],
 		addons: [
 			{ name: 'Extra page (beyond 5)', price: '$250', amount: 250 },
 			{ name: 'Blog / news section', price: '$600', amount: 600 },
@@ -151,6 +158,7 @@ const compare: Array<{ feature: string; free: string; standard: string; note?: s
 	{ feature: 'SEO setup', free: 'add', standard: 'inc' },
 	{ feature: 'Accessibility (ADA)', free: 'add', standard: 'inc' },
 	{ feature: 'Contact / booking forms', free: 'add', standard: 'inc' },
+	{ feature: 'Starter legal pages', free: 'add', standard: 'inc' },
 	{ feature: 'Blog or news section', free: 'add', standard: 'add' },
 	{ feature: 'Online store & payments', free: 'add', standard: 'add' },
 	{ feature: 'Analytics & tracking', free: 'add', standard: 'add' },
@@ -411,7 +419,7 @@ const serviceSchema = {
 					}
 				</tbody>
 			</table>
-				<p class="fl-note mono text-muted">Web App plans are fully custom — every feature you need is scoped into the build.</p>
+				<p class="fl-note mono text-muted">Starter legal pages are standard templates tailored to your business — a starting point, not legal advice. Web App plans are fully custom, with every feature scoped into the build.</p>
 			</div>
 		</details>
 	</section>
