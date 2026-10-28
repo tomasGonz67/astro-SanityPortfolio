@@ -149,6 +149,23 @@ const serviceSchema = {
 		<a class="fl-cta" href={`mailto:${EMAIL}?subject=Website%20project`}>Get a free quote →</a>
 	</section>
 
+	<section class="fl-proof-strip">
+		<div class="fl-proof-grid">
+			<div class="panel fl-proof">
+				<p class="fl-proof-value">Weeks, not months</p>
+				<p class="fl-proof-note">Most sites go live in 1–2 weeks. One person, start to finish — nothing sits in a queue waiting on a team.</p>
+			</div>
+			<div class="panel fl-proof">
+				<p class="fl-proof-value">A fraction of agency cost</p>
+				<p class="fl-proof-note">Senior-level work without the agency markup. You pay for the build itself, not the overhead on top of it.</p>
+			</div>
+			<div class="panel fl-proof">
+				<p class="fl-proof-value">Built to own, built to last</p>
+				<p class="fl-proof-note">Accessible, secure, and loads in under a second. It's yours to keep — no subscription, no lock-in.</p>
+			</div>
+		</div>
+	</section>
+
 	<section class="fl-block">
 		<h2 class="section-heading">Why hire me in the age of AI</h2>
 		<p class="fl-lede fl-intro">
@@ -338,6 +355,38 @@ const serviceSchema = {
 	}
 	.fl-cta:hover {
 		opacity: 0.7;
+	}
+
+	/* proof strip: faster / cheaper / own it — the 3-second takeaway */
+	.fl-proof-strip {
+		margin-top: 1.75rem;
+	}
+	.fl-proof-grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 1rem;
+	}
+	.fl-proof {
+		margin-bottom: 0;
+	}
+	.fl-proof-value {
+		margin: 0 0 0.45rem;
+		font-family: var(--font-mono);
+		font-size: 1rem;
+		font-weight: 700;
+		color: var(--accent);
+		line-height: 1.3;
+	}
+	.fl-proof-note {
+		margin: 0;
+		font-size: 0.85rem;
+		line-height: 1.55;
+		opacity: 0.8;
+	}
+	@media (max-width: 640px) {
+		.fl-proof-grid {
+			grid-template-columns: 1fr;
+		}
 	}
 
 	/* scroll-reveal + hover, matching the homepage */
