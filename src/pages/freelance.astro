@@ -258,6 +258,11 @@ const stories: Array<{
 	},
 ]
 
+// Safety net: never publish a placeholder quote. Fails a production build (dev still works).
+if (import.meta.env.PROD && stories.some((st) => /lorem ipsum/i.test(st.quote?.text ?? ''))) {
+	throw new Error('Placeholder (lorem ipsum) client quote found in freelance.astro — replace it with a real, approved quote or remove it before building for production.')
+}
+
 const faqs: Array<{ q: string; a: string }> = [
 	{
 		q: 'How much does a website cost in NJ?',
