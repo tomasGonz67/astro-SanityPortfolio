@@ -616,6 +616,40 @@ const serviceSchema = {
 		update()
 	}
 
+	// Info "ⓘ" tooltip: a single fixed element positioned by JS so it escapes the
+	// modal's overflow and sits above everything. Appended into the open dialog
+	// (top layer) when the marker is inside one, otherwise to <body>.
+	const tip = document.createElement('div')
+	tip.className = 'fl-tip'
+	tip.setAttribute('role', 'tooltip')
+	const showTip = (marker: HTMLElement) => {
+		const text = marker.getAttribute('data-tip')
+		if (!text) return
+		tip.textContent = text
+		const dlg = marker.closest('dialog[open]') as HTMLElement | null
+		const host = dlg ?? document.body
+		if (tip.parentElement !== host) host.appendChild(tip)
+		tip.style.visibility = 'hidden'
+		tip.classList.add('show')
+		const r = marker.getBoundingClientRect()
+		const tw = tip.offsetWidth
+		const th = tip.offsetHeight
+		let left = r.right - tw
+		left = Math.max(8, Math.min(left, window.innerWidth - tw - 8))
+		let top = r.bottom + 8
+		if (top + th > window.innerHeight - 8) top = r.top - th - 8
+		tip.style.left = left + 'px'
+		tip.style.top = top + 'px'
+		tip.style.visibility = 'visible'
+	}
+	const hideTip = () => tip.classList.remove('show')
+	for (const m of document.querySelectorAll<HTMLElement>('.fl-fee')) {
+		m.addEventListener('mouseenter', () => showTip(m))
+		m.addEventListener('mouseleave', hideTip)
+		m.addEventListener('focus', () => showTip(m))
+		m.addEventListener('blur', hideTip)
+	}
+
 </script>
 
 <style>
@@ -754,11 +788,10 @@ const serviceSchema = {
 		color: var(--accent);
 		border-color: var(--accent);
 	}
-	.fl-fee::after {
-		content: attr(data-tip);
-		position: absolute;
-		top: 150%;
-		right: 0;
+	/* floating tooltip (JS-positioned, fixed, above everything incl. the modal) */
+	.fl-tip {
+		position: fixed;
+		z-index: 2147483647;
 		width: 230px;
 		max-width: 72vw;
 		background: var(--bg);
@@ -767,25 +800,16 @@ const serviceSchema = {
 		padding: 0.55rem 0.7rem;
 		font-family: var(--font-sans);
 		font-size: 0.74rem;
-		font-weight: 400;
 		line-height: 1.45;
-		letter-spacing: normal;
-		text-transform: none;
 		text-align: left;
 		color: var(--text);
-		box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+		box-shadow: 0 6px 24px rgba(0, 0, 0, 0.4);
+		pointer-events: none;
 		opacity: 0;
-		visibility: hidden;
-		transform: translateY(-4px);
-		transition: opacity 0.15s ease, transform 0.15s ease;
-		z-index: 60;
+		transition: opacity 0.12s ease;
 	}
-	.fl-fee:hover::after,
-	.fl-fee:focus::after,
-	.fl-fee:focus-visible::after {
+	.fl-tip.show {
 		opacity: 1;
-		visibility: visible;
-		transform: translateY(0);
 	}
 	.fl-plan-featured {
 		position: relative;
