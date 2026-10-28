@@ -195,16 +195,9 @@ const serviceSchema = {
 								<div class="fl-step">
 									<span class="fl-step-label">Fact</span>
 									<p set:html={e.fact}></p>
-									{e.source && (
+									{e.sourceUrl && (
 										<p class="fl-source">
-											Source:{' '}
-											{e.sourceUrl ? (
-												<a href={e.sourceUrl} target="_blank" rel="noopener">
-													{e.source}
-												</a>
-											) : (
-												e.source
-											)}
+											<a href={e.sourceUrl} target="_blank" rel="noopener">source</a>
 										</p>
 									)}
 								</div>
@@ -408,7 +401,7 @@ const serviceSchema = {
 		opacity: 0.6;
 	}
 	.fl-source a {
-		color: var(--accent);
+		color: var(--text-muted);
 		text-decoration: underline;
 	}
 	.fl-step-solve .fl-step-label {
