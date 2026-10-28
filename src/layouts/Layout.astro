@@ -6,7 +6,7 @@ interface Props {
 	title: string
 	description?: string
 	fullTitle?: string
-	extraSchema?: Record<string, unknown>
+	extraSchema?: Record<string, unknown> | Array<Record<string, unknown>>
 }
 
 const DEFAULT_DESCRIPTION =
@@ -43,7 +43,7 @@ const personSchema = {
 	'@type': 'Person',
 	name: 'Tomas Gonzalez',
 	url: Astro.site?.toString(),
-	jobTitle: ['Software Engineer', 'Website Builder', 'Full-Stack & AI/ML Engineer'],
+	jobTitle: ['Software Engineer', 'Web Designer', 'Website Builder', 'Full-Stack & AI/ML Engineer'],
 	address: {
 		'@type': 'PostalAddress',
 		addressLocality: 'Holmdel',

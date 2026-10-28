@@ -253,12 +253,49 @@ const stories: Array<{ name: string; tag: string; links?: Array<{ label: string;
 	},
 ]
 
+const faqs: Array<{ q: string; a: string }> = [
+	{
+		q: 'How much does a website cost in NJ?',
+		a: 'A one-page starter site is free. A custom website of up to five pages is $3,000, online stores start at $2,500, and custom web apps start at $8,000. For comparison, boutique web agencies commonly charge $6,000 to $35,000 or more. Add-ons like extra pages, SEO and booking are priced individually.',
+	},
+	{
+		q: 'How long does it take to build a website?',
+		a: 'A one-page site goes live in 1 to 7 days and a multi-page site in 1 to 2 weeks, once I have your text and photos. Agencies typically take 6 to 12 weeks.',
+	},
+	{
+		q: 'Do I own my website?',
+		a: 'Yes. The code lives in your own repository, on your own domain and hosting account, so there is no platform subscription and no lock-in. You can keep it, move it, or hand it to another developer.',
+	},
+	{
+		q: 'What does hosting cost?',
+		a: 'Hosting for most sites is free up to about 100,000 requests a day, then about $5 a month. Sites with a backend or database can cost a bit more.',
+	},
+	{
+		q: 'Do you only work with businesses in New Jersey?',
+		a: 'No. I am based in Holmdel, NJ, and I work with clients located anywhere.',
+	},
+	{
+		q: 'What happens after my site launches?',
+		a: 'Every paid plan includes a 90-day warranty and 30 days of free maintenance, with free security patches for critical vulnerabilities. After that, an optional care plan covers updates and upkeep for $75 a month.',
+	},
+]
+
+const faqSchema = {
+	'@context': 'https://schema.org',
+	'@type': 'FAQPage',
+	mainEntity: faqs.map((f) => ({
+		'@type': 'Question',
+		name: f.q,
+		acceptedAnswer: { '@type': 'Answer', text: f.a },
+	})),
+}
+
 const serviceSchema = {
 	'@context': 'https://schema.org',
 	'@type': 'ProfessionalService',
 	name: 'Tomas Gonzalez — Freelance Web Development',
 	description:
-		'Custom website design and development for small businesses — a website builder and web developer in Holmdel, NJ, serving Monmouth County and across New Jersey. Also web apps and custom software.',
+		'Custom website design and development for businesses — a freelance web designer and developer in Holmdel, NJ, serving Monmouth County, New Jersey and clients anywhere. Also web apps and custom software.',
 	url: `${SITE}/freelance`,
 	provider: { '@type': 'Person', name: 'Tomas Gonzalez', url: SITE },
 	areaServed: [
@@ -287,13 +324,13 @@ const serviceSchema = {
 
 <Layout
 	title="Freelance"
-	fullTitle="Website Builder & Web Developer in NJ · Tomas Gonzalez"
-	description="Freelance website builder and web developer in Holmdel, NJ. I build fast, custom websites — plus web apps and custom software — for businesses across Monmouth County and New Jersey. Built to own and easy to update."
-	extraSchema={serviceSchema}
+	fullTitle="Holmdel NJ Web Designer & Developer | Tomas Gonzalez"
+	description="Freelance web designer in Holmdel, NJ. Custom websites from a free starter page to full web apps, live in 1–2 weeks, and yours to own."
+	extraSchema={[serviceSchema, faqSchema]}
 >
 	<section class="fl-hero">
-		<p class="greeting mono">Freelance web development</p>
-		<h1>Website builder &amp; web developer in Holmdel, NJ</h1>
+		<p class="greeting mono">Freelance web design &amp; development</p>
+		<h1>Web designer &amp; developer in Holmdel, NJ</h1>
 		<p class="fl-lede">
 			I build fast, custom <strong>websites</strong> — plus <strong>web apps and custom software</strong> — for businesses and
 			professionals, from a first storefront to an established company. Based in Holmdel, NJ. I work with clients located anywhere. Modern, mobile-first, easy to update,
@@ -323,7 +360,7 @@ const serviceSchema = {
 	</section>
 
 	<section class="fl-block">
-		<h2 class="section-heading">Why hire me in the age of AI</h2>
+		<h2 class="section-heading">Why hire a web developer in the age of AI</h2>
 		<p class="fl-lede fl-intro">
 			When AI tools like Base44 can build a website in minutes, and ChatGPT or Claude can crank out code in seconds — why
 			pay a person? Because AI alone can't give you this:
@@ -392,7 +429,7 @@ const serviceSchema = {
 	</section>
 
 	<section class="fl-block">
-		<h2 class="section-heading">My plans</h2>
+		<h2 class="section-heading">Website design plans &amp; pricing</h2>
 		<div class="fl-grid">
 			{
 				plans.map((p, i) => (
@@ -561,7 +598,7 @@ const serviceSchema = {
 	</section>
 
 	<section class="fl-block">
-		<h2 class="section-heading">Selected work</h2>
+		<h2 class="section-heading">Selected web design work</h2>
 		<div class="fl-stories">
 			{
 				stories.map((st) => (
@@ -593,6 +630,20 @@ const serviceSchema = {
 			}
 		</div>
 		<p class="fl-note mono text-muted">More builds in the <a href="/#projects">projects</a> section of my site.</p>
+	</section>
+
+	<section class="fl-block">
+		<h2 class="section-heading">Website design FAQ</h2>
+		<div class="fl-grid">
+			{
+				faqs.map((f) => (
+					<div class="panel fl-faq">
+						<h3>{f.q}</h3>
+						<p>{f.a}</p>
+					</div>
+				))
+			}
+		</div>
 	</section>
 
 	<section class="fl-block fl-contact">
@@ -1173,6 +1224,18 @@ const serviceSchema = {
 		color: var(--accent);
 		text-decoration: underline;
 		white-space: nowrap;
+	}
+
+	.fl-faq h3 {
+		margin: 0 0 0.5rem;
+		font-size: 1rem;
+		line-height: 1.35;
+	}
+	.fl-faq p {
+		margin: 0;
+		font-size: 0.9rem;
+		line-height: 1.55;
+		color: var(--text-muted);
 	}
 
 	/* "included with every paid plan" assurance callout */
