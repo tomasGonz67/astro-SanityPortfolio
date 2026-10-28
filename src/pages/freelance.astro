@@ -788,8 +788,9 @@ const serviceSchema = {
 		color: var(--accent);
 		border-color: var(--accent);
 	}
-	/* floating tooltip (JS-positioned, fixed, above everything incl. the modal) */
-	.fl-tip {
+	/* floating tooltip (JS-positioned, fixed, above everything incl. the modal).
+	   :global because the element is created in JS and lacks Astro's scope attr. */
+	:global(.fl-tip) {
 		position: fixed;
 		z-index: 2147483647;
 		width: 230px;
@@ -808,7 +809,7 @@ const serviceSchema = {
 		opacity: 0;
 		transition: opacity 0.12s ease;
 	}
-	.fl-tip.show {
+	:global(.fl-tip.show) {
 		opacity: 1;
 	}
 	.fl-plan-featured {
