@@ -110,7 +110,7 @@ const plans: Array<{
 			{ name: 'Booking / scheduling', price: 'from $400', amount: 400, from: true },
 			{ name: 'Legal pages (privacy + terms)', price: '$150', amount: 150, accessibilityRider: true },
 			{ name: 'Blog / news section', price: '$600', amount: 600 },
-			{ name: 'Online store & payments', price: 'from $1,200', amount: 1200, from: true },
+			{ name: 'Payments / Buy button', price: '$300', amount: 300 },
 			{ name: 'Analytics & tracking', price: '$150', amount: 150 },
 			{ name: 'Domain & email setup', price: '$150', amount: 150 },
 			{ name: 'Logo & brand basics', price: '$400', amount: 400 },
@@ -136,13 +136,27 @@ const plans: Array<{
 			{ name: 'Extra page (beyond 5)', price: '$50/page', amount: 50, qty: true },
 			{ name: 'Booking / scheduling', price: 'from $400', amount: 400, from: true },
 			{ name: 'Blog / news section', price: '$600', amount: 600 },
-			{ name: 'Online store & payments', price: 'from $1,200', amount: 1200, from: true },
+			{ name: 'Payments / Buy button', price: '$300', amount: 300 },
 			{ name: 'Analytics & tracking', price: '$150', amount: 150 },
 			{ name: 'Domain & email setup', price: '$150', amount: 150 },
 			{ name: 'Logo & brand basics', price: '$400', amount: 400 },
 			{ name: 'Content writing', price: '$100/page', amount: 100, unit: 'page' },
 			{ name: 'Ongoing care & updates', price: '$75/mo', amount: 75, unit: 'mo' },
 		],
+	},
+	{
+		name: 'Small Online Store',
+		price: 'from $3,500+',
+		custom: true,
+		blurb: 'A clean storefront for a focused catalog — product pages, cart, and secure checkout, built into your own site.',
+		points: ['Storefront + product pages', 'Cart & secure checkout', 'Self-edit product CMS', 'Yours to own'],
+	},
+	{
+		name: 'Medium Online Store',
+		price: 'from $7,500+',
+		custom: true,
+		blurb: 'A larger store with variants, inventory, discounts, shipping & tax — scoped to your catalog.',
+		points: ['Larger catalog & variants', 'Inventory & discounts', 'Shipping & tax setup', 'Integrations & automations'],
 	},
 	{
 		name: 'Small Web App',
@@ -173,7 +187,7 @@ const compare: Array<{ feature: string; free: string; standard: string; note?: s
 	{ feature: 'Booking / scheduling', free: 'add', standard: 'add' },
 	{ feature: 'Legal pages (privacy + terms)', free: 'add', standard: 'inc' },
 	{ feature: 'Blog or news section', free: 'add', standard: 'add' },
-	{ feature: 'Online store & payments', free: 'add', standard: 'add' },
+	{ feature: 'Payments / Buy button', free: 'add', standard: 'add' },
 	{ feature: 'Analytics & tracking', free: 'add', standard: 'add' },
 	{ feature: 'Domain & professional email', free: 'add', standard: 'add' },
 	{ feature: 'Logo & brand basics', free: 'add', standard: 'add' },
@@ -456,7 +470,7 @@ const serviceSchema = {
 					}
 				</tbody>
 			</table>
-				<p class="fl-note mono text-muted">Starter legal pages are standard templates tailored to your business — a starting point, not legal advice. Web App plans are fully custom, with every feature scoped into the build.</p>
+				<p class="fl-note mono text-muted">Starter legal pages are standard templates tailored to your business — a starting point, not legal advice. Online Store and Web App plans are fully custom, with every feature scoped into the build.</p>
 			</div>
 		</details>
 	</section>
