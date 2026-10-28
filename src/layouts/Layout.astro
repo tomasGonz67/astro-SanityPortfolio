@@ -1,6 +1,6 @@
 ---
 import '../styles/global.css'
-import { client, urlFor } from '../lib/sanity'
+import { client } from '../lib/sanity'
 
 interface Props {
 	title: string
@@ -33,9 +33,10 @@ const profile = await client.fetch<Profile | null>(
 )
 
 const resumeUrl = profile?.resumeFile?.asset?.url
-const ogImageUrl = profile?.avatar
-	? urlFor(profile.avatar.asset).width(600).height(600).fit('crop').url()
-	: undefined
+// Branded 1200x630 share card (public/og-image.png) used for link previews on
+// LinkedIn, iMessage, Slack, Facebook and X.
+const ogImageUrl = new URL('/og-image.png', Astro.site).toString()
+const logoUrl = new URL('/logo-512.png', Astro.site).toString()
 
 const sameAs = [profile?.githubUrl, profile?.linkedinUrl].filter(Boolean)
 const personSchema = {
@@ -43,6 +44,7 @@ const personSchema = {
 	'@type': 'Person',
 	name: 'Tomas Gonzalez',
 	url: Astro.site?.toString(),
+	image: logoUrl,
 	jobTitle: ['Software Engineer', 'Web Designer', 'Website Builder', 'Full-Stack & AI/ML Engineer'],
 	address: {
 		'@type': 'PostalAddress',
@@ -74,7 +76,10 @@ const EMAIL = 'thomasgonz67@gmail.com'
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="icon" href="/favicon.ico" sizes="48x48" />
+		<link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+		<link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png" />
+		<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 		<meta name="viewport" content="width=device-width" />
 		<meta name="generator" content={Astro.generator} />
 		<title>{pageTitle}</title>
@@ -86,12 +91,15 @@ const EMAIL = 'thomasgonz67@gmail.com'
 		<meta property="og:title" content={pageTitle} />
 		<meta property="og:description" content={description} />
 		<meta property="og:url" content={canonicalURL} />
-		{ogImageUrl && <meta property="og:image" content={ogImageUrl} />}
+		<meta property="og:image" content={ogImageUrl} />
+		<meta property="og:image:width" content="1200" />
+		<meta property="og:image:height" content="630" />
+		<meta property="og:image:alt" content="Tomas Gonzalez — TG dragon logo. Web designer and developer in Holmdel, NJ." />
 
-		<meta name="twitter:card" content="summary" />
+		<meta name="twitter:card" content="summary_large_image" />
 		<meta name="twitter:title" content={pageTitle} />
 		<meta name="twitter:description" content={description} />
-		{ogImageUrl && <meta name="twitter:image" content={ogImageUrl} />}
+		<meta name="twitter:image" content={ogImageUrl} />
 
 		<script type="application/ld+json" set:html={JSON.stringify(personSchema)} />
 		{extraSchema && <script type="application/ld+json" set:html={JSON.stringify(extraSchema)} />}
@@ -110,8 +118,9 @@ const EMAIL = 'thomasgonz67@gmail.com'
 						target={item.external ? '_blank' : undefined}
 						rel={item.external ? 'noopener' : undefined}
 						data-astro-prefetch={!item.external && item.href.startsWith('/') ? 'hover' : undefined}
-						class:list={{ active: !item.external && item.href.startsWith('/') && item.href === Astro.url.pathname }}
+						class:list={{ active: !item.external && item.href.startsWith('/') && item.href === Astro.url.pathname, 'nav-home': item.href === '/' }}
 					>
+						{item.href === '/' && <span class="nav-logo" aria-hidden="true" />}
 						{item.label}
 					</a>
 				))}
@@ -247,6 +256,20 @@ const EMAIL = 'thomasgonz67@gmail.com'
 	}
 	nav a:hover {
 		color: var(--text);
+	}
+	/* logo + "Home" as one link; the mark is a CSS mask so it follows the theme accent */
+	nav a.nav-home {
+		display: inline-flex;
+		align-items: center;
+		gap: 8px;
+	}
+	.nav-logo {
+		display: inline-block;
+		width: 22px;
+		height: 22px;
+		background: var(--accent);
+		-webkit-mask: url('/logo-mark.png') center / contain no-repeat;
+		mask: url('/logo-mark.png') center / contain no-repeat;
 	}
 	nav a.active {
 		color: var(--accent);
