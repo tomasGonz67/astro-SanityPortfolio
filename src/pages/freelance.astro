@@ -211,7 +211,9 @@ const stories: Array<{
 	name: string
 	tag: string
 	links?: Array<{ label: string; url: string }>
-	quote?: { text: string; name: string; role: string } // a real, approved client quote; renders nothing when absent
+	// A client quote renders only if present. `approved: true` means the named person has confirmed the exact wording;
+	// production builds fail on any quote without it (see the guard below).
+	quote?: { text: string; name: string; role: string; approved?: boolean }
 	before: string[]
 	after: string[]
 }> = [
@@ -258,9 +260,10 @@ const stories: Array<{
 	},
 ]
 
-// Safety net: never publish a placeholder quote. Fails a production build (dev still works).
-if (import.meta.env.PROD && stories.some((st) => /lorem ipsum/i.test(st.quote?.text ?? ''))) {
-	throw new Error('Placeholder (lorem ipsum) client quote found in freelance.astro — replace it with a real, approved quote or remove it before building for production.')
+// Safety net: never publish a quote the named person hasn't approved. Fails a production build (dev still works).
+const unapproved = stories.filter((st) => st.quote && !st.quote.approved).map((st) => st.name)
+if (import.meta.env.PROD && unapproved.length > 0) {
+	throw new Error(`Unapproved client quote for: ${unapproved.join(', ')}. Get the person's OK on the exact wording, then set approved: true (or remove the quote) before building for production.`)
 }
 
 const faqs: Array<{ q: string; a: string }> = [
