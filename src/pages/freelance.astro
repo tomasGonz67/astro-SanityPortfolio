@@ -436,8 +436,24 @@ const serviceSchema = {
 		margin: 1.5rem 0 0;
 		padding-top: 1rem;
 		border-top: 1px solid var(--border);
-		font-size: 1.05rem;
+		font-family: var(--font-mono);
+		font-size: 0.8rem;
+		font-weight: 500;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
 		color: var(--accent);
+		opacity: 0.75;
+	}
+	/* dialog section labels take the former title look: accent heading, ~2px smaller */
+	.fl-dialog .fl-step-label {
+		font-family: var(--font-sans);
+		font-size: 0.9rem;
+		font-weight: 600;
+		color: var(--accent);
+		letter-spacing: 0;
+		text-transform: none;
+		opacity: 1;
+		margin-bottom: 0.3rem;
 	}
 	.fl-dialog-close {
 		flex: none;
