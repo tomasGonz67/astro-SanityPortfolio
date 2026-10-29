@@ -518,7 +518,11 @@ const sectionItems = [
 		<div class="fl-grid">
 			{
 				plans.map((p, i) => (
-					<div class="panel fl-card fl-plan" class:list={{ 'fl-plan-featured': p.featured, 'fl-plan-badged': p.badge }}>
+					<div
+						class="panel fl-card fl-plan"
+						class:list={{ 'fl-plan-featured': p.featured, 'fl-plan-badged': p.badge }}
+						data-open={p.addons ? `addons-${i}` : p.custom && formEnabled ? `quote-${i}` : undefined}
+					>
 						{p.badge && <span class:list={['fl-plan-badge mono', { 'fl-plan-badge-offer': !p.featured }]}>{p.badge}</span>}
 						<div class="fl-card-head">
 							<h3>{p.name}</h3>
@@ -839,9 +843,10 @@ const sectionItems = [
 
 	// "Show the facts" pop-ups: open the matching <dialog>, close via x / Esc / backdrop.
 	for (const btn of document.querySelectorAll<HTMLElement>('[data-open]')) {
-		btn.addEventListener('click', () => {
+		btn.addEventListener('click', (event) => {
+			if ((event.target as HTMLElement).closest('a, .fl-fee')) return
 			const dlg = document.getElementById(btn.dataset.open ?? '') as HTMLDialogElement | null
-			dlg?.showModal()
+			if (dlg && !dlg.open) dlg.showModal()
 		})
 	}
 	for (const dlg of document.querySelectorAll<HTMLDialogElement>('dialog.fl-dialog')) {
