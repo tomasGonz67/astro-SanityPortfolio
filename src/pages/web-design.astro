@@ -423,75 +423,6 @@ const serviceSchema = {
 		</div>
 	</section>
 
-	<section class="fl-block">
-		<h2 class="section-heading">Why hire a web developer in the age of AI</h2>
-		<p class="fl-lede fl-intro">
-			When AI tools like Base44 can build a website in minutes, and ChatGPT or Claude can crank out code in seconds — why
-			pay a person? Because AI alone can't give you this:
-		</p>
-		<div class="fl-grid">
-			{
-				edges.map((e, i) => (
-					<div class="panel fl-card fl-edge" data-open={e.why || e.fact || e.process ? `facts-${i}` : undefined}>
-						<h3>{e.name}</h3>
-						<div class="fl-step">
-							<span class="fl-step-label">How AI does it</span>
-							<p>{e.ai}</p>
-						</div>
-						<div class="fl-step">
-							<span class="fl-step-label">Limitations of this</span>
-							<p>{e.limit}</p>
-						</div>
-						<div class="fl-step fl-step-solve">
-							<span class="fl-step-label">Problem I solve</span>
-							<p>{e.solve}</p>
-						</div>
-						{(e.why || e.fact || e.process) && (
-							<button type="button" class="fl-facts-btn">More details →</button>
-						)}
-					</div>
-				))
-			}
-		</div>
-		{
-			edges.map((e, i) =>
-				e.why || e.fact || e.process ? (
-					<dialog class="fl-dialog" id={`facts-${i}`} aria-labelledby={`facts-${i}-title`}>
-						<div class="fl-dialog-inner">
-							<div class="fl-dialog-head">
-								<button type="button" class="fl-dialog-close" data-close aria-label="Close">✕</button>
-							</div>
-							{e.why && (
-								<div class="fl-step">
-									<span class="fl-step-label">Why it matters</span>
-									<p set:html={e.why}></p>
-								</div>
-							)}
-							{e.fact && (
-								<div class="fl-step">
-									<span class="fl-step-label">Fact</span>
-									<p set:html={e.fact}></p>
-									{e.sourceUrl && (
-										<p class="fl-source">
-											<a href={e.sourceUrl} target="_blank" rel="noopener">source</a>
-										</p>
-									)}
-								</div>
-							)}
-							{e.process && (
-								<div class="fl-step">
-									<span class="fl-step-label">My process</span>
-									<p>{e.process}</p>
-								</div>
-							)}
-							<h3 id={`facts-${i}-title`} class="section-heading fl-dialog-title-bottom">{e.name}</h3>
-						</div>
-					</dialog>
-				) : null
-			)
-		}
-	</section>
-
 	<section class="fl-block" id="plans">
 		<h2 class="section-heading">Website design plans &amp; pricing</h2>
 		<div class="fl-grid">
@@ -749,6 +680,75 @@ const serviceSchema = {
 			}
 		</div>
 		<p class="fl-note mono text-muted">More builds in the <a href="/#projects">projects</a> section of my site.</p>
+	</section>
+
+	<section class="fl-block">
+		<h2 class="section-heading">Why hire a web developer in the age of AI</h2>
+		<p class="fl-lede fl-intro">
+			When AI tools like Base44 can build a website in minutes, and ChatGPT or Claude can crank out code in seconds — why
+			pay a person? Because AI alone can't give you this:
+		</p>
+		<div class="fl-grid">
+			{
+				edges.map((e, i) => (
+					<div class="panel fl-card fl-edge" data-open={e.why || e.fact || e.process ? `facts-${i}` : undefined}>
+						<h3>{e.name}</h3>
+						<div class="fl-step">
+							<span class="fl-step-label">How AI does it</span>
+							<p>{e.ai}</p>
+						</div>
+						<div class="fl-step">
+							<span class="fl-step-label">Limitations of this</span>
+							<p>{e.limit}</p>
+						</div>
+						<div class="fl-step fl-step-solve">
+							<span class="fl-step-label">Problem I solve</span>
+							<p>{e.solve}</p>
+						</div>
+						{(e.why || e.fact || e.process) && (
+							<button type="button" class="fl-facts-btn">More details →</button>
+						)}
+					</div>
+				))
+			}
+		</div>
+		{
+			edges.map((e, i) =>
+				e.why || e.fact || e.process ? (
+					<dialog class="fl-dialog" id={`facts-${i}`} aria-labelledby={`facts-${i}-title`}>
+						<div class="fl-dialog-inner">
+							<div class="fl-dialog-head">
+								<button type="button" class="fl-dialog-close" data-close aria-label="Close">✕</button>
+							</div>
+							{e.why && (
+								<div class="fl-step">
+									<span class="fl-step-label">Why it matters</span>
+									<p set:html={e.why}></p>
+								</div>
+							)}
+							{e.fact && (
+								<div class="fl-step">
+									<span class="fl-step-label">Fact</span>
+									<p set:html={e.fact}></p>
+									{e.sourceUrl && (
+										<p class="fl-source">
+											<a href={e.sourceUrl} target="_blank" rel="noopener">source</a>
+										</p>
+									)}
+								</div>
+							)}
+							{e.process && (
+								<div class="fl-step">
+									<span class="fl-step-label">My process</span>
+									<p>{e.process}</p>
+								</div>
+							)}
+							<h3 id={`facts-${i}-title`} class="section-heading fl-dialog-title-bottom">{e.name}</h3>
+						</div>
+					</dialog>
+				) : null
+			)
+		}
 	</section>
 
 	<section class="fl-block">
