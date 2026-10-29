@@ -857,7 +857,7 @@ const sectionItems = [
 	<section class="fl-block fl-contact" id="contact">
 		<h2 class="section-heading">Start a project</h2>
 		<div class="panel">
-			<p>Tell me about your business and what you need — I'll reply with ideas and a quote. Based in Holmdel, NJ, serving Monmouth County, all of New Jersey and clients anywhere.</p>
+			<p>Tell me about your business and what you need — I'll reply with ideas and a quote, always within 24 hours. Based in Holmdel, NJ, serving Monmouth County, all of New Jersey and clients anywhere.</p>
 			{
 				formEnabled ? (
 					<IntakeForm
@@ -1038,7 +1038,7 @@ const sectionItems = [
 				const result = await response.json()
 				if (response.ok && result.success) {
 					reqForm.reset()
-					status.textContent = 'Thank you! I\u2019ll reply soon.'
+					status.textContent = 'Thank you! I\u2019ll reply within 24 hours.'
 				} else {
 					status.textContent = failText
 				}
