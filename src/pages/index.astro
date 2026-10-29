@@ -82,7 +82,7 @@ const sectionItems = [
 	<section id="home" class="hero">
 		<div class="hero-row">
 			{profile?.avatar && (
-				<img class="avatar" src={urlFor(profile.avatar).width(240).height(240).url()} alt={profile.name} />
+				<img class="avatar" src={urlFor(profile.avatar).width(240).height(240).auto('format').url()} alt={profile.name} fetchpriority="high" />
 			)}
 			<div class="hero-intro">
 				<p class="greeting mono">Hi, I'm</p>
@@ -138,7 +138,7 @@ const sectionItems = [
 				<div class="panel entry" data-href={exp.link}>
 					<div class="entry-top">
 						{exp.coverImage && (
-							<img class="thumb" src={urlFor(exp.coverImage.asset).width(360).height(200).fit('max').url()} alt={exp.company} />
+							<img class="thumb" src={urlFor(exp.coverImage.asset).width(360).height(200).fit('max').auto('format').url()} alt={exp.company} loading="lazy" />
 						)}
 						<div class="entry-head">
 							<div>
@@ -180,7 +180,7 @@ const sectionItems = [
 			{projects.map((project) => (
 				<div class="panel entry" data-href={project.link}>
 					{project.coverImage && (
-						<img class="cover" src={urlFor(project.coverImage).width(800).height(360).url()} alt={project.title} />
+						<img class="cover" src={urlFor(project.coverImage).width(800).height(360).auto('format').url()} alt={project.title} loading="lazy" />
 					)}
 					<div class="entry-head">
 						<h3>{project.title}</h3>
