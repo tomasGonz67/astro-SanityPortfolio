@@ -347,9 +347,18 @@ const faqs: Array<{ q: string; a: string }> = [
 	},
 	{
 		q: 'Do you only work with businesses in New Jersey?',
-		a: 'No. I am based in Holmdel, NJ, and I work with clients located anywhere.',
+		a: 'No. I am based in Holmdel, NJ, and I work with clients across Monmouth County, New Jersey and anywhere else.',
 	},
 ]
+
+const breadcrumbSchema = {
+	'@context': 'https://schema.org',
+	'@type': 'BreadcrumbList',
+	itemListElement: [
+		{ '@type': 'ListItem', position: 1, name: 'Home', item: SITE },
+		{ '@type': 'ListItem', position: 2, name: 'Web design', item: `${SITE}/web-design` },
+	],
+}
 
 const faqSchema = {
 	'@context': 'https://schema.org',
@@ -409,7 +418,7 @@ const sectionItems = [
 	title="Freelance"
 	fullTitle="Holmdel NJ Web Designer & Developer | Tomas Gonzalez"
 	description="Freelance web designer in Holmdel, NJ. Custom websites from a free starter page to full web apps, live in 1–2 weeks, and yours to own."
-	extraSchema={[serviceSchema, faqSchema]}
+	extraSchema={[serviceSchema, faqSchema, breadcrumbSchema]}
 >
 	<SectionNav items={sectionItems} />
 
@@ -800,7 +809,7 @@ const sectionItems = [
 	<section class="fl-block fl-contact" id="contact">
 		<h2 class="section-heading">Start a project</h2>
 		<div class="panel">
-			<p>Tell me about your business and what you need — I'll reply with ideas and a quote.</p>
+			<p>Tell me about your business and what you need — I'll reply with ideas and a quote. Based in Holmdel, NJ, serving Monmouth County, all of New Jersey and clients anywhere.</p>
 			{
 				formEnabled ? (
 					<IntakeForm

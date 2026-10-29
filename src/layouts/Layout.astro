@@ -10,8 +10,8 @@ interface Props {
 }
 
 const DEFAULT_DESCRIPTION =
-	'Tomas Gonzalez — software engineer and website builder in Holmdel, NJ. I design and build fast, custom websites for businesses across New Jersey, plus full-stack and AI/ML work. See my projects, experience, and freelance services.'
-const OG_TITLE = 'Tomas Gonzalez — Software Engineer & Website Builder in Holmdel, NJ'
+	'Tomas Gonzalez, software engineer and website builder in Holmdel, NJ. Custom websites, web apps and AI/ML work. See projects, experience and services.'
+const OG_TITLE = 'Tomas Gonzalez | Software Engineer & Website Builder, NJ'
 
 const { title, description = DEFAULT_DESCRIPTION, fullTitle, extraSchema } = Astro.props
 // "Home" wastes the strongest SEO field by putting the page's own name in
@@ -86,6 +86,7 @@ const EMAIL = 'thomasgonz67@gmail.com'
 		<meta name="generator" content={Astro.generator} />
 		<title>{pageTitle}</title>
 		<meta name="description" content={description} />
+		<meta name="robots" content="index, follow, max-image-preview:large" />
 		<link rel="canonical" href={canonicalURL} />
 
 		<meta property="og:type" content="website" />
