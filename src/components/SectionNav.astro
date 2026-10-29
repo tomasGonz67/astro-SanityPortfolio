@@ -1,0 +1,152 @@
+---
+// "On this page" menu: a slim sidebar in the left margin that lists the page's sections and highlights the one
+// being read. Shown only where there is real room beside the 860px content column (wide screens); below that
+// it is hidden and the page works as before.
+//
+// Same convention as the top nav (see Layout.astro): the links keep a real href="#section" (copy-link and
+// middle-click work), but a plain click scrolls without touching the URL. Keyboard users land on the section.
+interface Item {
+	id: string
+	label: string
+}
+interface Props {
+	items: Item[]
+}
+const { items } = Astro.props
+---
+
+<nav class="section-nav" aria-label="On this page">
+	<p class="section-nav-title mono">On this page</p>
+	<ul>
+		{
+			items.map((item) => (
+				<li>
+					<a href={`#${item.id}`} data-section={item.id}>
+						{item.label}
+					</a>
+				</li>
+			))
+		}
+	</ul>
+</nav>
+
+<script>
+	const nav = document.querySelector<HTMLElement>('.section-nav')
+	if (nav) {
+		const links = [...nav.querySelectorAll<HTMLAnchorElement>('a[data-section]')]
+		const targets = links
+			.map((l) => document.getElementById(l.dataset.section ?? ''))
+			.filter((el): el is HTMLElement => el !== null)
+		const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+		const setActive = (id: string) => {
+			for (const l of links) {
+				const on = l.dataset.section === id
+				l.classList.toggle('active', on)
+				if (on) l.setAttribute('aria-current', 'true')
+				else l.removeAttribute('aria-current')
+			}
+		}
+		if (targets.length > 0) setActive(targets[0].id)
+
+		// highlight whichever section is crossing the upper-middle of the screen
+		const observer = new IntersectionObserver(
+			(entries) => {
+				for (const entry of entries) if (entry.isIntersecting) setActive(entry.target.id)
+			},
+			{ rootMargin: '-30% 0px -60% 0px' }
+		)
+		for (const t of targets) observer.observe(t)
+
+		// a short last section can never reach the highlight zone, so light it up when the page is scrolled to the bottom
+		let ticking = false
+		const checkBottom = () => {
+			ticking = false
+			if (targets.length > 0 && window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 8) {
+				setActive(targets[targets.length - 1].id)
+			}
+		}
+		window.addEventListener(
+			'scroll',
+			() => {
+				if (!ticking) {
+					ticking = true
+					requestAnimationFrame(checkBottom)
+				}
+			},
+			{ passive: true }
+		)
+
+		for (const link of links) {
+			link.addEventListener('click', (event) => {
+				const target = document.getElementById(link.dataset.section ?? '')
+				if (!target) return
+				event.preventDefault()
+				target.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' })
+				target.setAttribute('tabindex', '-1')
+				target.focus({ preventScroll: true })
+				setActive(target.id)
+			})
+		}
+	}
+</script>
+
+<style>
+	.section-nav {
+		display: none;
+	}
+	/* content column is 860px, centred: this needs ~190px free on the left, so only from ~1260px up */
+	@media (min-width: 1260px) {
+		.section-nav {
+			display: block;
+			position: fixed;
+			top: 110px;
+			left: calc(50vw - 430px - 190px);
+			width: 170px;
+			z-index: 5;
+		}
+	}
+	.section-nav-title {
+		margin: 0 0 0.6rem;
+		padding-left: 0.7rem;
+		font-size: 0.75rem;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+		color: var(--text-muted);
+	}
+	ul {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+	a {
+		display: block;
+		padding: 0.4rem 0.7rem;
+		border-left: 2px solid var(--border);
+		font-family: var(--font-mono);
+		font-size: 0.82rem;
+		line-height: 1.35;
+		color: var(--text-muted);
+		text-decoration: none;
+	}
+	a:hover {
+		color: var(--text);
+		border-left-color: var(--text-muted);
+	}
+	a.active {
+		color: var(--accent);
+		border-left-color: var(--accent);
+		font-weight: 600;
+	}
+	a:focus-visible {
+		outline: 2px solid var(--accent);
+		outline-offset: 2px;
+	}
+	/* the sections the menu points at: clear the sticky top bar, and no ring when focus is moved to them */
+	:global(section[id]) {
+		scroll-margin-top: 90px;
+	}
+	:global(section[tabindex='-1']:focus) {
+		outline: none;
+	}
+</style>

@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro'
+import SectionNav from '../components/SectionNav.astro'
 import { client, urlFor } from '../lib/sanity'
 
 interface SkillTier {
@@ -66,9 +67,18 @@ function formatDate(dateStr?: string) {
 	const d = new Date(dateStr)
 	return d.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
 }
+
+const sectionItems = [
+	{ id: 'home', label: 'Home' },
+	{ id: 'about', label: 'About' },
+	{ id: 'experience', label: 'Experience' },
+	{ id: 'projects', label: 'Projects' },
+	{ id: 'freelance-cta', label: 'Web design' },
+]
 ---
 
 <Layout title="Home">
+	<SectionNav items={sectionItems} />
 	<section id="home" class="hero">
 		<div class="hero-row">
 			{profile?.avatar && (

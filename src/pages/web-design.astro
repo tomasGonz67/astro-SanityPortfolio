@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro'
+import SectionNav from '../components/SectionNav.astro'
 import IntakeForm, { type Field } from '../components/IntakeForm.astro'
 
 const EMAIL = 'thomasgonz67@gmail.com'
@@ -392,6 +393,16 @@ const serviceSchema = {
 	],
 	priceRange: '$$',
 }
+
+const sectionItems = [
+	{ id: 'top', label: 'Overview' },
+	{ id: 'why', label: 'Why hire me' },
+	{ id: 'glance', label: 'At a glance' },
+	{ id: 'plans', label: 'Plans & pricing' },
+	{ id: 'work', label: 'Selected work' },
+	{ id: 'faq', label: 'FAQ' },
+	{ id: 'contact', label: 'Start a project' },
+]
 ---
 
 <Layout
@@ -400,7 +411,9 @@ const serviceSchema = {
 	description="Freelance web designer in Holmdel, NJ. Custom websites from a free starter page to full web apps, live in 1–2 weeks, and yours to own."
 	extraSchema={[serviceSchema, faqSchema]}
 >
-	<section class="fl-hero">
+	<SectionNav items={sectionItems} />
+
+	<section class="fl-hero" id="top">
 		<p class="greeting mono">Freelance web design &amp; development</p>
 		<h1>Web designer &amp; developer in Holmdel, NJ</h1>
 		<p class="fl-lede">
@@ -411,7 +424,7 @@ const serviceSchema = {
 		<a class="fl-cta" href="#plans">See plans &amp; pricing →</a>
 	</section>
 
-	<section class="fl-block">
+	<section class="fl-block" id="why">
 		<h2 class="section-heading">Why hire a web developer in the age of AI</h2>
 		<p class="fl-lede fl-intro">
 			When AI tools like Base44 can build a website in minutes, and ChatGPT or Claude can crank out code in seconds — why
@@ -480,7 +493,7 @@ const serviceSchema = {
 		}
 	</section>
 
-	<section class="fl-proof-strip">
+	<section class="fl-proof-strip" id="glance">
 		<div class="fl-proof-grid">
 			<div class="panel fl-proof">
 				<p class="fl-proof-value">Agency work, freelancer price</p>
@@ -723,7 +736,7 @@ const serviceSchema = {
 		</details>
 	</section>
 
-	<section class="fl-block">
+	<section class="fl-block" id="work">
 		<h2 class="section-heading">Selected web design work</h2>
 		<div class="fl-stories">
 			{
@@ -766,7 +779,7 @@ const serviceSchema = {
 		<p class="fl-note mono text-muted">More builds in the <a href="/#projects">projects</a> section of my site.</p>
 	</section>
 
-	<section class="fl-block">
+	<section class="fl-block" id="faq">
 		<h2 class="section-heading">Website design FAQ</h2>
 		<div class="fl-grid">
 			{
