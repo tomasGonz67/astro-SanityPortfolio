@@ -19,7 +19,7 @@ const edges: Array<{ name: string; ai: string; limit: string; solve: string; why
 		limit: 'You rent it forever and own none of it. Stop paying, and it’s gone.',
 		solve: 'I build it once; you own the code and host it anywhere for next to nothing. No subscription, no lock-in.',
 		why: 'You pay a builder every month, forever, for a site you don’t own — and can’t take with you.',
-		fact: 'Base44 (now Wix-owned) and similar AI builders run <strong>$16–$200/mo</strong> plus usage credits that don’t roll over. Cloudflare hosting for a static site is <strong>free</strong>: “Requests to static assets are free and unlimited” (<a href="https://developers.cloudflare.com/workers/platform/pricing/" target="_blank" rel="noopener">Cloudflare pricing</a>).',
+		fact: 'Base44 (now Wix-owned) and similar AI builders run <strong>$16–$200/mo</strong> plus usage credits that don’t roll over. Hosting on Cloudflare’s free plan has a limit of <strong>100,000 requests per day</strong> (<a href="https://developers.cloudflare.com/workers/platform/pricing/" target="_blank" rel="noopener">Cloudflare pricing</a>).',
 		source: 'Base44 pricing',
 		sourceUrl: 'https://base44.com/blog/how-much-does-base44-cost',
 		process: 'I hand over everything, in your name: the code in your own repo, your domain, your Cloudflare hosting, and every other service it uses (CMS, email, etc.). It’s yours to keep, move, or hand to another developer — no leash.',
@@ -277,7 +277,7 @@ const stories: Array<{
 		after: [
 			'<strong>~80% less time</strong> spent updating the site — a much easier workflow',
 			'Accessibility issues found and <strong>fixed</strong>',
-			'Free hosting on Cloudflare — <strong>no more monthly fees</strong>',
+			'Hosting moved to Cloudflare — <strong>no more $500/month hosting fees</strong>',
 			'One-time payment, and they own it',
 			'Pay only for what they actually need — nothing extra',
 			'Form submissions from both sites are wired into their existing backend and admin dashboard, right next to the rest of their proprietary data',
@@ -494,7 +494,7 @@ const serviceSchema = {
 			</div>
 			<div class="panel fl-proof">
 				<p class="fl-proof-value">Yours, forever</p>
-				<p class="fl-proof-note">Accessible, secure, and loads in ~1 second — and free to host.</p>
+				<p class="fl-proof-note">Accessible, secure, and loads in ~1 second — and free to host (Cloudflare’s free plan allows 100,000 requests a day).</p>
 				<p class="fl-proof-bench">Builder subscriptions run <strong>$16–$200/mo</strong>, forever <a href="https://base44.com/blog/how-much-does-base44-cost" target="_blank" rel="noopener">source</a></p>
 			</div>
 		</div>
@@ -660,12 +660,12 @@ const serviceSchema = {
 			<ul class="fl-assurance-list">
 				<li>Free website design preview before you commit</li>
 				<li>Polished animations &amp; scroll effects</li>
-				<li>Free hosting — no limit on visitors</li>
+				<li>Free hosting — Cloudflare’s free plan has a limit of 100,000 requests per day</li>
 				<li>Your domain connected — you buy the name, I connect it</li>
 				<li>Yours to own — no platform subscription, no lock-in</li>
 			</ul>
 			<p class="fl-assurance-fineprint">
-				Cloudflare: “Requests to static assets are free and unlimited.” Requests to a Worker (code that runs on Cloudflare) are limited to 100,000 per day on the free plan, and Workers Paid has “a minimum charge of $5 USD per month.”
+				Hosting is on Cloudflare’s free plan, which has a limit of 100,000 requests per day.
 				<a href="https://developers.cloudflare.com/workers/platform/pricing/" target="_blank" rel="noopener">source</a>
 			</p>
 			<p class="fl-assurance-fineprint">
