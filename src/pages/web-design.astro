@@ -19,7 +19,7 @@ const edges: Array<{ name: string; ai: string; limit: string; solve: string; why
 		limit: 'You rent it forever and own none of it. Stop paying, and it’s gone.',
 		solve: 'I build it once; you own the code and host it anywhere for next to nothing. No subscription, no lock-in.',
 		why: 'You pay a builder every month, forever, for a site you don’t own — and can’t take with you.',
-		fact: 'Base44 (now Wix-owned) and similar AI builders run <strong>$16–$200/mo</strong> plus usage credits that don’t roll over. Cloudflare hosting for a static site is <strong>free up to ~100k requests a day, then about $5/mo</strong>.',
+		fact: 'Base44 (now Wix-owned) and similar AI builders run <strong>$16–$200/mo</strong> plus usage credits that don’t roll over. Cloudflare hosting for a static site is <strong>free, with no limit on visitors</strong> (<a href="https://developers.cloudflare.com/workers/platform/pricing/" target="_blank" rel="noopener">per Cloudflare’s pricing</a>).',
 		source: 'Base44 pricing',
 		sourceUrl: 'https://base44.com/blog/how-much-does-base44-cost',
 		process: 'I hand over everything, in your name: the code in your own repo, your domain, your Cloudflare hosting, and every other service it uses (CMS, email, etc.). It’s yours to keep, move, or hand to another developer — no leash.',
@@ -324,20 +324,12 @@ const faqs: Array<{ q: string; a: string }> = [
 		a: 'A one-page site goes live in 1 to 7 days and a multi-page site in 1 to 2 weeks, once I have your text and photos. Agencies typically take 6 to 12 weeks.',
 	},
 	{
-		q: 'Do I own my website?',
-		a: 'Yes. The code lives in your own repository, on your own domain and hosting account, so there is no platform subscription and no lock-in. You can keep it, move it, or hand it to another developer.',
-	},
-	{
 		q: 'What does hosting cost?',
-		a: 'Hosting for most sites is free up to about 100,000 requests a day, then about $5 a month. Sites with a backend or database can cost a bit more.',
+		a: 'For a regular website, hosting on Cloudflare is free, with no limit on visitors. If a site runs backend code, such as an app with logins, Cloudflare includes 100,000 requests a day free, then its paid plan starts at $5 a month.',
 	},
 	{
 		q: 'Do you only work with businesses in New Jersey?',
 		a: 'No. I am based in Holmdel, NJ, and I work with clients located anywhere.',
-	},
-	{
-		q: 'What happens after my site launches?',
-		a: 'Every paid plan includes a 90-day warranty and 30 days of free maintenance, with free security patches for critical vulnerabilities. After that, an optional care plan covers updates and upkeep for $75 a month.',
 	},
 ]
 
@@ -416,7 +408,7 @@ const serviceSchema = {
 			</div>
 			<div class="panel fl-proof">
 				<p class="fl-proof-value">Yours, forever</p>
-				<p class="fl-proof-note">Accessible, secure, and loads in ~1 second — and hosted for just a few dollars a month.</p>
+				<p class="fl-proof-note">Accessible, secure, and loads in ~1 second — and free to host.</p>
 				<p class="fl-proof-bench">Builder subscriptions run <strong>$16–$200/mo</strong>, forever <a href="https://base44.com/blog/how-much-does-base44-cost" target="_blank" rel="noopener">source</a></p>
 			</div>
 		</div>
@@ -651,10 +643,10 @@ const serviceSchema = {
 			<ul class="fl-assurance-list">
 				<li>Free website design preview before you commit</li>
 				<li>Polished animations &amp; scroll effects</li>
-				<li>Free hosting — up to ~100k requests/day, then about $5/mo</li>
+				<li>Free hosting — no limit on visitors for a normal website</li>
 				<li>Yours to own — no platform subscription, no lock-in</li>
 			</ul>
-			<p class="fl-assurance-fineprint">Hosting figure is for static sites &amp; stores; web apps with a backend may run a bit more.</p>
+			<p class="fl-assurance-fineprint">Free, unlimited hosting applies to static websites and stores. Web apps that run backend code get 100,000 requests a day free, then Cloudflare’s $5/month plan, and larger apps may cost more.</p>
 			<p class="fl-assurance-fineprint">You provide your text and photos — timelines start once I have them.</p>
 		</div>
 
@@ -1498,6 +1490,13 @@ const serviceSchema = {
 		box-sizing: border-box;
 		text-align: center;
 		text-decoration: none;
+	}
+
+	/* links written inside a fact's HTML (set:html) skip scoped styles, so target them with :global */
+	.fl-step p :global(a) {
+		color: inherit;
+		text-decoration: underline;
+		text-underline-offset: 2px;
 	}
 
 	/* "included with every paid plan" assurance callout */
