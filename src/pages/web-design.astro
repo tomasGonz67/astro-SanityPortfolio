@@ -358,7 +358,7 @@ const breadcrumbSchema = {
 	'@type': 'BreadcrumbList',
 	itemListElement: [
 		{ '@type': 'ListItem', position: 1, name: 'Home', item: SITE },
-		{ '@type': 'ListItem', position: 2, name: 'Web design', item: `${SITE}/web-design` },
+		{ '@type': 'ListItem', position: 2, name: 'Web design', item: `${SITE}/web-design/` },
 	],
 }
 
@@ -378,10 +378,10 @@ const serviceSchema = {
 	name: 'Tomas Gonzalez — Freelance Web Development',
 	description:
 		'Custom website design and development for businesses — a freelance web designer and developer in Holmdel, NJ, serving Monmouth County, New Jersey and clients anywhere. Also web apps and custom software.',
-	url: `${SITE}/web-design`,
+	url: `${SITE}/web-design/`,
 	logo: `${SITE}/logo-512.png`,
 	image: `${SITE}/og-image.png`,
-	provider: { '@type': 'Person', name: 'Tomas Gonzalez', url: SITE },
+	founder: { '@type': 'Person', name: 'Tomas Gonzalez', url: SITE },
 	areaServed: [
 		{ '@type': 'City', name: 'Holmdel' },
 		{ '@type': 'AdministrativeArea', name: 'Monmouth County' },
@@ -393,14 +393,14 @@ const serviceSchema = {
 		addressRegion: 'NJ',
 		addressCountry: 'US',
 	},
-	serviceType: [
-		'Website design',
-		'Web development',
-		'Website redesign',
-		'CMS website',
-		'Website builder',
-		'Web application development',
-		'Custom software',
+	makesOffer: [
+		{ '@type': 'Offer', itemOffered: { '@type': 'Service', serviceType: 'Website design', provider: { '@type': 'Person', name: 'Tomas Gonzalez', url: SITE } } },
+		{ '@type': 'Offer', itemOffered: { '@type': 'Service', serviceType: 'Web development', provider: { '@type': 'Person', name: 'Tomas Gonzalez', url: SITE } } },
+		{ '@type': 'Offer', itemOffered: { '@type': 'Service', serviceType: 'Website redesign', provider: { '@type': 'Person', name: 'Tomas Gonzalez', url: SITE } } },
+		{ '@type': 'Offer', itemOffered: { '@type': 'Service', serviceType: 'CMS website', provider: { '@type': 'Person', name: 'Tomas Gonzalez', url: SITE } } },
+		{ '@type': 'Offer', itemOffered: { '@type': 'Service', serviceType: 'Website builder', provider: { '@type': 'Person', name: 'Tomas Gonzalez', url: SITE } } },
+		{ '@type': 'Offer', itemOffered: { '@type': 'Service', serviceType: 'Web application development', provider: { '@type': 'Person', name: 'Tomas Gonzalez', url: SITE } } },
+		{ '@type': 'Offer', itemOffered: { '@type': 'Service', serviceType: 'Custom software', provider: { '@type': 'Person', name: 'Tomas Gonzalez', url: SITE } } },
 	],
 	priceRange: '$$',
 }

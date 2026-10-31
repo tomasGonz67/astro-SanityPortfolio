@@ -68,7 +68,7 @@ const personSchema = {
 
 const navItems = [
 	{ href: '/', label: 'Home' },
-	{ href: '/web-design', label: 'Services' },
+	{ href: '/web-design/', label: 'Services' },
 	{ href: resumeUrl ?? '/resume', label: 'Resume', external: Boolean(resumeUrl) },
 ]
 
@@ -121,7 +121,7 @@ const EMAIL = 'thomasgonz67@gmail.com'
 						target={item.external ? '_blank' : undefined}
 						rel={item.external ? 'noopener' : undefined}
 						data-astro-prefetch={!item.external && item.href.startsWith('/') ? 'hover' : undefined}
-						class:list={{ active: !item.external && item.href.startsWith('/') && item.href === currentPath, 'nav-home': item.href === '/' }}
+						class:list={{ active: !item.external && item.href.startsWith('/') && (item.href.replace(/\/+$/, '') || '/') === currentPath, 'nav-home': item.href === '/' }}
 					>
 						{item.href === '/' && <span class="nav-logo" aria-hidden="true" />}
 						{item.label}
